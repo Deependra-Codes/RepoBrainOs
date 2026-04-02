@@ -1,0 +1,58 @@
+# Plans
+
+This directory holds execution plans, milestone sequencing, and work breakdowns.
+
+Difference from `docs/`:
+
+- `docs/` explains what the system should be
+- `plans/` explains how we will build it in stages
+
+Current plans:
+
+- [V1 foundation plan](d:/RepoBrainOS/plans/v1-foundation-plan.md)
+- [Snapshot inventory and exact retrieval intent](d:/RepoBrainOS/plans/2026-03-30-snapshot-inventory-and-exact-retrieval-intent.md)
+- [Snapshot inventory and exact retrieval spec](d:/RepoBrainOS/plans/2026-03-30-snapshot-inventory-and-exact-retrieval-spec.md)
+- [Symbol inventory and exact symbol lookup intent](d:/RepoBrainOS/plans/2026-03-30-symbol-inventory-and-exact-symbol-lookup-intent.md)
+- [Symbol inventory and exact symbol lookup spec](d:/RepoBrainOS/plans/2026-03-30-symbol-inventory-and-exact-symbol-lookup-spec.md)
+- [Structural adjacency and blast radius intent](d:/RepoBrainOS/plans/2026-03-30-structural-adjacency-and-blast-radius-intent.md)
+- [Structural adjacency and blast radius spec](d:/RepoBrainOS/plans/2026-03-30-structural-adjacency-and-blast-radius-spec.md)
+- [Shared repo-root normalization boundary intent](d:/RepoBrainOS/plans/2026-03-30-shared-repo-root-normalization-boundary-intent.md)
+- [Shared repo-root normalization boundary spec](d:/RepoBrainOS/plans/2026-03-30-shared-repo-root-normalization-boundary-spec.md)
+- [Performance and complexity discipline intent](d:/RepoBrainOS/plans/2026-03-30-performance-and-complexity-discipline-intent.md)
+- [Performance and complexity discipline spec](d:/RepoBrainOS/plans/2026-03-30-performance-and-complexity-discipline-spec.md)
+- [Performance release gate and workload-first data-structure enforcement intent](d:/RepoBrainOS/plans/2026-03-30-performance-release-gate-and-workload-first-data-structure-enforcement-intent.md)
+- [Performance release gate and workload-first data-structure enforcement spec](d:/RepoBrainOS/plans/2026-03-30-performance-release-gate-and-workload-first-data-structure-enforcement-spec.md)
+- [Verification target extraction and check planning intent](d:/RepoBrainOS/plans/2026-03-30-verification-target-extraction-and-check-planning-intent.md)
+- [Verification target extraction and check planning spec](d:/RepoBrainOS/plans/2026-03-30-verification-target-extraction-and-check-planning-spec.md)
+- [Snapshot-backed get-brief broker intent](d:/RepoBrainOS/plans/2026-03-30-snapshot-backed-get-brief-broker-intent.md)
+- [Snapshot-backed get-brief broker spec](d:/RepoBrainOS/plans/2026-03-30-snapshot-backed-get-brief-broker-spec.md)
+- [Evidence receipts and structural flow capsules intent](d:/RepoBrainOS/plans/2026-03-30-evidence-receipts-and-structural-flow-capsules-intent.md)
+- [Evidence receipts and structural flow capsules spec](d:/RepoBrainOS/plans/2026-03-30-evidence-receipts-and-structural-flow-capsules-spec.md)
+- [Parser-backed fact extraction and stable fact IDs intent](d:/RepoBrainOS/plans/2026-03-30-parser-backed-fact-extraction-and-stable-fact-ids-intent.md)
+- [Parser-backed fact extraction and stable fact IDs spec](d:/RepoBrainOS/plans/2026-03-30-parser-backed-fact-extraction-and-stable-fact-ids-spec.md)
+- [Stable-id graph relationships and broker identity matching intent](d:/RepoBrainOS/plans/2026-03-30-stable-id-graph-relationships-and-broker-identity-matching-intent.md)
+- [Stable-id graph relationships and broker identity matching spec](d:/RepoBrainOS/plans/2026-03-30-stable-id-graph-relationships-and-broker-identity-matching-spec.md)
+- [Reverse import index for interactive graph paths intent](d:/RepoBrainOS/plans/2026-03-30-reverse-import-index-for-interactive-graph-paths-intent.md)
+- [Reverse import index for interactive graph paths spec](d:/RepoBrainOS/plans/2026-03-30-reverse-import-index-for-interactive-graph-paths-spec.md)
+- [Symbol-fact and path-owned lookup indexes intent](d:/RepoBrainOS/plans/2026-03-30-symbol-fact-and-path-owned-lookup-indexes-intent.md)
+- [Symbol-fact and path-owned lookup indexes spec](d:/RepoBrainOS/plans/2026-03-30-symbol-fact-and-path-owned-lookup-indexes-spec.md)
+- [Snapshot-owned reverse import indexes and hot-path perf baselines intent](d:/RepoBrainOS/plans/2026-03-30-snapshot-owned-reverse-import-indexes-and-hot-path-perf-baselines-intent.md)
+- [Snapshot-owned reverse import indexes and hot-path perf baselines spec](d:/RepoBrainOS/plans/2026-03-30-snapshot-owned-reverse-import-indexes-and-hot-path-perf-baselines-spec.md)
+- [Query classification and coverage-audited briefing intent](d:/RepoBrainOS/plans/2026-03-30-query-classification-and-coverage-audited-briefing-intent.md)
+- [Query classification and coverage-audited briefing spec](d:/RepoBrainOS/plans/2026-03-30-query-classification-and-coverage-audited-briefing-spec.md)
+- [Invariants engine intent](d:/RepoBrainOS/plans/2026-04-01-invariants-engine-intent.md)
+- [Invariants engine spec](d:/RepoBrainOS/plans/2026-04-01-invariants-engine-spec.md)
+- [Pipeline readiness gap map intent](d:/RepoBrainOS/plans/2026-04-01-pipeline-readiness-gap-map-intent.md)
+- [Pipeline readiness gap map spec](d:/RepoBrainOS/plans/2026-04-01-pipeline-readiness-gap-map-spec.md)
+- [Semantic diff pipeline intent](d:/RepoBrainOS/plans/2026-04-01-semantic-diff-pipeline-intent.md)
+- [Semantic diff pipeline spec](d:/RepoBrainOS/plans/2026-04-01-semantic-diff-pipeline-spec.md)
+- [Semantic equivalence ladder architecture intent](d:/RepoBrainOS/plans/2026-04-01-semantic-equivalence-ladder-intent.md)
+- [Semantic equivalence ladder architecture spec](d:/RepoBrainOS/plans/2026-04-01-semantic-equivalence-ladder-spec.md)
+- [L1 Rust bounded backend (Kani) intent](d:/RepoBrainOS/plans/2026-04-01-l1-rust-bounded-kani-backend-intent.md)
+- [L1 Rust bounded backend (Kani) spec](d:/RepoBrainOS/plans/2026-04-01-l1-rust-bounded-kani-backend-spec.md)
+- [L2 relational semantic backend intent](d:/RepoBrainOS/plans/2026-04-01-l2-relational-semantic-backend-intent.md)
+- [L2 relational semantic backend spec](d:/RepoBrainOS/plans/2026-04-01-l2-relational-semantic-backend-spec.md)
+- [Full theorem-proving equivalence program intent](d:/RepoBrainOS/plans/2026-04-01-full-theorem-proving-equivalence-intent.md)
+- [Full theorem-proving equivalence program spec](d:/RepoBrainOS/plans/2026-04-01-full-theorem-proving-equivalence-spec.md)
+- [L3 solver execution and replay intent](d:/RepoBrainOS/plans/2026-04-01-l3-solver-execution-and-replay-intent.md)
+- [L3 solver execution and replay spec](d:/RepoBrainOS/plans/2026-04-01-l3-solver-execution-and-replay-spec.md)

@@ -1,0 +1,23 @@
+Metadata-Version: 2.4
+Name: repobrain-research
+Version: 0.1.0
+Summary: Research and evaluation package for RepoBrain OS.
+Author: RepoBrain OS
+Requires-Python: >=3.12
+Description-Content-Type: text/markdown
+Provides-Extra: dev
+Requires-Dist: mypy<2,>=1.19; extra == "dev"
+Requires-Dist: ruff<0.14,>=0.13; extra == "dev"
+
+# repobrain-research
+
+This package is the research and evaluation lane for RepoBrain OS.
+
+Keep here:
+
+- uplift experiments
+- retrieval experiments
+- calibration studies
+- benchmark harnesses
+
+Do not move serving-critical deterministic logic into this package.

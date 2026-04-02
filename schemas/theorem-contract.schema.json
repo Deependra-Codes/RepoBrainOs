@@ -1,0 +1,60 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://repobrain.dev/schemas/theorem-contract.schema.json",
+  "title": "TheoremContract",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "contract_id",
+    "observable_outputs",
+    "error_behavior",
+    "side_effects",
+    "preconditions"
+  ],
+  "properties": {
+    "contract_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "observable_outputs": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "minItems": 1
+    },
+    "error_behavior": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "minItems": 1
+    },
+    "side_effects": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "minItems": 1
+    },
+    "preconditions": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "minItems": 1
+    },
+    "environment_assumptions": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "default": []
+    }
+  }
+}

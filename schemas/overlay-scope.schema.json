@@ -1,0 +1,27 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://repobrain.dev/schemas/overlay-scope.schema.json",
+  "title": "OverlayScope",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["kind", "claim_scope", "touched_paths"],
+  "properties": {
+    "kind": {
+      "type": "string",
+      "enum": ["none", "worktree", "buffer", "mixed"]
+    },
+    "claim_scope": {
+      "type": "string",
+      "enum": ["snapshot_confirmed", "overlay_adjusted", "overlay_local_only"]
+    },
+    "overlay_hash": {
+      "type": "string"
+    },
+    "touched_paths": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  }
+}

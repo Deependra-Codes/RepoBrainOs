@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://repobrain.dev/schemas/evidence-receipt.schema.json",
+  "title": "EvidenceReceipt",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id", "source_type", "source_ref", "locator", "captured_at"],
+  "properties": {
+    "id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "source_type": {
+      "type": "string"
+    },
+    "source_ref": {
+      "type": "string"
+    },
+    "locator": {
+      "type": "string"
+    },
+    "snippet_hash": {
+      "type": "string"
+    },
+    "captured_at": {
+      "type": "string",
+      "format": "date-time"
+    }
+  }
+}

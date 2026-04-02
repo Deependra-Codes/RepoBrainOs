@@ -1,0 +1,32 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://repobrain.dev/schemas/impact-summary.schema.json",
+  "title": "ImpactSummary",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["reference", "summary", "changed_scope", "stale_concepts", "freshness_impact"],
+  "properties": {
+    "reference": {
+      "type": "string"
+    },
+    "summary": {
+      "type": "string"
+    },
+    "changed_scope": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "stale_concepts": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "freshness_impact": {
+      "type": "string",
+      "enum": ["none", "localized", "moderate", "high"]
+    }
+  }
+}

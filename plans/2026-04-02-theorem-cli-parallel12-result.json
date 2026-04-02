@@ -1,0 +1,3445 @@
+﻿SUCCESS: The process with PID 27868 (child process of PID 34896) has been terminated.
+SUCCESS: The process with PID 34896 (child process of PID 18132) has been terminated.
+SUCCESS: The process with PID 18132 (child process of PID 28724) has been terminated.
+{
+  "snapshot_id": "D:\\RepoBrainOS::worktree",
+  "readiness_state": "ready",
+  "reference": "HEAD",
+  "reference_snapshot_id": "D:\\RepoBrainOS::HEAD",
+  "status": "inconclusive_under_contract",
+  "summary": "theorem stage executed 128 obligation(s) under explicit contract and remained partially inconclusive under configured bounds after trying the LLVM SSA/IVL backend with bounded memory/pointer/call summaries and fallbacks. Structural baseline: deterministic structural delta between `D:\\RepoBrainOS::worktree` and `D:\\RepoBrainOS::HEAD`: 0 file add, 0 file remove, 3 file metadata modify, 263 symbol fact add, 267 symbol fact remove, 15 import fact add, 15 import fact remove, 0 verification target change Translation sidecar status: inconclusive.",
+  "equivalence_stage": "l3_theorem_contract",
+  "equivalence_contract": {
+    "observable_outputs": [
+      "public API return values",
+      "error codes and error messages"
+    ],
+    "error_behavior": [
+      "same input classes produce equivalent error categories"
+    ],
+    "side_effects": [
+      "same files are created, updated, or deleted for equivalent inputs"
+    ],
+    "preconditions": [
+      "identical environment configuration and dependencies",
+      "identical input payloads"
+    ]
+  },
+  "evidence_receipts": [
+    {
+      "backend": "theorem_obligation_compiler",
+      "stage": "l3_theorem_contract",
+      "status": "inconclusive",
+      "solver": "theorem_llvm_ssa_bv_v1",
+      "bounds": "max_obligations<=128;candidate_functions<=256;compiled_obligations=128;proved=0;refuted=0;inconclusive=128;stability_runs=1;flaky_retries=1;solver_mode=theorem_llvm_ssa_bv_v1;solver_timeout_ms=10000",
+      "timeout_ms": 30000,
+      "assumptions": [
+        "L3 executes bounded obligation-level theorem checks with deterministic scheduling and a compiler-IR-first LLVM SSA/IVL backend",
+        "proved/refuted outcomes are bounded by contract assumptions, supported LLVM semantics, explicit memory/pointer/call summaries, and fallback lanes when compiler IR is unavailable",
+        "Alive2 translation sidecar status=inconclusive under configured bounds (alive2_per_obligation=true;checked_obligations=0;max_obligations=32;timeout_ms=8000)"
+      ],
+      "witness": "theorem_timeout"
+    },
+    {
+      "backend": "alive2_translation_validation",
+      "stage": "l3_theorem_contract",
+      "status": "inconclusive",
+      "solver": "alive2",
+      "bounds": "alive2_per_obligation=true;checked_obligations=0;max_obligations=32;timeout_ms=8000",
+      "timeout_ms": 8000,
+      "assumptions": [
+        "Alive2 translation sidecar requires an external tool binary",
+        "configured Alive2 binary could not be started; per-obligation translation checks were skipped",
+        "tool probe failed for `alive-tv` with `spawn_failed:program not found`"
+      ],
+      "witness": "alive2_tool_unavailable:alive-tv:spawn_failed:program not found"
+    }
+  ],
+  "theorem_contract": {
+    "contract_id": "repo-equivalence-v1",
+    "observable_outputs": [
+      "public API return values",
+      "error codes and error messages"
+    ],
+    "error_behavior": [
+      "same input classes produce equivalent error categories"
+    ],
+    "side_effects": [
+      "same files are created, updated, or deleted for equivalent inputs"
+    ],
+    "preconditions": [
+      "identical environment configuration and dependencies",
+      "identical input payloads"
+    ],
+    "environment_assumptions": [
+      "filesystem semantics are stable",
+      "clock time is not an observable output"
+    ]
+  },
+  "theorem_run_status": "inconclusive_under_contract",
+  "theorem_obligations": [
+    {
+      "id": "thm_013875e8cae48bb7",
+      "source_pair": "pair:render_impact_node@src/rust/crates/repobrain-cli/src/main.rs:1036=>render_impact_node@src/rust/crates/repobrain-cli/src/main.rs:1020",
+      "contract_id": "repo-equivalence-v1",
+      "assumptions": [
+        "filesystem semantics are stable",
+        "clock time is not an observable output",
+        "alignment_strategy=exact_path_name",
+        "alignment_score=100",
+        "obligation_partition=pair:src/rust/crates/repobrain-cli/src/main.rs=>src/rust/crates/repobrain-cli/src/main.rs",
+        "obligation_priority=1"
+      ],
+      "encoding_hash": "de60eeead2149770"
+    },
+    {
+      "id": "thm_180614d77c34d2f8",
+      "source_pair": "pair:serving_metadata@src/rust/crates/repobrain-cli/src/main.rs:922=>serving_metadata@src/rust/crates/repobrain-cli/src/main.rs:906",
+      "contract_id": "repo-equivalence-v1",
+      "assumptions": [
+        "filesystem semantics are stable",
+        "clock time is not an observable output",
+        "alignment_strategy=exact_path_name",
+        "alignment_score=100",
+        "obligation_partition=pair:src/rust/crates/repobrain-cli/src/main.rs=>src/rust/crates/repobrain-cli/src/main.rs",
+        "obligation_priority=1"
+      ],
+      "encoding_hash": "e957a043877a2597"
+    },
+    {
+      "id": "thm_1ff959f92c157820",
+      "source_pair": "pair:default_model_profile@src/rust/crates/repobrain-cli/src/main.rs:898=>default_model_profile@src/rust/crates/repobrain-cli/src/main.rs:882",
+      "contract_id": "repo-equivalence-v1",
+      "assumptions": [
+        "filesystem semantics are stable",
+        "clock time is not an observable output",
+        "alignment_strategy=exact_path_name",
+        "alignment_score=100",
+        "obligation_partition=pair:src/rust/crates/repobrain-cli/src/main.rs=>src/rust/crates/repobrain-cli/src/main.rs",
+        "obligation_priority=1"
+      ],
+      "encoding_hash": "98bf66d958bc61c8"
+    },
+    {
+      "id": "thm_21d48866265e3ee1",
+      "source_pair": "pair:serving_runtime_input@src/rust/crates/repobrain-cli/src/main.rs:908=>serving_runtime_input@src/rust/crates/repobrain-cli/src/main.rs:892",
+      "contract_id": "repo-equivalence-v1",
+      "assumptions": [
+        "filesystem semantics are stable",
+        "clock time is not an observable output",
+        "alignment_strategy=exact_path_name",
+        "alignment_score=100",
+        "obligation_partition=pair:src/rust/crates/repobrain-cli/src/main.rs=>src/rust/crates/repobrain-cli/src/main.rs",
+        "obligation_priority=1"
+      ],
+      "encoding_hash": "3141341d2153f1fd"
+    },
+    {
+      "id": "thm_24e02f4697d4fbcd",
+      "source_pair": "pair:relationship_kind_label@src/rust/crates/repobrain-cli/src/main.rs:1064=>relationship_kind_label@src/rust/crates/repobrain-cli/src/main.rs:1048",
+      "contract_id": "repo-equivalence-v1",
+      "assumptions": [
+        "filesystem semantics are stable",
+        "clock time is not an observable output",
+        "alignment_strategy=exact_path_name",
+        "alignment_score=100",
+        "obligation_partition=pair:src/rust/crates/repobrain-cli/src/main.rs=>src/rust/crates/repobrain-cli/src/main.rs",
+        "obligation_priority=1"
+      ],
+      "encoding_hash": "23795a3c5235fcff"
+    },
+    {
+      "id": "thm_2d748d604a1e26ab",
+      "source_pair": "pair:symbol_kind_label@src/rust/crates/repobrain-cli/src/main.rs:962=>symbol_kind_label@src/rust/crates/repobrain-cli/src/main.rs:946",
+      "contract_id": "repo-equivalence-v1",
+      "assumptions": [
+        "filesystem semantics are stable",
+        "clock time is not an observable output",
+        "alignment_strategy=exact_path_name",
+        "alignment_score=100",
+        "obligation_partition=pair:src/rust/crates/repobrain-cli/src/main.rs=>src/rust/crates/repobrain-cli/src/main.rs",
+        "obligation_priority=1"
+      ],
+      "encoding_hash": "27730712e673a1d7"
+    },
+    {
+      "id": "thm_2ea21d8ce5b8323a",
+      "source_pair": "pair:revision_label_to_option@src/rust/crates/repobrain-cli/src/main.rs:497=>revision_label_to_option@src/rust/crates/repobrain-cli/src/main.rs:481",
+      "contract_id": "repo-equivalence-v1",
+      "assumptions": [
+        "filesystem semantics are stable",
+        "clock time is not an observable output",
+        "alignment_strategy=exact_path_name",
+        "alignment_score=100",
+        "obligation_partition=pair:src/rust/crates/repobrain-cli/src/main.rs=>src/rust/crates/repobrain-cli/src/main.rs",
+        "obligation_priority=1"
+      ],
+      "encoding_hash": "b658c63d8551fbae"
+    },
+    {
+      "id": "thm_3de1be35fecd7eea",
+      "source_pair": "pair:render_relationship_line@src/rust/crates/repobrain-cli/src/main.rs:1052=>render_relationship_line@src/rust/crates/repobrain-cli/src/main.rs:1036",
+      "contract_id": "repo-equivalence-v1",
+      "assumptions": [
+        "filesystem semantics are stable",
+        "clock time is not an observable output",
+        "alignment_strategy=exact_path_name",
+        "alignment_score=100",
+        "obligation_partition=pair:src/rust/crates/repobrain-cli/src/main.rs=>src/rust/crates/repobrain-cli/src/main.rs",
+        "obligation_priority=1"
+      ],
+      "encoding_hash": "f8db394ba5b53da1"
+    },
+    {
+      "id": "thm_3fe3f9df1c8d5fd7",
+      "source_pair": "pair:from@src/rust/crates/repobrain-cli/src/main.rs:1113=>from@src/rust/crates/repobrain-cli/src/main.rs:1097",
+      "contract_id": "repo-equivalence-v1",
+      "assumptions": [
+        "filesystem semantics are stable",
+        "clock time is not an observable output",
+        "alignment_strategy=exact_path_name",
+        "alignment_score=100",
+        "obligation_partition=pair:src/rust/crates/repobrain-cli/src/main.rs=>src/rust/crates/repobrain-cli/src/main.rs",
+        "obligation_priority=1"
+      ],
+      "encoding_hash": "3d7857375899eaf0"
+    },
+    {
+      "id": "thm_490efc73716a1f1c",
+      "source_pair": "pair:merge_delta_snapshot@src/rust/crates/repobrain-cli/src/main.rs:530=>merge_delta_snapshot@src/rust/crates/repobrain-cli/src/main.rs:514",
+      "contract_id": "repo-equivalence-v1",
+      "assumptions": [
+        "filesystem semantics are stable",
+        "clock time is not an observable output",
+        "alignment_strategy=exact_path_name",
+        "alignment_score=100",
+        "obligation_partition=pair:src/rust/crates/repobrain-cli/src/main.rs=>src/rust/crates/repobrain-cli/src/main.rs",
+        "obligation_priority=1"
+      ],
+      "encoding_hash": "63a82a296123e4f3"
+    },
+    {
+      "id": "thm_5120322e54a99f5b",
+      "source_pair": "pair:merge_delta_imports@src/rust/crates/repobrain-cli/src/main.rs:614=>merge_delta_imports@src/rust/crates/repobrain-cli/src/main.rs:598",
+      "contract_id": "repo-equivalence-v1",
+      "assumptions": [
+        "filesystem semantics are stable",
+        "clock time is not an observable output",
+        "alignment_strategy=exact_path_name",
+        "alignment_score=100",
+        "obligation_partition=pair:src/rust/crates/repobrain-cli/src/main.rs=>src/rust/crates/repobrain-cli/src/main.rs",
+        "obligation_priority=1"
+      ],
+      "encoding_hash": "9be2ccbf08711590"
+    },
+    {
+      "id": "thm_65424a6a93dd349c",
+      "source_pair": "pair:cli_flow_depth_label@src/rust/crates/repobrain-cli/src/main.rs:1013=>cli_flow_depth_label@src/rust/crates/repobrain-cli/src/main.rs:997",
+      "contract_id": "repo-equivalence-v1",
+      "assumptions": [
+        "filesystem semantics are stable",
+        "clock time is not an observable output",
+        "alignment_strategy=exact_path_name",
+        "alignment_score=100",
+        "obligation_partition=pair:src/rust/crates/repobrain-cli/src/main.rs=>src/rust/crates/repobrain-cli/src/main.rs",
+        "obligation_priority=1"
+      ],
+      "encoding_hash": "9b1304e40cc38535"
+    },
+    {
+      "id": "thm_69e55019e1c8e67f",
+      "source_pair": "pair:normalize_changed_path@src/rust/crates/repobrain-cli/src/main.rs:512=>normalize_changed_path@src/rust/crates/repobrain-cli/src/main.rs:496",
+      "contract_id": "repo-equivalence-v1",
+      "assumptions": [
+        "filesystem semantics are stable",
+        "clock time is not an observable output",
+        "alignment_strategy=exact_path_name",
+        "alignment_score=100",
+        "obligation_partition=pair:src/rust/crates/repobrain-cli/src/main.rs=>src/rust/crates/repobrain-cli/src/main.rs",
+        "obligation_priority=1"
+      ],
+      "encoding_hash": "b8247727614e96fe"
+    },
+    {
+      "id": "thm_73b53c4e2691e270",
+      "source_pair": "pair:scan_delta@src/rust/crates/repobrain-cli/src/main.rs:446=>scan_delta@src/rust/crates/repobrain-cli/src/main.rs:430",
+      "contract_id": "repo-equivalence-v1",
+      "assumptions": [
+        "filesystem semantics are stable",
+        "clock time is not an observable output",
+        "alignment_strategy=exact_path_name",
+        "alignment_score=100",
+        "obligation_partition=pair:src/rust/crates/repobrain-cli/src/main.rs=>src/rust/crates/repobrain-cli/src/main.rs",
+        "obligation_priority=1"
+      ],
+      "encoding_hash": "961f4e53e32fe040"
+    },
+    {
+      "id": "thm_81db7385f9d9dd70",
+      "source_pair": "pair:doctor@src/rust/crates/repobrain-cli/src/main.rs:385=>doctor@src/rust/crates/repobrain-cli/src/main.rs:369",
+      "contract_id": "repo-equivalence-v1",
+      "assumptions": [
+        "filesystem semantics are stable",
+        "clock time is not an observable output",
+        "alignment_strategy=exact_path_name",
+        "alignment_score=100",
+        "obligation_partition=pair:src/rust/crates/repobrain-cli/src/main.rs=>src/rust/crates/repobrain-cli/src/main.rs",
+        "obligation_priority=1"
+      ],
+      "encoding_hash": "64ff778f2df1c59f"
+    },
+    {
+      "id": "thm_83ac7228beba7646",
+      "source_pair": "pair:scan@src/rust/crates/repobrain-cli/src/main.rs:415=>scan@src/rust/crates/repobrain-cli/src/main.rs:399",
+      "contract_id": "repo-equivalence-v1",
+      "assumptions": [
+        "filesystem semantics are stable",
+        "clock time is not an observable output",
+        "alignment_strategy=exact_path_name",
+        "alignment_score=100",
+        "obligation_partition=pair:src/rust/crates/repobrain-cli/src/main.rs=>src/rust/crates/repobrain-cli/src/main.rs",
+        "obligation_priority=1"
+      ],
+      "encoding_hash": "221ee4fd8cf69054"
+    },
+    {
+      "id": "thm_8c39686153717513",
+      "source_pair": "pair:resolve_repo_root@src/rust/crates/repobrain-cli/src/main.rs:886=>resolve_repo_root@src/rust/crates/repobrain-cli/src/main.rs:870",
+      "contract_id": "repo-equivalence-v1",
+      "assumptions": [
+        "filesystem semantics are stable",
+        "clock time is not an observable output",
+        "alignment_strategy=exact_path_name",
+        "alignment_score=100",
+        "obligation_partition=pair:src/rust/crates/repobrain-cli/src/main.rs=>src/rust/crates/repobrain-cli/src/main.rs",
+        "obligation_priority=1"
+      ],
+      "encoding_hash": "837aaf1c4a57bc96"
+    },
+    {
+      "id": "thm_9151ace9c6825fcb",
+      "source_pair": "pair:merge_delta_files@src/rust/crates/repobrain-cli/src/main.rs:572=>merge_delta_files@src/rust/crates/repobrain-cli/src/main.rs:556",
+      "contract_id": "repo-equivalence-v1",
+      "assumptions": [
+        "filesystem semantics are stable",
+        "clock time is not an observable output",
+        "alignment_strategy=exact_path_name",
+        "alignment_score=100",
+        "obligation_partition=pair:src/rust/crates/repobrain-cli/src/main.rs=>src/rust/crates/repobrain-cli/src/main.rs",
+        "obligation_priority=1"
+      ],
+      "encoding_hash": "b7c03709d29a1b67"
+    },
+    {
+      "id": "thm_979b7e7138029af1",
+      "source_pair": "pair:symbol_evidence_label@src/rust/crates/repobrain-cli/src/main.rs:976=>symbol_evidence_label@src/rust/crates/repobrain-cli/src/main.rs:960",
+      "contract_id": "repo-equivalence-v1",
+      "assumptions": [
+        "filesystem semantics are stable",
+        "clock time is not an observable output",
+        "alignment_strategy=exact_path_name",
+        "alignment_score=100",
+        "obligation_partition=pair:src/rust/crates/repobrain-cli/src/main.rs=>src/rust/crates/repobrain-cli/src/main.rs",
+        "obligation_priority=1"
+      ],
+      "encoding_hash": "0cd6d3f8cf73744a"
+    },
+    {
+      "id": "thm_9c4ad699d6784d08",
+      "source_pair": "pair:layout@src/rust/crates/repobrain-cli/src/main.rs:393=>layout@src/rust/crates/repobrain-cli/src/main.rs:377",
+      "contract_id": "repo-equivalence-v1",
+      "assumptions": [
+        "filesystem semantics are stable",
+        "clock time is not an observable output",
+        "alignment_strategy=exact_path_name",
+        "alignment_score=100",
+        "obligation_partition=pair:src/rust/crates/repobrain-cli/src/main.rs=>src/rust/crates/repobrain-cli/src/main.rs",
+        "obligation_priority=1"
+      ],
+      "encoding_hash": "a0e51d96cb0befaf"
+    },
+    {
+      "id": "thm_9f7e7685df6db2fa",
+      "source_pair": "pair:from@src/rust/crates/repobrain-cli/src/main.rs:1103=>from@src/rust/crates/repobrain-cli/src/main.rs:1087",
+      "contract_id": "repo-equivalence-v1",
+      "assumptions": [
+        "filesystem semantics are stable",
+        "clock time is not an observable output",
+        "alignment_strategy=exact_path_name",
+        "alignment_score=100",
+        "obligation_partition=pair:src/rust/crates/repobrain-cli/src/main.rs=>src/rust/crates/repobrain-cli/src/main.rs",
+        "obligation_priority=1"
+      ],
+      "encoding_hash": "c093024553b2045a"
+    },
+    {
+      "id": "thm_a03a8ed5cd1efa36",
+      "source_pair": "pair:flow_trace@src/rust/crates/repobrain-cli/src/main.rs:983=>flow_trace@src/rust/crates/repobrain-cli/src/main.rs:967",
+      "contract_id": "repo-equivalence-v1",
+      "assumptions": [
+        "filesystem semantics are stable",
+        "clock time is not an observable output",
+        "alignment_strategy=exact_path_name",
+        "alignment_score=100",
+        "obligation_partition=pair:src/rust/crates/repobrain-cli/src/main.rs=>src/rust/crates/repobrain-cli/src/main.rs",
+        "obligation_priority=1"
+      ],
+      "encoding_hash": "aaf2f7cebb410bbf"
+    },
+    {
+      "id": "thm_a7e97552411e26b6",
+      "source_pair": "pair:schema_index@src/rust/crates/repobrain-cli/src/main.rs:404=>schema_index@src/rust/crates/repobrain-cli/src/main.rs:388",
+      "contract_id": "repo-equivalence-v1",
+      "assumptions": [
+        "filesystem semantics are stable",
+        "clock time is not an observable output",
+        "alignment_strategy=exact_path_name",
+        "alignment_score=100",
+        "obligation_partition=pair:src/rust/crates/repobrain-cli/src/main.rs=>src/rust/crates/repobrain-cli/src/main.rs",
+        "obligation_priority=1"
+      ],
+      "encoding_hash": "94d95456e29de038"
+    },
+    {
+      "id": "thm_b38acbb07741241a",
+      "source_pair": "pair:changed_paths_affect_verification@src/rust/crates/repobrain-cli/src/main.rs:652=>changed_paths_affect_verification@src/rust/crates/repobrain-cli/src/main.rs:636",
+      "contract_id": "repo-equivalence-v1",
+      "assumptions": [
+        "filesystem semantics are stable",
+        "clock time is not an observable output",
+        "alignment_strategy=exact_path_name",
+        "alignment_score=100",
+        "obligation_partition=pair:src/rust/crates/repobrain-cli/src/main.rs=>src/rust/crates/repobrain-cli/src/main.rs",
+        "obligation_priority=1"
+      ],
+      "encoding_hash": "e8ae99e1c3d0a3b1"
+    },
+    {
+      "id": "thm_b7ac942d05c29884",
+      "source_pair": "pair:merged_invariants@src/rust/crates/repobrain-cli/src/main.rs:1025=>merged_invariants@src/rust/crates/repobrain-cli/src/main.rs:1009",
+      "contract_id": "repo-equivalence-v1",
+      "assumptions": [
+        "filesystem semantics are stable",
+        "clock time is not an observable output",
+        "alignment_strategy=exact_path_name",
+        "alignment_score=100",
+        "obligation_partition=pair:src/rust/crates/repobrain-cli/src/main.rs=>src/rust/crates/repobrain-cli/src/main.rs",
+        "obligation_priority=1"
+      ],
+      "encoding_hash": "61ae6812ceb727e3"
+    },
+    {
+      "id": "thm_c02c6a59ffc309d7",
+      "source_pair": "pair:from@src/rust/crates/repobrain-cli/src/main.rs:1132=>from@src/rust/crates/repobrain-cli/src/main.rs:1116",
+      "contract_id": "repo-equivalence-v1",
+      "assumptions": [
+        "filesystem semantics are stable",
+        "clock time is not an observable output",
+        "alignment_strategy=exact_path_name",
+        "alignment_score=100",
+        "obligation_partition=pair:src/rust/crates/repobrain-cli/src/main.rs=>src/rust/crates/repobrain-cli/src/main.rs",
+        "obligation_priority=1"
+      ],
+      "encoding_hash": "b9fbd76ade6cd163"
+    },
+    {
+      "id": "thm_c1fc81a0d986fd24",
+      "source_pair": "pair:take_prefix@src/rust/crates/repobrain-cli/src/main.rs:1021=>take_prefix@src/rust/crates/repobrain-cli/src/main.rs:1005",
+      "contract_id": "repo-equivalence-v1",
+      "assumptions": [
+        "filesystem semantics are stable",
+        "clock time is not an observable output",
+        "alignment_strategy=exact_path_name",
+        "alignment_score=100",
+        "obligation_partition=pair:src/rust/crates/repobrain-cli/src/main.rs=>src/rust/crates/repobrain-cli/src/main.rs",
+        "obligation_priority=1"
+      ],
+      "encoding_hash": "074bfc0408357977"
+    },
+    {
+      "id": "thm_c7d1327891aa4de7",
+      "source_pair": "pair:from@src/rust/crates/repobrain-cli/src/main.rs:1079=>from@src/rust/crates/repobrain-cli/src/main.rs:1063",
+      "contract_id": "repo-equivalence-v1",
+      "assumptions": [
+        "filesystem semantics are stable",
+        "clock time is not an observable output",
+        "alignment_strategy=exact_path_name",
+        "alignment_score=100",
+        "obligation_partition=pair:src/rust/crates/repobrain-cli/src/main.rs=>src/rust/crates/repobrain-cli/src/main.rs",
+        "obligation_priority=1"
+      ],
+      "encoding_hash": "dfa540fd7074400a"
+    },
+    {
+      "id": "thm_cdb9f69b25c69fab",
+      "source_pair": "pair:normalize_changed_paths@src/rust/crates/repobrain-cli/src/main.rs:505=>normalize_changed_paths@src/rust/crates/repobrain-cli/src/main.rs:489",
+      "contract_id": "repo-equivalence-v1",
+      "assumptions": [
+        "filesystem semantics are stable",
+        "clock time is not an observable output",
+        "alignment_strategy=exact_path_name",
+        "alignment_score=100",
+        "obligation_partition=pair:src/rust/crates/repobrain-cli/src/main.rs=>src/rust/crates/repobrain-cli/src/main.rs",
+        "obligation_priority=1"
+      ],
+      "encoding_hash": "f23c5064010d15fa"
+    },
+    {
+      "id": "thm_d0da86617cd0fb94",
+      "source_pair": "pair:lookup_path@src/rust/crates/repobrain-cli/src/main.rs:826=>lookup_path@src/rust/crates/repobrain-cli/src/main.rs:810",
+      "contract_id": "repo-equivalence-v1",
+      "assumptions": [
+        "filesystem semantics are stable",
+        "clock time is not an observable output",
+        "alignment_strategy=exact_path_name",
+        "alignment_score=100",
+        "obligation_partition=pair:src/rust/crates/repobrain-cli/src/main.rs=>src/rust/crates/repobrain-cli/src/main.rs",
+        "obligation_priority=1"
+      ],
+      "encoding_hash": "4274c3f8081c141e"
+    },
+    {
+      "id": "thm_d3620f0dbbca8f18",
+      "source_pair": "pair:main@src/rust/crates/repobrain-cli/src/main.rs:356=>main@src/rust/crates/repobrain-cli/src/main.rs:340",
+      "contract_id": "repo-equivalence-v1",
+      "assumptions": [
+        "filesystem semantics are stable",
+        "clock time is not an observable output",
+        "alignment_strategy=exact_path_name",
+        "alignment_score=100",
+        "obligation_partition=pair:src/rust/crates/repobrain-cli/src/main.rs=>src/rust/crates/repobrain-cli/src/main.rs",
+        "obligation_priority=1"
+      ],
+      "encoding_hash": "432aa95119939036"
+    },
+    {
+      "id": "thm_e87b59053bc38cdb",
+      "source_pair": "pair:lookup_symbol@src/rust/crates/repobrain-cli/src/main.rs:851=>lookup_symbol@src/rust/crates/repobrain-cli/src/main.rs:835",
+      "contract_id": "repo-equivalence-v1",
+      "assumptions": [
+        "filesystem semantics are stable",
+        "clock time is not an observable output",
+        "alignment_strategy=exact_path_name",
+        "alignment_score=100",
+        "obligation_partition=pair:src/rust/crates/repobrain-cli/src/main.rs=>src/rust/crates/repobrain-cli/src/main.rs",
+        "obligation_priority=1"
+      ],
+      "encoding_hash": "1c9ea90fb50eed17"
+    },
+    {
+      "id": "thm_ed8026c7db41674c",
+      "source_pair": "pair:readiness_label@src/rust/crates/repobrain-cli/src/main.rs:950=>readiness_label@src/rust/crates/repobrain-cli/src/main.rs:934",
+      "contract_id": "repo-equivalence-v1",
+      "assumptions": [
+        "filesystem semantics are stable",
+        "clock time is not an observable output",
+        "alignment_strategy=exact_path_name",
+        "alignment_score=100",
+        "obligation_partition=pair:src/rust/crates/repobrain-cli/src/main.rs=>src/rust/crates/repobrain-cli/src/main.rs",
+        "obligation_priority=1"
+      ],
+      "encoding_hash": "68488dec5dba41ab"
+    },
+    {
+      "id": "thm_ee3aac19098f09f3",
+      "source_pair": "pair:get_brief@src/rust/crates/repobrain-cli/src/main.rs:672=>get_brief@src/rust/crates/repobrain-cli/src/main.rs:656",
+      "contract_id": "repo-equivalence-v1",
+      "assumptions": [
+        "filesystem semantics are stable",
+        "clock time is not an observable output",
+        "alignment_strategy=exact_path_name",
+        "alignment_score=100",
+        "obligation_partition=pair:src/rust/crates/repobrain-cli/src/main.rs=>src/rust/crates/repobrain-cli/src/main.rs",
+        "obligation_priority=1"
+      ],
+      "encoding_hash": "2e3d82fb62a33e9d"
+    },
+    {
+      "id": "thm_eed86912c7059c27",
+      "source_pair": "pair:from@src/rust/crates/repobrain-cli/src/main.rs:1092=>from@src/rust/crates/repobrain-cli/src/main.rs:1076",
+      "contract_id": "repo-equivalence-v1",
+      "assumptions": [
+        "filesystem semantics are stable",
+        "clock time is not an observable output",
+        "alignment_strategy=exact_path_name",
+        "alignment_score=100",
+        "obligation_partition=pair:src/rust/crates/repobrain-cli/src/main.rs=>src/rust/crates/repobrain-cli/src/main.rs",
+        "obligation_priority=1"
+      ],
+      "encoding_hash": "57de5ba1f3f0d309"
+    },
+    {
+      "id": "thm_f178f31a39d20820",
+      "source_pair": "pair:blast_radius@src/rust/crates/repobrain-cli/src/main.rs:713=>blast_radius@src/rust/crates/repobrain-cli/src/main.rs:697",
+      "contract_id": "repo-equivalence-v1",
+      "assumptions": [
+        "filesystem semantics are stable",
+        "clock time is not an observable output",
+        "alignment_strategy=exact_path_name",
+        "alignment_score=100",
+        "obligation_partition=pair:src/rust/crates/repobrain-cli/src/main.rs=>src/rust/crates/repobrain-cli/src/main.rs",
+        "obligation_priority=1"
+      ],
+      "encoding_hash": "b1e47c6db046b6ea"
+    },
+    {
+      "id": "thm_f68cd4eef6e5d9d1",
+      "source_pair": "pair:from@src/rust/crates/repobrain-cli/src/main.rs:1123=>from@src/rust/crates/repobrain-cli/src/main.rs:1107",
+      "contract_id": "repo-equivalence-v1",
+      "assumptions": [
+        "filesystem semantics are stable",
+        "clock time is not an observable output",
+        "alignment_strategy=exact_path_name",
+        "alignment_score=100",
+        "obligation_partition=pair:src/rust/crates/repobrain-cli/src/main.rs=>src/rust/crates/repobrain-cli/src/main.rs",
+        "obligation_priority=1"
+      ],
+      "encoding_hash": "96e8bd7700d57793"
+    },
+    {
+      "id": "thm_f72cac4e763a767b",
+      "source_pair": "pair:merge_delta_symbols@src/rust/crates/repobrain-cli/src/main.rs:595=>merge_delta_symbols@src/rust/crates/repobrain-cli/src/main.rs:579",
+      "contract_id": "repo-equivalence-v1",
+      "assumptions": [
+        "filesystem semantics are stable",
+        "clock time is not an observable output",
+        "alignment_strategy=exact_path_name",
+        "alignment_score=100",
+        "obligation_partition=pair:src/rust/crates/repobrain-cli/src/main.rs=>src/rust/crates/repobrain-cli/src/main.rs",
+        "obligation_priority=1"
+      ],
+      "encoding_hash": "7fdc06a817ff0fc5"
+    },
+    {
+      "id": "thm_090ff46e7d73a3d8",
+      "source_pair": "pair:l2_declaration_signature@src/rust/crates/repobrain-cli/src/semantic_pipeline.rs:4385=>l2_declaration_signature@src/rust/crates/repobrain-cli/src/semantic_pipeline.rs:4289",
+      "contract_id": "repo-equivalence-v1",
+      "assumptions": [
+        "filesystem semantics are stable",
+        "clock time is not an observable output",
+        "alignment_strategy=exact_path_name",
+        "alignment_score=100",
+        "obligation_partition=pair:src/rust/crates/repobrain-cli/src/semantic_pipeline.rs=>src/rust/crates/repobrain-cli/src/semantic_pipeline.rs",
+        "obligation_priority=1"
+      ],
+      "encoding_hash": "e04bba848632fb8e"
+    },
+    {
+      "id": "thm_0caae520170c9162",
+      "source_pair": "pair:semantic_diff_l3_stage@src/rust/crates/repobrain-cli/src/semantic_pipeline.rs:710=>semantic_diff_l3_stage@src/rust/crates/repobrain-cli/src/semantic_pipeline.rs:707",
+      "contract_id": "repo-equivalence-v1",
+      "assumptions": [
+        "filesystem semantics are stable",
+        "clock time is not an observable output",
+        "alignment_strategy=exact_path_name",
+        "alignment_score=100",
+        "obligation_partition=pair:src/rust/crates/repobrain-cli/src/semantic_pipeline.rs=>src/rust/crates/repobrain-cli/src/semantic_pipeline.rs",
+        "obligation_priority=1"
+      ],
+      "encoding_hash": "bc72997de237dab5"
+    },
+    {
+      "id": "thm_0d2b07812d48a64f",
+      "source_pair": "pair:l1_nearest_manifest_path@src/rust/crates/repobrain-cli/src/semantic_pipeline.rs:3863=>l1_nearest_manifest_path@src/rust/crates/repobrain-cli/src/semantic_pipeline.rs:3767",
+      "contract_id": "repo-equivalence-v1",
+      "assumptions": [
+        "filesystem semantics are stable",
+        "clock time is not an observable output",
+        "alignment_strategy=exact_path_name",
+        "alignment_score=100",
+        "obligation_partition=pair:src/rust/crates/repobrain-cli/src/semantic_pipeline.rs=>src/rust/crates/repobrain-cli/src/semantic_pipeline.rs",
+        "obligation_priority=1"
+      ],
+      "encoding_hash": "15a9ea5d331beaa4"
+    },
+    {
+      "id": "thm_0fd1bdf27a99ea39",
+      "source_pair": "pair:run_kani_with_timeout@src/rust/crates/repobrain-cli/src/semantic_pipeline.rs:3966=>run_kani_with_timeout@src/rust/crates/repobrain-cli/src/semantic_pipeline.rs:3870",
+      "contract_id": "repo-equivalence-v1",
+      "assumptions": [
+        "filesystem semantics are stable",
+        "clock time is not an observable output",
+        "alignment_strategy=exact_path_name",
+        "alignment_score=100",
+        "obligation_partition=pair:src/rust/crates/repobrain-cli/src/semantic_pipeline.rs=>src/rust/crates/repobrain-cli/src/semantic_pipeline.rs",
+        "obligation_priority=1"
+      ],
+      "encoding_hash": "140e96c28ec88f07"
+    },
+    {
+      "id": "thm_0fef55c7cadf0d3b",
+      "source_pair": "pair:l2_base_assumptions@src/rust/crates/repobrain-cli/src/semantic_pipeline.rs:4169=>l2_base_assumptions@src/rust/crates/repobrain-cli/src/semantic_pipeline.rs:4073",
+      "contract_id": "repo-equivalence-v1",
+      "assumptions": [
+        "filesystem semantics are stable",
+        "clock time is not an observable output",
+        "alignment_strategy=exact_path_name",
+        "alignment_score=100",
+        "obligation_partition=pair:src/rust/crates/repobrain-cli/src/semantic_pipeline.rs=>src/rust/crates/repobrain-cli/src/semantic_pipeline.rs",
+        "obligation_priority=1"
+      ],
+      "encoding_hash": "9f551a1343fe9a8d"
+    },
+    {
+      "id": "thm_113a99d9e4cf7616",
+      "source_pair": "pair:l1_is_kani_proof_attribute@src/rust/crates/repobrain-cli/src/semantic_pipeline.rs:3835=>l1_is_kani_proof_attribute@src/rust/crates/repobrain-cli/src/semantic_pipeline.rs:3739",
+      "contract_id": "repo-equivalence-v1",
+      "assumptions": [
+        "filesystem semantics are stable",
+        "clock time is not an observable output",
+        "alignment_strategy=exact_path_name",
+        "alignment_score=100",
+        "obligation_partition=pair:src/rust/crates/repobrain-cli/src/semantic_pipeline.rs=>src/rust/crates/repobrain-cli/src/semantic_pipeline.rs",
+        "obligation_priority=1"
+      ],
+      "encoding_hash": "404a6be23ee25bd0"
+    },
+    {
+      "id": "thm_1501bb921a9f64ed",
+      "source_pair": "pair:l2_function_neighbor_signatures@src/rust/crates/repobrain-cli/src/semantic_pipeline.rs:4421=>l2_function_neighbor_signatures@src/rust/crates/repobrain-cli/src/semantic_pipeline.rs:4325",
+      "contract_id": "repo-equivalence-v1",
+      "assumptions": [
+        "filesystem semantics are stable",
+        "clock time is not an observable output",
+        "alignment_strategy=exact_path_name",
+        "alignment_score=100",
+        "obligation_partition=pair:src/rust/crates/repobrain-cli/src/semantic_pipeline.rs=>src/rust/crates/repobrain-cli/src/semantic_pipeline.rs",
+        "obligation_priority=1"
+      ],
+      "encoding_hash": "986d0a2b1f2d7c48"
+    },
+    {
+      "id": "thm_1565f2660c46053d",
+      "source_pair": "pair:l2_relational_outcome@src/rust/crates/repobrain-cli/src/semantic_pipeline.rs:4965=>l2_relational_outcome@src/rust/crates/repobrain-cli/src/semantic_pipeline.rs:4869",
+      "contract_id": "repo-equivalence-v1",
+      "assumptions": [
+        "filesystem semantics are stable",
+        "clock time is not an observable output",
+        "alignment_strategy=exact_path_name",
+        "alignment_score=100",
+        "obligation_partition=pair:src/rust/crates/repobrain-cli/src/semantic_pipeline.rs=>src/rust/crates/repobrain-cli/src/semantic_pipeline.rs",
+        "obligation_priority=1"
+      ],
+      "encoding_hash": "3fe905e95c87281e"
+    },
+    {
+      "id": "thm_175da3e113ed9552",
+      "source_pair": "pair:l1_extract_kani_proof_harnesses@src/rust/crates/repobrain-cli/src/semantic_pipeline.rs:3809=>l1_extract_kani_proof_harnesses@src/rust/crates/repobrain-cli/src/semantic_pipeline.rs:3713",
+      "contract_id": "repo-equivalence-v1",
+      "assumptions": [
+        "filesystem semantics are stable",
+        "clock time is not an observable output",
+        "alignment_strategy=exact_path_name",
+        "alignment_score=100",
+        "obligation_partition=pair:src/rust/crates/repobrain-cli/src/semantic_pipeline.rs=>src/rust/crates/repobrain-cli/src/semantic_pipeline.rs",
+        "obligation_priority=1"
+      ],
+      "encoding_hash": "bc86f8ad2d8c2597"
+    },
+    {
+      "id": "thm_1bc745543a6e00ee",
+      "source_pair": "pair:load_reference_snapshot@src/rust/crates/repobrain-cli/src/semantic_pipeline.rs:498=>load_reference_snapshot@src/rust/crates/repobrain-cli/src/semantic_pipeline.rs:495",
+      "contract_id": "repo-equivalence-v1",
+      "assumptions": [
+        "filesystem semantics are stable",
+        "clock time is not an observable output",
+        "alignment_strategy=exact_path_name",
+        "alignment_score=100",
+        "obligation_partition=pair:src/rust/crates/repobrain-cli/src/semantic_pipeline.rs=>src/rust/crates/repobrain-cli/src/semantic_pipeline.rs",
+        "obligation_priority=1"
+      ],
+      "encoding_hash": "507550fd6773efb2"
+    },
+    {
+      "id": "thm_228d85f7d57157a2",
+      "source_pair": "pair:l1_per_obligation_timeout_ms@src/rust/crates/repobrain-cli/src/semantic_pipeline.rs:3752=>l1_per_obligation_timeout_ms@src/rust/crates/repobrain-cli/src/semantic_pipeline.rs:3656",
+      "contract_id": "repo-equivalence-v1",
+      "assumptions": [
+        "filesystem semantics are stable",
+        "clock time is not an observable output",
+        "alignment_strategy=exact_path_name",
+        "alignment_score=100",
+        "obligation_partition=pair:src/rust/crates/repobrain-cli/src/semantic_pipeline.rs=>src/rust/crates/repobrain-cli/src/semantic_pipeline.rs",
+        "obligation_priority=1"
+      ],
+      "encoding_hash": "ed6ab3aa2e3aa322"
+    },
+    {
+      "id": "thm_22ad6ab9f3530ef9",
+      "source_pair": "pair:render_verification_target@src/rust/crates/repobrain-cli/src/semantic_pipeline.rs:1071=>render_verification_target@src/rust/crates/repobrain-cli/src/semantic_pipeline.rs:1068",
+      "contract_id": "repo-equivalence-v1",
+      "assumptions": [
+        "filesystem semantics are stable",
+        "clock time is not an observable output",
+        "alignment_strategy=exact_path_name",
+        "alignment_score=100",
+        "obligation_partition=pair:src/rust/crates/repobrain-cli/src/semantic_pipeline.rs=>src/rust/crates/repobrain-cli/src/semantic_pipeline.rs",
+        "obligation_priority=1"
+      ],
+      "encoding_hash": "c9e62f6a0770d4ef"
+    },
+    {
+      "id": "thm_256a66e63e0dee8c",
+      "source_pair": "pair:semantic_delta_witness@src/rust/crates/repobrain-cli/src/semantic_pipeline.rs:5130=>semantic_delta_witness@src/rust/crates/repobrain-cli/src/semantic_pipeline.rs:5034",
+      "contract_id": "repo-equivalence-v1",
+      "assumptions": [
+        "filesystem semantics are stable",
+        "clock time is not an observable output",
+        "alignment_strategy=exact_path_name",
+        "alignment_score=100",
+        "obligation_partition=pair:src/rust/crates/repobrain-cli/src/semantic_pipeline.rs=>src/rust/crates/repobrain-cli/src/semantic_pipeline.rs",
+        "obligation_priority=1"
+      ],
+      "encoding_hash": "285adfbda872e39a"
+    },
+    {
+      "id": "thm_261003061385d651",
+      "source_pair": "pair:l1_policy_from_args@src/rust/crates/repobrain-cli/src/semantic_pipeline.rs:1241=>l1_policy_from_args@src/rust/crates/repobrain-cli/src/semantic_pipeline.rs:1238",
+      "contract_id": "repo-equivalence-v1",
+      "assumptions": [
+        "filesystem semantics are stable",
+        "clock time is not an observable output",
+        "alignment_strategy=exact_path_name",
+        "alignment_score=100",
+        "obligation_partition=pair:src/rust/crates/repobrain-cli/src/semantic_pipeline.rs=>src/rust/crates/repobrain-cli/src/semantic_pipeline.rs",
+        "obligation_priority=1"
+      ],
+      "encoding_hash": "dd5f9d7ab23a0555"
+    },
+    {
+      "id": "thm_26b01abc120078ab",
+      "source_pair": "pair:l2_manifest_path_for_source_path@src/rust/crates/repobrain-cli/src/semantic_pipeline.rs:4213=>l2_manifest_path_for_source_path@src/rust/crates/repobrain-cli/src/semantic_pipeline.rs:4117",
+      "contract_id": "repo-equivalence-v1",
+      "assumptions": [
+        "filesystem semantics are stable",
+        "clock time is not an observable output",
+        "alignment_strategy=exact_path_name",
+        "alignment_score=100",
+        "obligation_partition=pair:src/rust/crates/repobrain-cli/src/semantic_pipeline.rs=>src/rust/crates/repobrain-cli/src/semantic_pipeline.rs",
+        "obligation_priority=1"
+      ],
+      "encoding_hash": "0a5ff425dfa70abc"
+    },
+    {
+      "id": "thm_2969240f38d888ff",
+      "source_pair": "pair:collect_rust_scope_paths@src/rust/crates/repobrain-cli/src/semantic_pipeline.rs:3659=>collect_rust_scope_paths@src/rust/crates/repobrain-cli/src/semantic_pipeline.rs:3563",
+      "contract_id": "repo-equivalence-v1",
+      "assumptions": [
+        "filesystem semantics are stable",
+        "clock time is not an observable output",
+        "alignment_strategy=exact_path_name",
+        "alignment_score=100",
+        "obligation_partition=pair:src/rust/crates/repobrain-cli/src/semantic_pipeline.rs=>src/rust/crates/repobrain-cli/src/semantic_pipeline.rs",
+        "obligation_priority=1"
+      ],
+      "encoding_hash": "a1adea1e3acd7ead"
+    },
+    {
+      "id": "thm_2dfcc57e09e230f2",
+      "source_pair": "pair:l2_behavior_profile_for_symbol@src/rust/crates/repobrain-cli/src/semantic_pipeline.rs:4352=>l2_behavior_profile_for_symbol@src/rust/crates/repobrain-cli/src/semantic_pipeline.rs:4256",
+      "contract_id": "repo-equivalence-v1",
+      "assumptions": [
+        "filesystem semantics are stable",
+        "clock time is not an observable output",
+        "alignment_strategy=exact_path_name",
+        "alignment_score=100",
+        "obligation_partition=pair:src/rust/crates/repobrain-cli/src/semantic_pipeline.rs=>src/rust/crates/repobrain-cli/src/semantic_pipeline.rs",
+        "obligation_priority=1"
+      ],
+      "encoding_hash": "359f499ba814db36"
+    },
+    {
+      "id": "thm_38672138bb8c998c",
+      "source_pair": "pair:normalize_identifier@src/rust/crates/repobrain-cli/src/semantic_pipeline.rs:4925=>normalize_identifier@src/rust/crates/repobrain-cli/src/semantic_pipeline.rs:4829",
+      "contract_id": "repo-equivalence-v1",
+      "assumptions": [
+        "filesystem semantics are stable",
+        "clock time is not an observable output",
+        "alignment_strategy=exact_path_name",
+        "alignment_score=100",
+        "obligation_partition=pair:src/rust/crates/repobrain-cli/src/semantic_pipeline.rs=>src/rust/crates/repobrain-cli/src/semantic_pipeline.rs",
+        "obligation_priority=1"
+      ],
+      "encoding_hash": "933bc0ee6703821e"
+    },
+    {
+      "id": "thm_42b498fddcdc4607",
+      "source_pair": "pair:l2_policy_from_args@src/rust/crates/repobrain-cli/src/semantic_pipeline.rs:1250=>l2_policy_from_args@src/rust/crates/repobrain-cli/src/semantic_pipeline.rs:1247",
+      "contract_id": "repo-equivalence-v1",
+      "assumptions": [
+        "filesystem semantics are stable",
+        "clock time is not an observable output",
+        "alignment_strategy=exact_path_name",
+        "alignment_score=100",
+        "obligation_partition=pair:src/rust/crates/repobrain-cli/src/semantic_pipeline.rs=>src/rust/crates/repobrain-cli/src/semantic_pipeline.rs",
+        "obligation_priority=1"
+      ],
+      "encoding_hash": "56c0e62b5d9580d3"
+    },
+    {
+      "id": "thm_45f17c67e1ca8f16",
+      "source_pair": "pair:l0_structural_delta_receipt@src/rust/crates/repobrain-cli/src/semantic_pipeline.rs:1180=>l0_structural_delta_receipt@src/rust/crates/repobrain-cli/src/semantic_pipeline.rs:1177",
+      "contract_id": "repo-equivalence-v1",
+      "assumptions": [
+        "filesystem semantics are stable",
+        "clock time is not an observable output",
+        "alignment_strategy=exact_path_name",
+        "alignment_score=100",
+        "obligation_partition=pair:src/rust/crates/repobrain-cli/src/semantic_pipeline.rs=>src/rust/crates/repobrain-cli/src/semantic_pipeline.rs",
+        "obligation_priority=1"
+      ],
+      "encoding_hash": "95237b2ee48c63a1"
+    },
+    {
+      "id": "thm_49e514f4a0668b9e",
+      "source_pair": "pair:semantic_diff_l0_stage@src/rust/crates/repobrain-cli/src/semantic_pipeline.rs:636=>semantic_diff_l0_stage@src/rust/crates/repobrain-cli/src/semantic_pipeline.rs:633",
+      "contract_id": "repo-equivalence-v1",
+      "assumptions": [
+        "filesystem semantics are stable",
+        "clock time is not an observable output",
+        "alignment_strategy=exact_path_name",
+        "alignment_score=100",
+        "obligation_partition=pair:src/rust/crates/repobrain-cli/src/semantic_pipeline.rs=>src/rust/crates/repobrain-cli/src/semantic_pipeline.rs",
+        "obligation_priority=1"
+      ],
+      "encoding_hash": "23c57e4c8ac3f0fe"
+    },
+    {
+      "id": "thm_4d8907afde129b50",
+      "source_pair": "pair:load_theorem_contract_for_stage@src/rust/crates/repobrain-cli/src/semantic_pipeline.rs:511=>load_theorem_contract_for_stage@src/rust/crates/repobrain-cli/src/semantic_pipeline.rs:508",
+      "contract_id": "repo-equivalence-v1",
+      "assumptions": [
+        "filesystem semantics are stable",
+        "clock time is not an observable output",
+        "alignment_strategy=exact_path_name",
+        "alignment_score=100",
+        "obligation_partition=pair:src/rust/crates/repobrain-cli/src/semantic_pipeline.rs=>src/rust/crates/repobrain-cli/src/semantic_pipeline.rs",
+        "obligation_priority=1"
+      ],
+      "encoding_hash": "2d4650fd62aee037"
+    },
+    {
+      "id": "thm_4dd64d5143451c17",
+      "source_pair": "pair:run_l1_targeted_obligations@src/rust/crates/repobrain-cli/src/semantic_pipeline.rs:3697=>run_l1_targeted_obligations@src/rust/crates/repobrain-cli/src/semantic_pipeline.rs:3601",
+      "contract_id": "repo-equivalence-v1",
+      "assumptions": [
+        "filesystem semantics are stable",
+        "clock time is not an observable output",
+        "alignment_strategy=exact_path_name",
+        "alignment_score=100",
+        "obligation_partition=pair:src/rust/crates/repobrain-cli/src/semantic_pipeline.rs=>src/rust/crates/repobrain-cli/src/semantic_pipeline.rs",
+        "obligation_priority=1"
+      ],
+      "encoding_hash": "e4db211758bbffea"
+    },
+    {
+      "id": "thm_511bc8c301487104",
+      "source_pair": "pair:equivalence_stage_for_cli@src/rust/crates/repobrain-cli/src/semantic_pipeline.rs:1223=>equivalence_stage_for_cli@src/rust/crates/repobrain-cli/src/semantic_pipeline.rs:1220",
+      "contract_id": "repo-equivalence-v1",
+      "assumptions": [
+        "filesystem semantics are stable",
+        "clock time is not an observable output",
+        "alignment_strategy=exact_path_name",
+        "alignment_score=100",
+        "obligation_partition=pair:src/rust/crates/repobrain-cli/src/semantic_pipeline.rs=>src/rust/crates/repobrain-cli/src/semantic_pipeline.rs",
+        "obligation_priority=1"
+      ],
+      "encoding_hash": "d607e59464933bc2"
+    },
+    {
+      "id": "thm_524b5fa002f6d5c7",
+      "source_pair": "pair:l2_alignment_similarity_score@src/rust/crates/repobrain-cli/src/semantic_pipeline.rs:4849=>l2_alignment_similarity_score@src/rust/crates/repobrain-cli/src/semantic_pipeline.rs:4753",
+      "contract_id": "repo-equivalence-v1",
+      "assumptions": [
+        "filesystem semantics are stable",
+        "clock time is not an observable output",
+        "alignment_strategy=exact_path_name",
+        "alignment_score=100",
+        "obligation_partition=pair:src/rust/crates/repobrain-cli/src/semantic_pipeline.rs=>src/rust/crates/repobrain-cli/src/semantic_pipeline.rs",
+        "obligation_priority=1"
+      ],
+      "encoding_hash": "6937eddf6d876509"
+    },
+    {
+      "id": "thm_52bad3dd8cfb1aba",
+      "source_pair": "pair:l1_collect_proof_obligations@src/rust/crates/repobrain-cli/src/semantic_pipeline.rs:3769=>l1_collect_proof_obligations@src/rust/crates/repobrain-cli/src/semantic_pipeline.rs:3673",
+      "contract_id": "repo-equivalence-v1",
+      "assumptions": [
+        "filesystem semantics are stable",
+        "clock time is not an observable output",
+        "alignment_strategy=exact_path_name",
+        "alignment_score=100",
+        "obligation_partition=pair:src/rust/crates/repobrain-cli/src/semantic_pipeline.rs=>src/rust/crates/repobrain-cli/src/semantic_pipeline.rs",
+        "obligation_priority=1"
+      ],
+      "encoding_hash": "4ff3f702263db869"
+    },
+    {
+      "id": "thm_5517800943401174",
+      "source_pair": "pair:list_invariants@src/rust/crates/repobrain-cli/src/semantic_pipeline.rs:328=>list_invariants@src/rust/crates/repobrain-cli/src/semantic_pipeline.rs:325",
+      "contract_id": "repo-equivalence-v1",
+      "assumptions": [
+        "filesystem semantics are stable",
+        "clock time is not an observable output",
+        "alignment_strategy=exact_path_name",
+        "alignment_score=100",
+        "obligation_partition=pair:src/rust/crates/repobrain-cli/src/semantic_pipeline.rs=>src/rust/crates/repobrain-cli/src/semantic_pipeline.rs",
+        "obligation_priority=1"
+      ],
+      "encoding_hash": "8c61e39b1dc05bca"
+    },
+    {
+      "id": "thm_5692e2a56f01ebda",
+      "source_pair": "pair:kani_failure_status@src/rust/crates/repobrain-cli/src/semantic_pipeline.rs:4043=>kani_failure_status@src/rust/crates/repobrain-cli/src/semantic_pipeline.rs:3947",
+      "contract_id": "repo-equivalence-v1",
+      "assumptions": [
+        "filesystem semantics are stable",
+        "clock time is not an observable output",
+        "alignment_strategy=exact_path_name",
+        "alignment_score=100",
+        "obligation_partition=pair:src/rust/crates/repobrain-cli/src/semantic_pipeline.rs=>src/rust/crates/repobrain-cli/src/semantic_pipeline.rs",
+        "obligation_priority=1"
+      ],
+      "encoding_hash": "18da210ba4d7c4c7"
+    },
+    {
+      "id": "thm_5dda7a965e7be39b",
+      "source_pair": "pair:drop@src/rust/crates/repobrain-cli/src/semantic_pipeline.rs:2300=>drop@src/rust/crates/repobrain-cli/src/semantic_pipeline.rs:2293",
+      "contract_id": "repo-equivalence-v1",
+      "assumptions": [
+        "filesystem semantics are stable",
+        "clock time is not an observable output",
+        "alignment_strategy=exact_path_name",
+        "alignment_score=100",
+        "obligation_partition=pair:src/rust/crates/repobrain-cli/src/semantic_pipeline.rs=>src/rust/crates/repobrain-cli/src/semantic_pipeline.rs",
+        "obligation_priority=1"
+      ],
+      "encoding_hash": "bd23effee4c4111e"
+    },
+    {
+      "id": "thm_5fa9e4db3e078432",
+      "source_pair": "pair:explain_flow@src/rust/crates/repobrain-cli/src/semantic_pipeline.rs:285=>explain_flow@src/rust/crates/repobrain-cli/src/semantic_pipeline.rs:282",
+      "contract_id": "repo-equivalence-v1",
+      "assumptions": [
+        "filesystem semantics are stable",
+        "clock time is not an observable output",
+        "alignment_strategy=exact_path_name",
+        "alignment_score=100",
+        "obligation_partition=pair:src/rust/crates/repobrain-cli/src/semantic_pipeline.rs=>src/rust/crates/repobrain-cli/src/semantic_pipeline.rs",
+        "obligation_priority=1"
+      ],
+      "encoding_hash": "f54964f83eadbda8"
+    },
+    {
+      "id": "thm_6403b7084f467b31",
+      "source_pair": "pair:import_fact_delta@src/rust/crates/repobrain-cli/src/semantic_pipeline.rs:976=>import_fact_delta@src/rust/crates/repobrain-cli/src/semantic_pipeline.rs:973",
+      "contract_id": "repo-equivalence-v1",
+      "assumptions": [
+        "filesystem semantics are stable",
+        "clock time is not an observable output",
+        "alignment_strategy=exact_path_name",
+        "alignment_score=100",
+        "obligation_partition=pair:src/rust/crates/repobrain-cli/src/semantic_pipeline.rs=>src/rust/crates/repobrain-cli/src/semantic_pipeline.rs",
+        "obligation_priority=1"
+      ],
+      "encoding_hash": "d69d3315d3c71c4a"
+    },
+    {
+      "id": "thm_64792b0023ca7ce6",
+      "source_pair": "pair:l1_receipt_from_runtime_error@src/rust/crates/repobrain-cli/src/semantic_pipeline.rs:3595=>l1_receipt_from_runtime_error@src/rust/crates/repobrain-cli/src/semantic_pipeline.rs:3499",
+      "contract_id": "repo-equivalence-v1",
+      "assumptions": [
+        "filesystem semantics are stable",
+        "clock time is not an observable output",
+        "alignment_strategy=exact_path_name",
+        "alignment_score=100",
+        "obligation_partition=pair:src/rust/crates/repobrain-cli/src/semantic_pipeline.rs=>src/rust/crates/repobrain-cli/src/semantic_pipeline.rs",
+        "obligation_priority=1"
+      ],
+      "encoding_hash": "a80d277bedb4e68e"
+    },
+    {
+      "id": "thm_65c64ff5c81cb97a",
+      "source_pair": "pair:semantic_delta@src/rust/crates/repobrain-cli/src/semantic_pipeline.rs:825=>semantic_delta@src/rust/crates/repobrain-cli/src/semantic_pipeline.rs:822",
+      "contract_id": "repo-equivalence-v1",
+      "assumptions": [
+        "filesystem semantics are stable",
+        "clock time is not an observable output",
+        "alignment_strategy=exact_path_name",
+        "alignment_score=100",
+        "obligation_partition=pair:src/rust/crates/repobrain-cli/src/semantic_pipeline.rs=>src/rust/crates/repobrain-cli/src/semantic_pipeline.rs",
+        "obligation_priority=1"
+      ],
+      "encoding_hash": "cbd3ab82ec3048ae"
+    },
+    {
+      "id": "thm_68157cfc31f48841",
+      "source_pair": "pair:semantic_diff_l2_stage@src/rust/crates/repobrain-cli/src/semantic_pipeline.rs:685=>semantic_diff_l2_stage@src/rust/crates/repobrain-cli/src/semantic_pipeline.rs:682",
+      "contract_id": "repo-equivalence-v1",
+      "assumptions": [
+        "filesystem semantics are stable",
+        "clock time is not an observable output",
+        "alignment_strategy=exact_path_name",
+        "alignment_score=100",
+        "obligation_partition=pair:src/rust/crates/repobrain-cli/src/semantic_pipeline.rs=>src/rust/crates/repobrain-cli/src/semantic_pipeline.rs",
+        "obligation_priority=1"
+      ],
+      "encoding_hash": "36f752416cbec4d8"
+    },
+    {
+      "id": "thm_6aec8392ad527f3c",
+      "source_pair": "pair:l2_pair_signature_similarity@src/rust/crates/repobrain-cli/src/semantic_pipeline.rs:4792=>l2_pair_signature_similarity@src/rust/crates/repobrain-cli/src/semantic_pipeline.rs:4696",
+      "contract_id": "repo-equivalence-v1",
+      "assumptions": [
+        "filesystem semantics are stable",
+        "clock time is not an observable output",
+        "alignment_strategy=exact_path_name",
+        "alignment_score=100",
+        "obligation_partition=pair:src/rust/crates/repobrain-cli/src/semantic_pipeline.rs=>src/rust/crates/repobrain-cli/src/semantic_pipeline.rs",
+        "obligation_priority=1"
+      ],
+      "encoding_hash": "478c70ee75054e4e"
+    },
+    {
+      "id": "thm_6cd4b082f433b351",
+      "source_pair": "pair:file_inventory_delta@src/rust/crates/repobrain-cli/src/semantic_pipeline.rs:861=>file_inventory_delta@src/rust/crates/repobrain-cli/src/semantic_pipeline.rs:858",
+      "contract_id": "repo-equivalence-v1",
+      "assumptions": [
+        "filesystem semantics are stable",
+        "clock time is not an observable output",
+        "alignment_strategy=exact_path_name",
+        "alignment_score=100",
+        "obligation_partition=pair:src/rust/crates/repobrain-cli/src/semantic_pipeline.rs=>src/rust/crates/repobrain-cli/src/semantic_pipeline.rs",
+        "obligation_priority=1"
+      ],
+      "encoding_hash": "fb06fff5d2eff21d"
+    },
+    {
+      "id": "thm_6f5c022dde7550bf",
+      "source_pair": "pair:l1_receipt@src/rust/crates/repobrain-cli/src/semantic_pipeline.rs:3612=>l1_receipt@src/rust/crates/repobrain-cli/src/semantic_pipeline.rs:3516",
+      "contract_id": "repo-equivalence-v1",
+      "assumptions": [
+        "filesystem semantics are stable",
+        "clock time is not an observable output",
+        "alignment_strategy=exact_path_name",
+        "alignment_score=100",
+        "obligation_partition=pair:src/rust/crates/repobrain-cli/src/semantic_pipeline.rs=>src/rust/crates/repobrain-cli/src/semantic_pipeline.rs",
+        "obligation_priority=1"
+      ],
+      "encoding_hash": "d75325048fa007c4"
+    },
+    {
+      "id": "thm_70e95befcdad071d",
+      "source_pair": "pair:l2_receipt@src/rust/crates/repobrain-cli/src/semantic_pipeline.rs:5078=>l2_receipt@src/rust/crates/repobrain-cli/src/semantic_pipeline.rs:4982",
+      "contract_id": "repo-equivalence-v1",
+      "assumptions": [
+        "filesystem semantics are stable",
+        "clock time is not an observable output",
+        "alignment_strategy=exact_path_name",
+        "alignment_score=100",
+        "obligation_partition=pair:src/rust/crates/repobrain-cli/src/semantic_pipeline.rs=>src/rust/crates/repobrain-cli/src/semantic_pipeline.rs",
+        "obligation_priority=1"
+      ],
+      "encoding_hash": "5a5e171fb52160d6"
+    },
+    {
+      "id": "thm_73b099380a1542a8",
+      "source_pair": "pair:backend_label_for_stage@src/rust/crates/repobrain-cli/src/semantic_pipeline.rs:1232=>backend_label_for_stage@src/rust/crates/repobrain-cli/src/semantic_pipeline.rs:1229",
+      "contract_id": "repo-equivalence-v1",
+      "assumptions": [
+        "filesystem semantics are stable",
+        "clock time is not an observable output",
+        "alignment_strategy=exact_path_name",
+        "alignment_score=100",
+        "obligation_partition=pair:src/rust/crates/repobrain-cli/src/semantic_pipeline.rs=>src/rust/crates/repobrain-cli/src/semantic_pipeline.rs",
+        "obligation_priority=1"
+      ],
+      "encoding_hash": "9de755dc92763223"
+    },
+    {
+      "id": "thm_765415bb4d36635b",
+      "source_pair": "pair:identifier_similarity_score@src/rust/crates/repobrain-cli/src/semantic_pipeline.rs:4944=>identifier_similarity_score@src/rust/crates/repobrain-cli/src/semantic_pipeline.rs:4848",
+      "contract_id": "repo-equivalence-v1",
+      "assumptions": [
+        "filesystem semantics are stable",
+        "clock time is not an observable output",
+        "alignment_strategy=exact_path_name",
+        "alignment_score=100",
+        "obligation_partition=pair:src/rust/crates/repobrain-cli/src/semantic_pipeline.rs=>src/rust/crates/repobrain-cli/src/semantic_pipeline.rs",
+        "obligation_priority=1"
+      ],
+      "encoding_hash": "68eeb613456952ce"
+    },
+    {
+      "id": "thm_77b0df031f693663",
+      "source_pair": "pair:l2_reverse_import_context_signatures@src/rust/crates/repobrain-cli/src/semantic_pipeline.rs:4320=>l2_reverse_import_context_signatures@src/rust/crates/repobrain-cli/src/semantic_pipeline.rs:4224",
+      "contract_id": "repo-equivalence-v1",
+      "assumptions": [
+        "filesystem semantics are stable",
+        "clock time is not an observable output",
+        "alignment_strategy=exact_path_name",
+        "alignment_score=100",
+        "obligation_partition=pair:src/rust/crates/repobrain-cli/src/semantic_pipeline.rs=>src/rust/crates/repobrain-cli/src/semantic_pipeline.rs",
+        "obligation_priority=1"
+      ],
+      "encoding_hash": "89b2da366a8ed6f2"
+    },
+    {
+      "id": "thm_78b5711bf70611fd",
+      "source_pair": "pair:l2_symbol_context_signatures@src/rust/crates/repobrain-cli/src/semantic_pipeline.rs:4512=>l2_symbol_context_signatures@src/rust/crates/repobrain-cli/src/semantic_pipeline.rs:4416",
+      "contract_id": "repo-equivalence-v1",
+      "assumptions": [
+        "filesystem semantics are stable",
+        "clock time is not an observable output",
+        "alignment_strategy=exact_path_name",
+        "alignment_score=100",
+        "obligation_partition=pair:src/rust/crates/repobrain-cli/src/semantic_pipeline.rs=>src/rust/crates/repobrain-cli/src/semantic_pipeline.rs",
+        "obligation_priority=1"
+      ],
+      "encoding_hash": "ae3ae1d14b88456a"
+    },
+    {
+      "id": "thm_7ac55ff84d3f4367",
+      "source_pair": "pair:l2_pair_difference_reasons@src/rust/crates/repobrain-cli/src/semantic_pipeline.rs:5025=>l2_pair_difference_reasons@src/rust/crates/repobrain-cli/src/semantic_pipeline.rs:4929",
+      "contract_id": "repo-equivalence-v1",
+      "assumptions": [
+        "filesystem semantics are stable",
+        "clock time is not an observable output",
+        "alignment_strategy=exact_path_name",
+        "alignment_score=100",
+        "obligation_partition=pair:src/rust/crates/repobrain-cli/src/semantic_pipeline.rs=>src/rust/crates/repobrain-cli/src/semantic_pipeline.rs",
+        "obligation_priority=1"
+      ],
+      "encoding_hash": "d1ecb1bffdcb3dab"
+    },
+    {
+      "id": "thm_7b518e279bfc8600",
+      "source_pair": "pair:l1_rust_bounded_scope@src/rust/crates/repobrain-cli/src/semantic_pipeline.rs:3631=>l1_rust_bounded_scope@src/rust/crates/repobrain-cli/src/semantic_pipeline.rs:3535",
+      "contract_id": "repo-equivalence-v1",
+      "assumptions": [
+        "filesystem semantics are stable",
+        "clock time is not an observable output",
+        "alignment_strategy=exact_path_name",
+        "alignment_score=100",
+        "obligation_partition=pair:src/rust/crates/repobrain-cli/src/semantic_pipeline.rs=>src/rust/crates/repobrain-cli/src/semantic_pipeline.rs",
+        "obligation_priority=1"
+      ],
+      "encoding_hash": "f95c883fb0674096"
+    },
+    {
+      "id": "thm_804775f1e5513b6b",
+      "source_pair": "pair:l2_changed_paths@src/rust/crates/repobrain-cli/src/semantic_pipeline.rs:4195=>l2_changed_paths@src/rust/crates/repobrain-cli/src/semantic_pipeline.rs:4099",
+      "contract_id": "repo-equivalence-v1",
+      "assumptions": [
+        "filesystem semantics are stable",
+        "clock time is not an observable output",
+        "alignment_strategy=exact_path_name",
+        "alignment_score=100",
+        "obligation_partition=pair:src/rust/crates/repobrain-cli/src/semantic_pipeline.rs=>src/rust/crates/repobrain-cli/src/semantic_pipeline.rs",
+        "obligation_priority=1"
+      ],
+      "encoding_hash": "be7a6855f3563126"
+    },
+    {
+      "id": "thm_8617b65b3df48d71",
+      "source_pair": "pair:l2_manifest_candidates@src/rust/crates/repobrain-cli/src/semantic_pipeline.rs:4204=>l2_manifest_candidates@src/rust/crates/repobrain-cli/src/semantic_pipeline.rs:4108",
+      "contract_id": "repo-equivalence-v1",
+      "assumptions": [
+        "filesystem semantics are stable",
+        "clock time is not an observable output",
+        "alignment_strategy=exact_path_name",
+        "alignment_score=100",
+        "obligation_partition=pair:src/rust/crates/repobrain-cli/src/semantic_pipeline.rs=>src/rust/crates/repobrain-cli/src/semantic_pipeline.rs",
+        "obligation_priority=1"
+      ],
+      "encoding_hash": "87340b2b68084da4"
+    },
+    {
+      "id": "thm_87ab94a23e63ee03",
+      "source_pair": "pair:l1_kani_mode_label@src/rust/crates/repobrain-cli/src/semantic_pipeline.rs:4036=>l1_kani_mode_label@src/rust/crates/repobrain-cli/src/semantic_pipeline.rs:3940",
+      "contract_id": "repo-equivalence-v1",
+      "assumptions": [
+        "filesystem semantics are stable",
+        "clock time is not an observable output",
+        "alignment_strategy=exact_path_name",
+        "alignment_score=100",
+        "obligation_partition=pair:src/rust/crates/repobrain-cli/src/semantic_pipeline.rs=>src/rust/crates/repobrain-cli/src/semantic_pipeline.rs",
+        "obligation_priority=1"
+      ],
+      "encoding_hash": "a47e4bb0230d1cc8"
+    },
+    {
+      "id": "thm_8b75c1d645ef0e58",
+      "source_pair": "pair:l2_alignment_mode_label@src/rust/crates/repobrain-cli/src/semantic_pipeline.rs:4188=>l2_alignment_mode_label@src/rust/crates/repobrain-cli/src/semantic_pipeline.rs:4092",
+      "contract_id": "repo-equivalence-v1",
+      "assumptions": [
+        "filesystem semantics are stable",
+        "clock time is not an observable output",
+        "alignment_strategy=exact_path_name",
+        "alignment_score=100",
+        "obligation_partition=pair:src/rust/crates/repobrain-cli/src/semantic_pipeline.rs=>src/rust/crates/repobrain-cli/src/semantic_pipeline.rs",
+        "obligation_priority=1"
+      ],
+      "encoding_hash": "95e8a068a7bf64fb"
+    },
+    {
+      "id": "thm_8e742f536b43efaa",
+      "source_pair": "pair:l1_status_label@src/rust/crates/repobrain-cli/src/semantic_pipeline.rs:4056=>l1_status_label@src/rust/crates/repobrain-cli/src/semantic_pipeline.rs:3960",
+      "contract_id": "repo-equivalence-v1",
+      "assumptions": [
+        "filesystem semantics are stable",
+        "clock time is not an observable output",
+        "alignment_strategy=exact_path_name",
+        "alignment_score=100",
+        "obligation_partition=pair:src/rust/crates/repobrain-cli/src/semantic_pipeline.rs=>src/rust/crates/repobrain-cli/src/semantic_pipeline.rs",
+        "obligation_priority=1"
+      ],
+      "encoding_hash": "508853d51b1d678a"
+    },
+    {
+      "id": "thm_92480d683be4fe82",
+      "source_pair": "pair:l2_summary@src/rust/crates/repobrain-cli/src/semantic_pipeline.rs:5106=>l2_summary@src/rust/crates/repobrain-cli/src/semantic_pipeline.rs:5010",
+      "contract_id": "repo-equivalence-v1",
+      "assumptions": [
+        "filesystem semantics are stable",
+        "clock time is not an observable output",
+        "alignment_strategy=exact_path_name",
+        "alignment_score=100",
+        "obligation_partition=pair:src/rust/crates/repobrain-cli/src/semantic_pipeline.rs=>src/rust/crates/repobrain-cli/src/semantic_pipeline.rs",
+        "obligation_priority=1"
+      ],
+      "encoding_hash": "e1ee1dd4e3d3dfe5"
+    },
+    {
+      "id": "thm_98e98e55d8673a32",
+      "source_pair": "pair:l2_import_role_signature@src/rust/crates/repobrain-cli/src/semantic_pipeline.rs:4393=>l2_import_role_signature@src/rust/crates/repobrain-cli/src/semantic_pipeline.rs:4297",
+      "contract_id": "repo-equivalence-v1",
+      "assumptions": [
+        "filesystem semantics are stable",
+        "clock time is not an observable output",
+        "alignment_strategy=exact_path_name",
+        "alignment_score=100",
+        "obligation_partition=pair:src/rust/crates/repobrain-cli/src/semantic_pipeline.rs=>src/rust/crates/repobrain-cli/src/semantic_pipeline.rs",
+        "obligation_priority=1"
+      ],
+      "encoding_hash": "aa4a1ddd94a1b5d2"
+    },
+    {
+      "id": "thm_99566750dec59e34",
+      "source_pair": "pair:has_changes@src/rust/crates/repobrain-cli/src/semantic_pipeline.rs:76=>has_changes@src/rust/crates/repobrain-cli/src/semantic_pipeline.rs:75",
+      "contract_id": "repo-equivalence-v1",
+      "assumptions": [
+        "filesystem semantics are stable",
+        "clock time is not an observable output",
+        "alignment_strategy=exact_path_name",
+        "alignment_score=100",
+        "obligation_partition=pair:src/rust/crates/repobrain-cli/src/semantic_pipeline.rs=>src/rust/crates/repobrain-cli/src/semantic_pipeline.rs",
+        "obligation_priority=1"
+      ],
+      "encoding_hash": "99526b0303046414"
+    },
+    {
+      "id": "thm_99dfae1e3aa4190f",
+      "source_pair": "pair:l1_scope_witness@src/rust/crates/repobrain-cli/src/semantic_pipeline.rs:3686=>l1_scope_witness@src/rust/crates/repobrain-cli/src/semantic_pipeline.rs:3590",
+      "contract_id": "repo-equivalence-v1",
+      "assumptions": [
+        "filesystem semantics are stable",
+        "clock time is not an observable output",
+        "alignment_strategy=exact_path_name",
+        "alignment_score=100",
+        "obligation_partition=pair:src/rust/crates/repobrain-cli/src/semantic_pipeline.rs=>src/rust/crates/repobrain-cli/src/semantic_pipeline.rs",
+        "obligation_priority=1"
+      ],
+      "encoding_hash": "ef7df9c3a71185eb"
+    },
+    {
+      "id": "thm_9a1f976befb8bb31",
+      "source_pair": "pair:l2_fnv1a_hash@src/rust/crates/repobrain-cli/src/semantic_pipeline.rs:4470=>l2_fnv1a_hash@src/rust/crates/repobrain-cli/src/semantic_pipeline.rs:4374",
+      "contract_id": "repo-equivalence-v1",
+      "assumptions": [
+        "filesystem semantics are stable",
+        "clock time is not an observable output",
+        "alignment_strategy=exact_path_name",
+        "alignment_score=100",
+        "obligation_partition=pair:src/rust/crates/repobrain-cli/src/semantic_pipeline.rs=>src/rust/crates/repobrain-cli/src/semantic_pipeline.rs",
+        "obligation_priority=1"
+      ],
+      "encoding_hash": "4b4a1070ce35e9b8"
+    },
+    {
+      "id": "thm_9c57c96a3a2fcb95",
+      "source_pair": "pair:missing_reference_receipt@src/rust/crates/repobrain-cli/src/semantic_pipeline.rs:1203=>missing_reference_receipt@src/rust/crates/repobrain-cli/src/semantic_pipeline.rs:1200",
+      "contract_id": "repo-equivalence-v1",
+      "assumptions": [
+        "filesystem semantics are stable",
+        "clock time is not an observable output",
+        "alignment_strategy=exact_path_name",
+        "alignment_score=100",
+        "obligation_partition=pair:src/rust/crates/repobrain-cli/src/semantic_pipeline.rs=>src/rust/crates/repobrain-cli/src/semantic_pipeline.rs",
+        "obligation_priority=1"
+      ],
+      "encoding_hash": "b840a044494eab34"
+    },
+    {
+      "id": "thm_9cb195b886e79ae8",
+      "source_pair": "pair:run_kani_obligation_with_timeout@src/rust/crates/repobrain-cli/src/semantic_pipeline.rs:3886=>run_kani_obligation_with_timeout@src/rust/crates/repobrain-cli/src/semantic_pipeline.rs:3790",
+      "contract_id": "repo-equivalence-v1",
+      "assumptions": [
+        "filesystem semantics are stable",
+        "clock time is not an observable output",
+        "alignment_strategy=exact_path_name",
+        "alignment_score=100",
+        "obligation_partition=pair:src/rust/crates/repobrain-cli/src/semantic_pipeline.rs=>src/rust/crates/repobrain-cli/src/semantic_pipeline.rs",
+        "obligation_priority=1"
+      ],
+      "encoding_hash": "a699373d7ab02c27"
+    },
+    {
+      "id": "thm_9cf8bbfce20c437b",
+      "source_pair": "pair:l1_obligation_label@src/rust/crates/repobrain-cli/src/semantic_pipeline.rs:3956=>l1_obligation_label@src/rust/crates/repobrain-cli/src/semantic_pipeline.rs:3860",
+      "contract_id": "repo-equivalence-v1",
+      "assumptions": [
+        "filesystem semantics are stable",
+        "clock time is not an observable output",
+        "alignment_strategy=exact_path_name",
+        "alignment_score=100",
+        "obligation_partition=pair:src/rust/crates/repobrain-cli/src/semantic_pipeline.rs=>src/rust/crates/repobrain-cli/src/semantic_pipeline.rs",
+        "obligation_priority=1"
+      ],
+      "encoding_hash": "98e6ab95b5c9d3a1"
+    },
+    {
+      "id": "thm_a40431ab8330bd97",
+      "source_pair": "pair:equivalence_contract_from_theorem_contract@src/rust/crates/repobrain-cli/src/semantic_pipeline.rs:561=>equivalence_contract_from_theorem_contract@src/rust/crates/repobrain-cli/src/semantic_pipeline.rs:558",
+      "contract_id": "repo-equivalence-v1",
+      "assumptions": [
+        "filesystem semantics are stable",
+        "clock time is not an observable output",
+        "alignment_strategy=exact_path_name",
+        "alignment_score=100",
+        "obligation_partition=pair:src/rust/crates/repobrain-cli/src/semantic_pipeline.rs=>src/rust/crates/repobrain-cli/src/semantic_pipeline.rs",
+        "obligation_priority=1"
+      ],
+      "encoding_hash": "5b3a1a50ff2ec157"
+    },
+    {
+      "id": "thm_a4dac86cb67c7df5",
+      "source_pair": "pair:l1_function_name_from_declaration@src/rust/crates/repobrain-cli/src/semantic_pipeline.rs:3844=>l1_function_name_from_declaration@src/rust/crates/repobrain-cli/src/semantic_pipeline.rs:3748",
+      "contract_id": "repo-equivalence-v1",
+      "assumptions": [
+        "filesystem semantics are stable",
+        "clock time is not an observable output",
+        "alignment_strategy=exact_path_name",
+        "alignment_score=100",
+        "obligation_partition=pair:src/rust/crates/repobrain-cli/src/semantic_pipeline.rs=>src/rust/crates/repobrain-cli/src/semantic_pipeline.rs",
+        "obligation_priority=1"
+      ],
+      "encoding_hash": "ac4fc941789a7bcc"
+    },
+    {
+      "id": "thm_aa2fed9c6640469a",
+      "source_pair": "pair:l1_bounds@src/rust/crates/repobrain-cli/src/semantic_pipeline.rs:3485=>l1_bounds@src/rust/crates/repobrain-cli/src/semantic_pipeline.rs:3389",
+      "contract_id": "repo-equivalence-v1",
+      "assumptions": [
+        "filesystem semantics are stable",
+        "clock time is not an observable output",
+        "alignment_strategy=exact_path_name",
+        "alignment_score=100",
+        "obligation_partition=pair:src/rust/crates/repobrain-cli/src/semantic_pipeline.rs=>src/rust/crates/repobrain-cli/src/semantic_pipeline.rs",
+        "obligation_priority=1"
+      ],
+      "encoding_hash": "51c5cb28295ab78c"
+    },
+    {
+      "id": "thm_ae6f4496fe57cbd3",
+      "source_pair": "pair:l1_summary@src/rust/crates/repobrain-cli/src/semantic_pipeline.rs:4065=>l1_summary@src/rust/crates/repobrain-cli/src/semantic_pipeline.rs:3969",
+      "contract_id": "repo-equivalence-v1",
+      "assumptions": [
+        "filesystem semantics are stable",
+        "clock time is not an observable output",
+        "alignment_strategy=exact_path_name",
+        "alignment_score=100",
+        "obligation_partition=pair:src/rust/crates/repobrain-cli/src/semantic_pipeline.rs=>src/rust/crates/repobrain-cli/src/semantic_pipeline.rs",
+        "obligation_priority=1"
+      ],
+      "encoding_hash": "40ec4b09f0d53785"
+    },
+    {
+      "id": "thm_b14bb779aecee2d5",
+      "source_pair": "pair:l2_parent_path@src/rust/crates/repobrain-cli/src/semantic_pipeline.rs:4917=>l2_parent_path@src/rust/crates/repobrain-cli/src/semantic_pipeline.rs:4821",
+      "contract_id": "repo-equivalence-v1",
+      "assumptions": [
+        "filesystem semantics are stable",
+        "clock time is not an observable output",
+        "alignment_strategy=exact_path_name",
+        "alignment_score=100",
+        "obligation_partition=pair:src/rust/crates/repobrain-cli/src/semantic_pipeline.rs=>src/rust/crates/repobrain-cli/src/semantic_pipeline.rs",
+        "obligation_priority=1"
+      ],
+      "encoding_hash": "bbfe61447e88dd9b"
+    },
+    {
+      "id": "thm_b2075ee367f50c43",
+      "source_pair": "pair:l2_pair_exact_matches@src/rust/crates/repobrain-cli/src/semantic_pipeline.rs:4616=>l2_pair_exact_matches@src/rust/crates/repobrain-cli/src/semantic_pipeline.rs:4520",
+      "contract_id": "repo-equivalence-v1",
+      "assumptions": [
+        "filesystem semantics are stable",
+        "clock time is not an observable output",
+        "alignment_strategy=exact_path_name",
+        "alignment_score=100",
+        "obligation_partition=pair:src/rust/crates/repobrain-cli/src/semantic_pipeline.rs=>src/rust/crates/repobrain-cli/src/semantic_pipeline.rs",
+        "obligation_priority=1"
+      ],
+      "encoding_hash": "a4ac90c0dfdc90fb"
+    },
+    {
+      "id": "thm_b333d3a54aedaeac",
+      "source_pair": "pair:l1_obligation_outcome@src/rust/crates/repobrain-cli/src/semantic_pipeline.rs:3902=>l1_obligation_outcome@src/rust/crates/repobrain-cli/src/semantic_pipeline.rs:3806",
+      "contract_id": "repo-equivalence-v1",
+      "assumptions": [
+        "filesystem semantics are stable",
+        "clock time is not an observable output",
+        "alignment_strategy=exact_path_name",
+        "alignment_score=100",
+        "obligation_partition=pair:src/rust/crates/repobrain-cli/src/semantic_pipeline.rs=>src/rust/crates/repobrain-cli/src/semantic_pipeline.rs",
+        "obligation_priority=1"
+      ],
+      "encoding_hash": "517efa41322109c2"
+    },
+    {
+      "id": "thm_b4d742385242d210",
+      "source_pair": "pair:l1_receipt_from_timeout@src/rust/crates/repobrain-cli/src/semantic_pipeline.rs:3570=>l1_receipt_from_timeout@src/rust/crates/repobrain-cli/src/semantic_pipeline.rs:3474",
+      "contract_id": "repo-equivalence-v1",
+      "assumptions": [
+        "filesystem semantics are stable",
+        "clock time is not an observable output",
+        "alignment_strategy=exact_path_name",
+        "alignment_score=100",
+        "obligation_partition=pair:src/rust/crates/repobrain-cli/src/semantic_pipeline.rs=>src/rust/crates/repobrain-cli/src/semantic_pipeline.rs",
+        "obligation_priority=1"
+      ],
+      "encoding_hash": "f131d19aed55563c"
+    },
+    {
+      "id": "thm_b73a340507a06024",
+      "source_pair": "pair:l2_bounds@src/rust/crates/repobrain-cli/src/semantic_pipeline.rs:4178=>l2_bounds@src/rust/crates/repobrain-cli/src/semantic_pipeline.rs:4082",
+      "contract_id": "repo-equivalence-v1",
+      "assumptions": [
+        "filesystem semantics are stable",
+        "clock time is not an observable output",
+        "alignment_strategy=exact_path_name",
+        "alignment_score=100",
+        "obligation_partition=pair:src/rust/crates/repobrain-cli/src/semantic_pipeline.rs=>src/rust/crates/repobrain-cli/src/semantic_pipeline.rs",
+        "obligation_priority=1"
+      ],
+      "encoding_hash": "7aca80e8643061cd"
+    },
+    {
+      "id": "thm_b7fef5993675355c",
+      "source_pair": "pair:semantic_diff_l1_stage@src/rust/crates/repobrain-cli/src/semantic_pipeline.rs:660=>semantic_diff_l1_stage@src/rust/crates/repobrain-cli/src/semantic_pipeline.rs:657",
+      "contract_id": "repo-equivalence-v1",
+      "assumptions": [
+        "filesystem semantics are stable",
+        "clock time is not an observable output",
+        "alignment_strategy=exact_path_name",
+        "alignment_score=100",
+        "obligation_partition=pair:src/rust/crates/repobrain-cli/src/semantic_pipeline.rs=>src/rust/crates/repobrain-cli/src/semantic_pipeline.rs",
+        "obligation_priority=1"
+      ],
+      "encoding_hash": "a96bf6c60a263d83"
+    },
+    {
+      "id": "thm_b8ac6853b1fbdc4d",
+      "source_pair": "pair:l2_import_context_signatures@src/rust/crates/repobrain-cli/src/semantic_pipeline.rs:4482=>l2_import_context_signatures@src/rust/crates/repobrain-cli/src/semantic_pipeline.rs:4386",
+      "contract_id": "repo-equivalence-v1",
+      "assumptions": [
+        "filesystem semantics are stable",
+        "clock time is not an observable output",
+        "alignment_strategy=exact_path_name",
+        "alignment_score=100",
+        "obligation_partition=pair:src/rust/crates/repobrain-cli/src/semantic_pipeline.rs=>src/rust/crates/repobrain-cli/src/semantic_pipeline.rs",
+        "obligation_priority=1"
+      ],
+      "encoding_hash": "e2fa0ed8be70eb6c"
+    },
+    {
+      "id": "thm_bdd20e632a7f2bf5",
+      "source_pair": "pair:l1_rust_bounded_receipt@src/rust/crates/repobrain-cli/src/semantic_pipeline.rs:3396=>l1_rust_bounded_receipt@src/rust/crates/repobrain-cli/src/semantic_pipeline.rs:3300",
+      "contract_id": "repo-equivalence-v1",
+      "assumptions": [
+        "filesystem semantics are stable",
+        "clock time is not an observable output",
+        "alignment_strategy=exact_path_name",
+        "alignment_score=100",
+        "obligation_partition=pair:src/rust/crates/repobrain-cli/src/semantic_pipeline.rs=>src/rust/crates/repobrain-cli/src/semantic_pipeline.rs",
+        "obligation_priority=1"
+      ],
+      "encoding_hash": "9f93649770759ac4"
+    },
+    {
+      "id": "thm_bf1c242fa0d4f43b",
+      "source_pair": "pair:l1_receipt_from_run@src/rust/crates/repobrain-cli/src/semantic_pipeline.rs:3495=>l1_receipt_from_run@src/rust/crates/repobrain-cli/src/semantic_pipeline.rs:3399",
+      "contract_id": "repo-equivalence-v1",
+      "assumptions": [
+        "filesystem semantics are stable",
+        "clock time is not an observable output",
+        "alignment_strategy=exact_path_name",
+        "alignment_score=100",
+        "obligation_partition=pair:src/rust/crates/repobrain-cli/src/semantic_pipeline.rs=>src/rust/crates/repobrain-cli/src/semantic_pipeline.rs",
+        "obligation_priority=1"
+      ],
+      "encoding_hash": "1011c6a48fe10dae"
+    },
+    {
+      "id": "thm_c21f940a394e254d",
+      "source_pair": "pair:is_rust_source_path@src/rust/crates/repobrain-cli/src/semantic_pipeline.rs:3680=>is_rust_source_path@src/rust/crates/repobrain-cli/src/semantic_pipeline.rs:3584",
+      "contract_id": "repo-equivalence-v1",
+      "assumptions": [
+        "filesystem semantics are stable",
+        "clock time is not an observable output",
+        "alignment_strategy=exact_path_name",
+        "alignment_score=100",
+        "obligation_partition=pair:src/rust/crates/repobrain-cli/src/semantic_pipeline.rs=>src/rust/crates/repobrain-cli/src/semantic_pipeline.rs",
+        "obligation_priority=1"
+      ],
+      "encoding_hash": "b24f7cd1677d2356"
+    },
+    {
+      "id": "thm_c5f334d10efe59fe",
+      "source_pair": "pair:run_alive2_obligation@src/rust/crates/repobrain-cli/src/semantic_pipeline.rs:2709=>run_alive2_obligation@src/rust/crates/repobrain-cli/src/semantic_pipeline.rs:2658",
+      "contract_id": "repo-equivalence-v1",
+      "assumptions": [
+        "filesystem semantics are stable",
+        "clock time is not an observable output",
+        "alignment_strategy=exact_path_name",
+        "alignment_score=100",
+        "obligation_partition=pair:src/rust/crates/repobrain-cli/src/semantic_pipeline.rs=>src/rust/crates/repobrain-cli/src/semantic_pipeline.rs",
+        "obligation_priority=1"
+      ],
+      "encoding_hash": "31758cfe1e4df7fa"
+    },
+    {
+      "id": "thm_d01822c59e7f1f9a",
+      "source_pair": "pair:l2_pair_behavioral_profiles@src/rust/crates/repobrain-cli/src/semantic_pipeline.rs:4679=>l2_pair_behavioral_profiles@src/rust/crates/repobrain-cli/src/semantic_pipeline.rs:4583",
+      "contract_id": "repo-equivalence-v1",
+      "assumptions": [
+        "filesystem semantics are stable",
+        "clock time is not an observable output",
+        "alignment_strategy=exact_path_name",
+        "alignment_score=100",
+        "obligation_partition=pair:src/rust/crates/repobrain-cli/src/semantic_pipeline.rs=>src/rust/crates/repobrain-cli/src/semantic_pipeline.rs",
+        "obligation_priority=1"
+      ],
+      "encoding_hash": "039ea4456b8c5393"
+    },
+    {
+      "id": "thm_d2e5f26e712b902c",
+      "source_pair": "pair:l2_relational_semantic_receipt@src/rust/crates/repobrain-cli/src/semantic_pipeline.rs:4088=>l2_relational_semantic_receipt@src/rust/crates/repobrain-cli/src/semantic_pipeline.rs:3992",
+      "contract_id": "repo-equivalence-v1",
+      "assumptions": [
+        "filesystem semantics are stable",
+        "clock time is not an observable output",
+        "alignment_strategy=exact_path_name",
+        "alignment_score=100",
+        "obligation_partition=pair:src/rust/crates/repobrain-cli/src/semantic_pipeline.rs=>src/rust/crates/repobrain-cli/src/semantic_pipeline.rs",
+        "obligation_priority=1"
+      ],
+      "encoding_hash": "784e034f13334d8a"
+    },
+    {
+      "id": "thm_d7e006a7e5c3b737",
+      "source_pair": "pair:l2_function_signals@src/rust/crates/repobrain-cli/src/semantic_pipeline.rs:4234=>l2_function_signals@src/rust/crates/repobrain-cli/src/semantic_pipeline.rs:4138",
+      "contract_id": "repo-equivalence-v1",
+      "assumptions": [
+        "filesystem semantics are stable",
+        "clock time is not an observable output",
+        "alignment_strategy=exact_path_name",
+        "alignment_score=100",
+        "obligation_partition=pair:src/rust/crates/repobrain-cli/src/semantic_pipeline.rs=>src/rust/crates/repobrain-cli/src/semantic_pipeline.rs",
+        "obligation_priority=1"
+      ],
+      "encoding_hash": "b3ab2ad0a3319212"
+    },
+    {
+      "id": "thm_d7e8ebbba12dca71",
+      "source_pair": "pair:first_non_empty_line@src/rust/crates/repobrain-cli/src/semantic_pipeline.rs:4029=>first_non_empty_line@src/rust/crates/repobrain-cli/src/semantic_pipeline.rs:3933",
+      "contract_id": "repo-equivalence-v1",
+      "assumptions": [
+        "filesystem semantics are stable",
+        "clock time is not an observable output",
+        "alignment_strategy=exact_path_name",
+        "alignment_score=100",
+        "obligation_partition=pair:src/rust/crates/repobrain-cli/src/semantic_pipeline.rs=>src/rust/crates/repobrain-cli/src/semantic_pipeline.rs",
+        "obligation_priority=1"
+      ],
+      "encoding_hash": "ff2af43d232731da"
+    },
+    {
+      "id": "thm_da521025b6e52a23",
+      "source_pair": "pair:l2_identifier_shape@src/rust/crates/repobrain-cli/src/semantic_pipeline.rs:4463=>l2_identifier_shape@src/rust/crates/repobrain-cli/src/semantic_pipeline.rs:4367",
+      "contract_id": "repo-equivalence-v1",
+      "assumptions": [
+        "filesystem semantics are stable",
+        "clock time is not an observable output",
+        "alignment_strategy=exact_path_name",
+        "alignment_score=100",
+        "obligation_partition=pair:src/rust/crates/repobrain-cli/src/semantic_pipeline.rs=>src/rust/crates/repobrain-cli/src/semantic_pipeline.rs",
+        "obligation_priority=1"
+      ],
+      "encoding_hash": "08585bebb806e704"
+    },
+    {
+      "id": "thm_dea2684d9a313269",
+      "source_pair": "pair:l1_receipt_from_completed@src/rust/crates/repobrain-cli/src/semantic_pipeline.rs:3515=>l1_receipt_from_completed@src/rust/crates/repobrain-cli/src/semantic_pipeline.rs:3419",
+      "contract_id": "repo-equivalence-v1",
+      "assumptions": [
+        "filesystem semantics are stable",
+        "clock time is not an observable output",
+        "alignment_strategy=exact_path_name",
+        "alignment_score=100",
+        "obligation_partition=pair:src/rust/crates/repobrain-cli/src/semantic_pipeline.rs=>src/rust/crates/repobrain-cli/src/semantic_pipeline.rs",
+        "obligation_priority=1"
+      ],
+      "encoding_hash": "4e45b13273f4d7ea"
+    },
+    {
+      "id": "thm_e02992f5c3b07e3f",
+      "source_pair": "pair:run_command_with_timeout@src/rust/crates/repobrain-cli/src/semantic_pipeline.rs:3983=>run_command_with_timeout@src/rust/crates/repobrain-cli/src/semantic_pipeline.rs:3887",
+      "contract_id": "repo-equivalence-v1",
+      "assumptions": [
+        "filesystem semantics are stable",
+        "clock time is not an observable output",
+        "alignment_strategy=exact_path_name",
+        "alignment_score=100",
+        "obligation_partition=pair:src/rust/crates/repobrain-cli/src/semantic_pipeline.rs=>src/rust/crates/repobrain-cli/src/semantic_pipeline.rs",
+        "obligation_priority=1"
+      ],
+      "encoding_hash": "3a0b5c93cfdf0642"
+    },
+    {
+      "id": "thm_e1dd2324dd155916",
+      "source_pair": "pair:l1_base_assumptions@src/rust/crates/repobrain-cli/src/semantic_pipeline.rs:3477=>l1_base_assumptions@src/rust/crates/repobrain-cli/src/semantic_pipeline.rs:3381",
+      "contract_id": "repo-equivalence-v1",
+      "assumptions": [
+        "filesystem semantics are stable",
+        "clock time is not an observable output",
+        "alignment_strategy=exact_path_name",
+        "alignment_score=100",
+        "obligation_partition=pair:src/rust/crates/repobrain-cli/src/semantic_pipeline.rs=>src/rust/crates/repobrain-cli/src/semantic_pipeline.rs",
+        "obligation_priority=1"
+      ],
+      "encoding_hash": "44e7720d3fad9a89"
+    },
+    {
+      "id": "thm_ea9f1e186b467902",
+      "source_pair": "pair:replay_theorem@src/rust/crates/repobrain-cli/src/semantic_pipeline.rs:441=>replay_theorem@src/rust/crates/repobrain-cli/src/semantic_pipeline.rs:438",
+      "contract_id": "repo-equivalence-v1",
+      "assumptions": [
+        "filesystem semantics are stable",
+        "clock time is not an observable output",
+        "alignment_strategy=exact_path_name",
+        "alignment_score=100",
+        "obligation_partition=pair:src/rust/crates/repobrain-cli/src/semantic_pipeline.rs=>src/rust/crates/repobrain-cli/src/semantic_pipeline.rs",
+        "obligation_priority=1"
+      ],
+      "encoding_hash": "97d11c963b96a045"
+    },
+    {
+      "id": "thm_ec972992ca4ffebc",
+      "source_pair": "pair:l2_status_label@src/rust/crates/repobrain-cli/src/semantic_pipeline.rs:5097=>l2_status_label@src/rust/crates/repobrain-cli/src/semantic_pipeline.rs:5001",
+      "contract_id": "repo-equivalence-v1",
+      "assumptions": [
+        "filesystem semantics are stable",
+        "clock time is not an observable output",
+        "alignment_strategy=exact_path_name",
+        "alignment_score=100",
+        "obligation_partition=pair:src/rust/crates/repobrain-cli/src/semantic_pipeline.rs=>src/rust/crates/repobrain-cli/src/semantic_pipeline.rs",
+        "obligation_priority=1"
+      ],
+      "encoding_hash": "bbe4d768888d7fc6"
+    },
+    {
+      "id": "thm_f0eef67effde5e97",
+      "source_pair": "pair:l1_status_from_execution@src/rust/crates/repobrain-cli/src/semantic_pipeline.rs:3758=>l1_status_from_execution@src/rust/crates/repobrain-cli/src/semantic_pipeline.rs:3662",
+      "contract_id": "repo-equivalence-v1",
+      "assumptions": [
+        "filesystem semantics are stable",
+        "clock time is not an observable output",
+        "alignment_strategy=exact_path_name",
+        "alignment_score=100",
+        "obligation_partition=pair:src/rust/crates/repobrain-cli/src/semantic_pipeline.rs=>src/rust/crates/repobrain-cli/src/semantic_pipeline.rs",
+        "obligation_priority=1"
+      ],
+      "encoding_hash": "de2fc14d642b01b3"
+    },
+    {
+      "id": "thm_f46c847519fab46b",
+      "source_pair": "pair:l1_repo_relative_path@src/rust/crates/repobrain-cli/src/semantic_pipeline.rs:3879=>l1_repo_relative_path@src/rust/crates/repobrain-cli/src/semantic_pipeline.rs:3783",
+      "contract_id": "repo-equivalence-v1",
+      "assumptions": [
+        "filesystem semantics are stable",
+        "clock time is not an observable output",
+        "alignment_strategy=exact_path_name",
+        "alignment_score=100",
+        "obligation_partition=pair:src/rust/crates/repobrain-cli/src/semantic_pipeline.rs=>src/rust/crates/repobrain-cli/src/semantic_pipeline.rs",
+        "obligation_priority=1"
+      ],
+      "encoding_hash": "a807c72cb6eb4bcb"
+    },
+    {
+      "id": "thm_f47bcdd71dc1ac04",
+      "source_pair": "pair:l2_file_stem@src/rust/crates/repobrain-cli/src/semantic_pipeline.rs:4909=>l2_file_stem@src/rust/crates/repobrain-cli/src/semantic_pipeline.rs:4813",
+      "contract_id": "repo-equivalence-v1",
+      "assumptions": [
+        "filesystem semantics are stable",
+        "clock time is not an observable output",
+        "alignment_strategy=exact_path_name",
+        "alignment_score=100",
+        "obligation_partition=pair:src/rust/crates/repobrain-cli/src/semantic_pipeline.rs=>src/rust/crates/repobrain-cli/src/semantic_pipeline.rs",
+        "obligation_priority=1"
+      ],
+      "encoding_hash": "fca2f34dd4595d91"
+    },
+    {
+      "id": "thm_f604a115be85ead4",
+      "source_pair": "pair:l2_pair_requires_conservative_difference@src/rust/crates/repobrain-cli/src/semantic_pipeline.rs:5019=>l2_pair_requires_conservative_difference@src/rust/crates/repobrain-cli/src/semantic_pipeline.rs:4923",
+      "contract_id": "repo-equivalence-v1",
+      "assumptions": [
+        "filesystem semantics are stable",
+        "clock time is not an observable output",
+        "alignment_strategy=exact_path_name",
+        "alignment_score=100",
+        "obligation_partition=pair:src/rust/crates/repobrain-cli/src/semantic_pipeline.rs=>src/rust/crates/repobrain-cli/src/semantic_pipeline.rs",
+        "obligation_priority=1"
+      ],
+      "encoding_hash": "0fb5eb4186d46fa2"
+    },
+    {
+      "id": "thm_f9cf976d00aa136f",
+      "source_pair": "pair:l2_pair_same_name@src/rust/crates/repobrain-cli/src/semantic_pipeline.rs:4736=>l2_pair_same_name@src/rust/crates/repobrain-cli/src/semantic_pipeline.rs:4640",
+      "contract_id": "repo-equivalence-v1",
+      "assumptions": [
+        "filesystem semantics are stable",
+        "clock time is not an observable output",
+        "alignment_strategy=exact_path_name",
+        "alignment_score=100",
+        "obligation_partition=pair:src/rust/crates/repobrain-cli/src/semantic_pipeline.rs=>src/rust/crates/repobrain-cli/src/semantic_pipeline.rs",
+        "obligation_priority=1"
+      ],
+      "encoding_hash": "2fe371e9d8d18941"
+    },
+    {
+      "id": "thm_fae4103f0c3af8a7",
+      "source_pair": "pair:run_theorem_smt_solver@src/rust/crates/repobrain-cli/src/semantic_pipeline.rs:1942=>run_theorem_smt_solver@src/rust/crates/repobrain-cli/src/semantic_pipeline.rs:1935",
+      "contract_id": "repo-equivalence-v1",
+      "assumptions": [
+        "filesystem semantics are stable",
+        "clock time is not an observable output",
+        "alignment_strategy=exact_path_name",
+        "alignment_score=100",
+        "obligation_partition=pair:src/rust/crates/repobrain-cli/src/semantic_pipeline.rs=>src/rust/crates/repobrain-cli/src/semantic_pipeline.rs",
+        "obligation_priority=1"
+      ],
+      "encoding_hash": "84ea8ff27178be63"
+    },
+    {
+      "id": "thm_fc12d6f2d6d42d8b",
+      "source_pair": "pair:l2_align_functions@src/rust/crates/repobrain-cli/src/semantic_pipeline.rs:4536=>l2_align_functions@src/rust/crates/repobrain-cli/src/semantic_pipeline.rs:4440",
+      "contract_id": "repo-equivalence-v1",
+      "assumptions": [
+        "filesystem semantics are stable",
+        "clock time is not an observable output",
+        "alignment_strategy=exact_path_name",
+        "alignment_score=100",
+        "obligation_partition=pair:src/rust/crates/repobrain-cli/src/semantic_pipeline.rs=>src/rust/crates/repobrain-cli/src/semantic_pipeline.rs",
+        "obligation_priority=1"
+      ],
+      "encoding_hash": "7465ac0509d44eff"
+    },
+    {
+      "id": "thm_fcf0eeab0b6bba7e",
+      "source_pair": "pair:l2_status_from_outcome@src/rust/crates/repobrain-cli/src/semantic_pipeline.rs:5061=>l2_status_from_outcome@src/rust/crates/repobrain-cli/src/semantic_pipeline.rs:4965",
+      "contract_id": "repo-equivalence-v1",
+      "assumptions": [
+        "filesystem semantics are stable",
+        "clock time is not an observable output",
+        "alignment_strategy=exact_path_name",
+        "alignment_score=100",
+        "obligation_partition=pair:src/rust/crates/repobrain-cli/src/semantic_pipeline.rs=>src/rust/crates/repobrain-cli/src/semantic_pipeline.rs",
+        "obligation_priority=1"
+      ],
+      "encoding_hash": "2c9eb3e2200b7cb3"
+    }
+  ],
+  "theorem_certificates": [
+    {
+      "obligation_id": "thm_013875e8cae48bb7",
+      "encoding_hash": "de60eeead2149770",
+      "status": "inconclusive",
+      "solver": "theorem_llvm_ssa_bv_v1",
+      "timeout_ms": 2727,
+      "assumptions": [
+        "theorem_deadline_reached_before_obligation_execution",
+        "obligation_encoding_hash=de60eeead2149770"
+      ],
+      "witness": "theorem_timeout"
+    },
+    {
+      "obligation_id": "thm_180614d77c34d2f8",
+      "encoding_hash": "e957a043877a2597",
+      "status": "inconclusive",
+      "solver": "theorem_llvm_ssa_bv_v1",
+      "timeout_ms": 2727,
+      "assumptions": [
+        "theorem_deadline_reached_before_obligation_execution",
+        "obligation_encoding_hash=e957a043877a2597"
+      ],
+      "witness": "theorem_timeout"
+    },
+    {
+      "obligation_id": "thm_1ff959f92c157820",
+      "encoding_hash": "98bf66d958bc61c8",
+      "status": "inconclusive",
+      "solver": "theorem_llvm_ssa_bv_v1",
+      "timeout_ms": 2727,
+      "assumptions": [
+        "theorem_deadline_reached_before_obligation_execution",
+        "obligation_encoding_hash=98bf66d958bc61c8"
+      ],
+      "witness": "theorem_timeout"
+    },
+    {
+      "obligation_id": "thm_21d48866265e3ee1",
+      "encoding_hash": "3141341d2153f1fd",
+      "status": "inconclusive",
+      "solver": "theorem_llvm_ssa_bv_v1",
+      "timeout_ms": 2727,
+      "assumptions": [
+        "theorem_deadline_reached_before_obligation_execution",
+        "obligation_encoding_hash=3141341d2153f1fd"
+      ],
+      "witness": "theorem_timeout"
+    },
+    {
+      "obligation_id": "thm_24e02f4697d4fbcd",
+      "encoding_hash": "23795a3c5235fcff",
+      "status": "inconclusive",
+      "solver": "theorem_llvm_ssa_bv_v1",
+      "timeout_ms": 2727,
+      "assumptions": [
+        "theorem_deadline_reached_before_obligation_execution",
+        "obligation_encoding_hash=23795a3c5235fcff"
+      ],
+      "witness": "theorem_timeout"
+    },
+    {
+      "obligation_id": "thm_2d748d604a1e26ab",
+      "encoding_hash": "27730712e673a1d7",
+      "status": "inconclusive",
+      "solver": "theorem_llvm_ssa_bv_v1",
+      "timeout_ms": 2727,
+      "assumptions": [
+        "theorem_deadline_reached_before_obligation_execution",
+        "obligation_encoding_hash=27730712e673a1d7"
+      ],
+      "witness": "theorem_timeout"
+    },
+    {
+      "obligation_id": "thm_2ea21d8ce5b8323a",
+      "encoding_hash": "b658c63d8551fbae",
+      "status": "inconclusive",
+      "solver": "theorem_llvm_ssa_bv_v1",
+      "timeout_ms": 2727,
+      "assumptions": [
+        "theorem_deadline_reached_before_obligation_execution",
+        "obligation_encoding_hash=b658c63d8551fbae"
+      ],
+      "witness": "theorem_timeout"
+    },
+    {
+      "obligation_id": "thm_3de1be35fecd7eea",
+      "encoding_hash": "f8db394ba5b53da1",
+      "status": "inconclusive",
+      "solver": "theorem_llvm_ssa_bv_v1",
+      "timeout_ms": 2727,
+      "assumptions": [
+        "theorem_deadline_reached_before_obligation_execution",
+        "obligation_encoding_hash=f8db394ba5b53da1"
+      ],
+      "witness": "theorem_timeout"
+    },
+    {
+      "obligation_id": "thm_3fe3f9df1c8d5fd7",
+      "encoding_hash": "3d7857375899eaf0",
+      "status": "inconclusive",
+      "solver": "theorem_llvm_ssa_bv_v1",
+      "timeout_ms": 2727,
+      "assumptions": [
+        "theorem_deadline_reached_before_obligation_execution",
+        "obligation_encoding_hash=3d7857375899eaf0"
+      ],
+      "witness": "theorem_timeout"
+    },
+    {
+      "obligation_id": "thm_490efc73716a1f1c",
+      "encoding_hash": "63a82a296123e4f3",
+      "status": "inconclusive",
+      "solver": "theorem_llvm_ssa_bv_v1",
+      "timeout_ms": 2727,
+      "assumptions": [
+        "theorem_deadline_reached_before_obligation_execution",
+        "obligation_encoding_hash=63a82a296123e4f3"
+      ],
+      "witness": "theorem_timeout"
+    },
+    {
+      "obligation_id": "thm_5120322e54a99f5b",
+      "encoding_hash": "9be2ccbf08711590",
+      "status": "inconclusive",
+      "solver": "theorem_llvm_ssa_bv_v1",
+      "timeout_ms": 2727,
+      "assumptions": [
+        "theorem_deadline_reached_before_obligation_execution",
+        "obligation_encoding_hash=9be2ccbf08711590"
+      ],
+      "witness": "theorem_timeout"
+    },
+    {
+      "obligation_id": "thm_65424a6a93dd349c",
+      "encoding_hash": "9b1304e40cc38535",
+      "status": "inconclusive",
+      "solver": "theorem_llvm_ssa_bv_v1",
+      "timeout_ms": 2727,
+      "assumptions": [
+        "theorem_deadline_reached_before_obligation_execution",
+        "obligation_encoding_hash=9b1304e40cc38535"
+      ],
+      "witness": "theorem_timeout"
+    },
+    {
+      "obligation_id": "thm_69e55019e1c8e67f",
+      "encoding_hash": "b8247727614e96fe",
+      "status": "inconclusive",
+      "solver": "theorem_llvm_ssa_bv_v1",
+      "timeout_ms": 2727,
+      "assumptions": [
+        "theorem_deadline_reached_before_obligation_execution",
+        "obligation_encoding_hash=b8247727614e96fe"
+      ],
+      "witness": "theorem_timeout"
+    },
+    {
+      "obligation_id": "thm_73b53c4e2691e270",
+      "encoding_hash": "961f4e53e32fe040",
+      "status": "inconclusive",
+      "solver": "theorem_llvm_ssa_bv_v1",
+      "timeout_ms": 2727,
+      "assumptions": [
+        "theorem_deadline_reached_before_obligation_execution",
+        "obligation_encoding_hash=961f4e53e32fe040"
+      ],
+      "witness": "theorem_timeout"
+    },
+    {
+      "obligation_id": "thm_81db7385f9d9dd70",
+      "encoding_hash": "64ff778f2df1c59f",
+      "status": "inconclusive",
+      "solver": "theorem_llvm_ssa_bv_v1",
+      "timeout_ms": 2727,
+      "assumptions": [
+        "theorem_deadline_reached_before_obligation_execution",
+        "obligation_encoding_hash=64ff778f2df1c59f"
+      ],
+      "witness": "theorem_timeout"
+    },
+    {
+      "obligation_id": "thm_83ac7228beba7646",
+      "encoding_hash": "221ee4fd8cf69054",
+      "status": "inconclusive",
+      "solver": "theorem_llvm_ssa_bv_v1",
+      "timeout_ms": 2727,
+      "assumptions": [
+        "theorem_deadline_reached_before_obligation_execution",
+        "obligation_encoding_hash=221ee4fd8cf69054"
+      ],
+      "witness": "theorem_timeout"
+    },
+    {
+      "obligation_id": "thm_8c39686153717513",
+      "encoding_hash": "837aaf1c4a57bc96",
+      "status": "inconclusive",
+      "solver": "theorem_llvm_ssa_bv_v1",
+      "timeout_ms": 2727,
+      "assumptions": [
+        "theorem_deadline_reached_before_obligation_execution",
+        "obligation_encoding_hash=837aaf1c4a57bc96"
+      ],
+      "witness": "theorem_timeout"
+    },
+    {
+      "obligation_id": "thm_9151ace9c6825fcb",
+      "encoding_hash": "b7c03709d29a1b67",
+      "status": "inconclusive",
+      "solver": "theorem_llvm_ssa_bv_v1",
+      "timeout_ms": 2727,
+      "assumptions": [
+        "theorem_deadline_reached_before_obligation_execution",
+        "obligation_encoding_hash=b7c03709d29a1b67"
+      ],
+      "witness": "theorem_timeout"
+    },
+    {
+      "obligation_id": "thm_979b7e7138029af1",
+      "encoding_hash": "0cd6d3f8cf73744a",
+      "status": "inconclusive",
+      "solver": "theorem_llvm_ssa_bv_v1",
+      "timeout_ms": 2727,
+      "assumptions": [
+        "theorem_deadline_reached_before_obligation_execution",
+        "obligation_encoding_hash=0cd6d3f8cf73744a"
+      ],
+      "witness": "theorem_timeout"
+    },
+    {
+      "obligation_id": "thm_9c4ad699d6784d08",
+      "encoding_hash": "a0e51d96cb0befaf",
+      "status": "inconclusive",
+      "solver": "theorem_llvm_ssa_bv_v1",
+      "timeout_ms": 2727,
+      "assumptions": [
+        "theorem_deadline_reached_before_obligation_execution",
+        "obligation_encoding_hash=a0e51d96cb0befaf"
+      ],
+      "witness": "theorem_timeout"
+    },
+    {
+      "obligation_id": "thm_9f7e7685df6db2fa",
+      "encoding_hash": "c093024553b2045a",
+      "status": "inconclusive",
+      "solver": "theorem_llvm_ssa_bv_v1",
+      "timeout_ms": 2727,
+      "assumptions": [
+        "theorem_deadline_reached_before_obligation_execution",
+        "obligation_encoding_hash=c093024553b2045a"
+      ],
+      "witness": "theorem_timeout"
+    },
+    {
+      "obligation_id": "thm_a03a8ed5cd1efa36",
+      "encoding_hash": "aaf2f7cebb410bbf",
+      "status": "inconclusive",
+      "solver": "theorem_llvm_ssa_bv_v1",
+      "timeout_ms": 2727,
+      "assumptions": [
+        "theorem_deadline_reached_before_obligation_execution",
+        "obligation_encoding_hash=aaf2f7cebb410bbf"
+      ],
+      "witness": "theorem_timeout"
+    },
+    {
+      "obligation_id": "thm_a7e97552411e26b6",
+      "encoding_hash": "94d95456e29de038",
+      "status": "inconclusive",
+      "solver": "theorem_llvm_ssa_bv_v1",
+      "timeout_ms": 2727,
+      "assumptions": [
+        "theorem_deadline_reached_before_obligation_execution",
+        "obligation_encoding_hash=94d95456e29de038"
+      ],
+      "witness": "theorem_timeout"
+    },
+    {
+      "obligation_id": "thm_b38acbb07741241a",
+      "encoding_hash": "e8ae99e1c3d0a3b1",
+      "status": "inconclusive",
+      "solver": "theorem_llvm_ssa_bv_v1",
+      "timeout_ms": 2727,
+      "assumptions": [
+        "theorem_deadline_reached_before_obligation_execution",
+        "obligation_encoding_hash=e8ae99e1c3d0a3b1"
+      ],
+      "witness": "theorem_timeout"
+    },
+    {
+      "obligation_id": "thm_b7ac942d05c29884",
+      "encoding_hash": "61ae6812ceb727e3",
+      "status": "inconclusive",
+      "solver": "theorem_llvm_ssa_bv_v1",
+      "timeout_ms": 2727,
+      "assumptions": [
+        "theorem_deadline_reached_before_obligation_execution",
+        "obligation_encoding_hash=61ae6812ceb727e3"
+      ],
+      "witness": "theorem_timeout"
+    },
+    {
+      "obligation_id": "thm_c02c6a59ffc309d7",
+      "encoding_hash": "b9fbd76ade6cd163",
+      "status": "inconclusive",
+      "solver": "theorem_llvm_ssa_bv_v1",
+      "timeout_ms": 2727,
+      "assumptions": [
+        "theorem_deadline_reached_before_obligation_execution",
+        "obligation_encoding_hash=b9fbd76ade6cd163"
+      ],
+      "witness": "theorem_timeout"
+    },
+    {
+      "obligation_id": "thm_c1fc81a0d986fd24",
+      "encoding_hash": "074bfc0408357977",
+      "status": "inconclusive",
+      "solver": "theorem_llvm_ssa_bv_v1",
+      "timeout_ms": 2727,
+      "assumptions": [
+        "theorem_deadline_reached_before_obligation_execution",
+        "obligation_encoding_hash=074bfc0408357977"
+      ],
+      "witness": "theorem_timeout"
+    },
+    {
+      "obligation_id": "thm_c7d1327891aa4de7",
+      "encoding_hash": "dfa540fd7074400a",
+      "status": "inconclusive",
+      "solver": "theorem_llvm_ssa_bv_v1",
+      "timeout_ms": 2727,
+      "assumptions": [
+        "theorem_deadline_reached_before_obligation_execution",
+        "obligation_encoding_hash=dfa540fd7074400a"
+      ],
+      "witness": "theorem_timeout"
+    },
+    {
+      "obligation_id": "thm_cdb9f69b25c69fab",
+      "encoding_hash": "f23c5064010d15fa",
+      "status": "inconclusive",
+      "solver": "theorem_llvm_ssa_bv_v1",
+      "timeout_ms": 2727,
+      "assumptions": [
+        "theorem_deadline_reached_before_obligation_execution",
+        "obligation_encoding_hash=f23c5064010d15fa"
+      ],
+      "witness": "theorem_timeout"
+    },
+    {
+      "obligation_id": "thm_d0da86617cd0fb94",
+      "encoding_hash": "4274c3f8081c141e",
+      "status": "inconclusive",
+      "solver": "theorem_llvm_ssa_bv_v1",
+      "timeout_ms": 2727,
+      "assumptions": [
+        "theorem_deadline_reached_before_obligation_execution",
+        "obligation_encoding_hash=4274c3f8081c141e"
+      ],
+      "witness": "theorem_timeout"
+    },
+    {
+      "obligation_id": "thm_d3620f0dbbca8f18",
+      "encoding_hash": "432aa95119939036",
+      "status": "inconclusive",
+      "solver": "theorem_llvm_ssa_bv_v1",
+      "timeout_ms": 2727,
+      "assumptions": [
+        "theorem_deadline_reached_before_obligation_execution",
+        "obligation_encoding_hash=432aa95119939036"
+      ],
+      "witness": "theorem_timeout"
+    },
+    {
+      "obligation_id": "thm_e87b59053bc38cdb",
+      "encoding_hash": "1c9ea90fb50eed17",
+      "status": "inconclusive",
+      "solver": "theorem_llvm_ssa_bv_v1",
+      "timeout_ms": 2727,
+      "assumptions": [
+        "theorem_deadline_reached_before_obligation_execution",
+        "obligation_encoding_hash=1c9ea90fb50eed17"
+      ],
+      "witness": "theorem_timeout"
+    },
+    {
+      "obligation_id": "thm_ed8026c7db41674c",
+      "encoding_hash": "68488dec5dba41ab",
+      "status": "inconclusive",
+      "solver": "theorem_llvm_ssa_bv_v1",
+      "timeout_ms": 2727,
+      "assumptions": [
+        "theorem_deadline_reached_before_obligation_execution",
+        "obligation_encoding_hash=68488dec5dba41ab"
+      ],
+      "witness": "theorem_timeout"
+    },
+    {
+      "obligation_id": "thm_ee3aac19098f09f3",
+      "encoding_hash": "2e3d82fb62a33e9d",
+      "status": "inconclusive",
+      "solver": "theorem_llvm_ssa_bv_v1",
+      "timeout_ms": 2727,
+      "assumptions": [
+        "theorem_deadline_reached_before_obligation_execution",
+        "obligation_encoding_hash=2e3d82fb62a33e9d"
+      ],
+      "witness": "theorem_timeout"
+    },
+    {
+      "obligation_id": "thm_eed86912c7059c27",
+      "encoding_hash": "57de5ba1f3f0d309",
+      "status": "inconclusive",
+      "solver": "theorem_llvm_ssa_bv_v1",
+      "timeout_ms": 2727,
+      "assumptions": [
+        "theorem_deadline_reached_before_obligation_execution",
+        "obligation_encoding_hash=57de5ba1f3f0d309"
+      ],
+      "witness": "theorem_timeout"
+    },
+    {
+      "obligation_id": "thm_f178f31a39d20820",
+      "encoding_hash": "b1e47c6db046b6ea",
+      "status": "inconclusive",
+      "solver": "theorem_llvm_ssa_bv_v1",
+      "timeout_ms": 2727,
+      "assumptions": [
+        "theorem_deadline_reached_before_obligation_execution",
+        "obligation_encoding_hash=b1e47c6db046b6ea"
+      ],
+      "witness": "theorem_timeout"
+    },
+    {
+      "obligation_id": "thm_f68cd4eef6e5d9d1",
+      "encoding_hash": "96e8bd7700d57793",
+      "status": "inconclusive",
+      "solver": "theorem_llvm_ssa_bv_v1",
+      "timeout_ms": 2727,
+      "assumptions": [
+        "theorem_deadline_reached_before_obligation_execution",
+        "obligation_encoding_hash=96e8bd7700d57793"
+      ],
+      "witness": "theorem_timeout"
+    },
+    {
+      "obligation_id": "thm_f72cac4e763a767b",
+      "encoding_hash": "7fdc06a817ff0fc5",
+      "status": "inconclusive",
+      "solver": "theorem_llvm_ssa_bv_v1",
+      "timeout_ms": 2727,
+      "assumptions": [
+        "theorem_deadline_reached_before_obligation_execution",
+        "obligation_encoding_hash=7fdc06a817ff0fc5"
+      ],
+      "witness": "theorem_timeout"
+    },
+    {
+      "obligation_id": "thm_090ff46e7d73a3d8",
+      "encoding_hash": "e04bba848632fb8e",
+      "status": "inconclusive",
+      "solver": "theorem_llvm_ssa_bv_v1",
+      "timeout_ms": 2727,
+      "assumptions": [
+        "theorem_deadline_reached_before_obligation_execution",
+        "obligation_encoding_hash=e04bba848632fb8e"
+      ],
+      "witness": "theorem_timeout"
+    },
+    {
+      "obligation_id": "thm_0caae520170c9162",
+      "encoding_hash": "bc72997de237dab5",
+      "status": "inconclusive",
+      "solver": "theorem_llvm_ssa_bv_v1",
+      "timeout_ms": 2727,
+      "assumptions": [
+        "theorem_deadline_reached_before_obligation_execution",
+        "obligation_encoding_hash=bc72997de237dab5"
+      ],
+      "witness": "theorem_timeout"
+    },
+    {
+      "obligation_id": "thm_0d2b07812d48a64f",
+      "encoding_hash": "15a9ea5d331beaa4",
+      "status": "inconclusive",
+      "solver": "theorem_llvm_ssa_bv_v1",
+      "timeout_ms": 2727,
+      "assumptions": [
+        "theorem_deadline_reached_before_obligation_execution",
+        "obligation_encoding_hash=15a9ea5d331beaa4"
+      ],
+      "witness": "theorem_timeout"
+    },
+    {
+      "obligation_id": "thm_0fd1bdf27a99ea39",
+      "encoding_hash": "140e96c28ec88f07",
+      "status": "inconclusive",
+      "solver": "theorem_llvm_ssa_bv_v1",
+      "timeout_ms": 2727,
+      "assumptions": [
+        "theorem_deadline_reached_before_obligation_execution",
+        "obligation_encoding_hash=140e96c28ec88f07"
+      ],
+      "witness": "theorem_timeout"
+    },
+    {
+      "obligation_id": "thm_0fef55c7cadf0d3b",
+      "encoding_hash": "9f551a1343fe9a8d",
+      "status": "inconclusive",
+      "solver": "theorem_llvm_ssa_bv_v1",
+      "timeout_ms": 2727,
+      "assumptions": [
+        "theorem_deadline_reached_before_obligation_execution",
+        "obligation_encoding_hash=9f551a1343fe9a8d"
+      ],
+      "witness": "theorem_timeout"
+    },
+    {
+      "obligation_id": "thm_113a99d9e4cf7616",
+      "encoding_hash": "404a6be23ee25bd0",
+      "status": "inconclusive",
+      "solver": "theorem_llvm_ssa_bv_v1",
+      "timeout_ms": 2727,
+      "assumptions": [
+        "theorem_deadline_reached_before_obligation_execution",
+        "obligation_encoding_hash=404a6be23ee25bd0"
+      ],
+      "witness": "theorem_timeout"
+    },
+    {
+      "obligation_id": "thm_1501bb921a9f64ed",
+      "encoding_hash": "986d0a2b1f2d7c48",
+      "status": "inconclusive",
+      "solver": "theorem_llvm_ssa_bv_v1",
+      "timeout_ms": 2727,
+      "assumptions": [
+        "theorem_deadline_reached_before_obligation_execution",
+        "obligation_encoding_hash=986d0a2b1f2d7c48"
+      ],
+      "witness": "theorem_timeout"
+    },
+    {
+      "obligation_id": "thm_1565f2660c46053d",
+      "encoding_hash": "3fe905e95c87281e",
+      "status": "inconclusive",
+      "solver": "theorem_llvm_ssa_bv_v1",
+      "timeout_ms": 2727,
+      "assumptions": [
+        "theorem_deadline_reached_before_obligation_execution",
+        "obligation_encoding_hash=3fe905e95c87281e"
+      ],
+      "witness": "theorem_timeout"
+    },
+    {
+      "obligation_id": "thm_175da3e113ed9552",
+      "encoding_hash": "bc86f8ad2d8c2597",
+      "status": "inconclusive",
+      "solver": "theorem_llvm_ssa_bv_v1",
+      "timeout_ms": 2727,
+      "assumptions": [
+        "theorem_deadline_reached_before_obligation_execution",
+        "obligation_encoding_hash=bc86f8ad2d8c2597"
+      ],
+      "witness": "theorem_timeout"
+    },
+    {
+      "obligation_id": "thm_1bc745543a6e00ee",
+      "encoding_hash": "507550fd6773efb2",
+      "status": "inconclusive",
+      "solver": "theorem_llvm_ssa_bv_v1",
+      "timeout_ms": 2727,
+      "assumptions": [
+        "theorem_deadline_reached_before_obligation_execution",
+        "obligation_encoding_hash=507550fd6773efb2"
+      ],
+      "witness": "theorem_timeout"
+    },
+    {
+      "obligation_id": "thm_228d85f7d57157a2",
+      "encoding_hash": "ed6ab3aa2e3aa322",
+      "status": "inconclusive",
+      "solver": "theorem_llvm_ssa_bv_v1",
+      "timeout_ms": 2727,
+      "assumptions": [
+        "theorem_deadline_reached_before_obligation_execution",
+        "obligation_encoding_hash=ed6ab3aa2e3aa322"
+      ],
+      "witness": "theorem_timeout"
+    },
+    {
+      "obligation_id": "thm_22ad6ab9f3530ef9",
+      "encoding_hash": "c9e62f6a0770d4ef",
+      "status": "inconclusive",
+      "solver": "theorem_llvm_ssa_bv_v1",
+      "timeout_ms": 2727,
+      "assumptions": [
+        "theorem_deadline_reached_before_obligation_execution",
+        "obligation_encoding_hash=c9e62f6a0770d4ef"
+      ],
+      "witness": "theorem_timeout"
+    },
+    {
+      "obligation_id": "thm_256a66e63e0dee8c",
+      "encoding_hash": "285adfbda872e39a",
+      "status": "inconclusive",
+      "solver": "theorem_llvm_ssa_bv_v1",
+      "timeout_ms": 2727,
+      "assumptions": [
+        "theorem_deadline_reached_before_obligation_execution",
+        "obligation_encoding_hash=285adfbda872e39a"
+      ],
+      "witness": "theorem_timeout"
+    },
+    {
+      "obligation_id": "thm_261003061385d651",
+      "encoding_hash": "dd5f9d7ab23a0555",
+      "status": "inconclusive",
+      "solver": "theorem_llvm_ssa_bv_v1",
+      "timeout_ms": 2727,
+      "assumptions": [
+        "theorem_deadline_reached_before_obligation_execution",
+        "obligation_encoding_hash=dd5f9d7ab23a0555"
+      ],
+      "witness": "theorem_timeout"
+    },
+    {
+      "obligation_id": "thm_26b01abc120078ab",
+      "encoding_hash": "0a5ff425dfa70abc",
+      "status": "inconclusive",
+      "solver": "theorem_llvm_ssa_bv_v1",
+      "timeout_ms": 2727,
+      "assumptions": [
+        "theorem_deadline_reached_before_obligation_execution",
+        "obligation_encoding_hash=0a5ff425dfa70abc"
+      ],
+      "witness": "theorem_timeout"
+    },
+    {
+      "obligation_id": "thm_2969240f38d888ff",
+      "encoding_hash": "a1adea1e3acd7ead",
+      "status": "inconclusive",
+      "solver": "theorem_llvm_ssa_bv_v1",
+      "timeout_ms": 2727,
+      "assumptions": [
+        "theorem_deadline_reached_before_obligation_execution",
+        "obligation_encoding_hash=a1adea1e3acd7ead"
+      ],
+      "witness": "theorem_timeout"
+    },
+    {
+      "obligation_id": "thm_2dfcc57e09e230f2",
+      "encoding_hash": "359f499ba814db36",
+      "status": "inconclusive",
+      "solver": "theorem_llvm_ssa_bv_v1",
+      "timeout_ms": 2727,
+      "assumptions": [
+        "theorem_deadline_reached_before_obligation_execution",
+        "obligation_encoding_hash=359f499ba814db36"
+      ],
+      "witness": "theorem_timeout"
+    },
+    {
+      "obligation_id": "thm_38672138bb8c998c",
+      "encoding_hash": "933bc0ee6703821e",
+      "status": "inconclusive",
+      "solver": "theorem_llvm_ssa_bv_v1",
+      "timeout_ms": 2727,
+      "assumptions": [
+        "theorem_deadline_reached_before_obligation_execution",
+        "obligation_encoding_hash=933bc0ee6703821e"
+      ],
+      "witness": "theorem_timeout"
+    },
+    {
+      "obligation_id": "thm_42b498fddcdc4607",
+      "encoding_hash": "56c0e62b5d9580d3",
+      "status": "inconclusive",
+      "solver": "theorem_llvm_ssa_bv_v1",
+      "timeout_ms": 2727,
+      "assumptions": [
+        "theorem_deadline_reached_before_obligation_execution",
+        "obligation_encoding_hash=56c0e62b5d9580d3"
+      ],
+      "witness": "theorem_timeout"
+    },
+    {
+      "obligation_id": "thm_45f17c67e1ca8f16",
+      "encoding_hash": "95237b2ee48c63a1",
+      "status": "inconclusive",
+      "solver": "theorem_llvm_ssa_bv_v1",
+      "timeout_ms": 2727,
+      "assumptions": [
+        "theorem_deadline_reached_before_obligation_execution",
+        "obligation_encoding_hash=95237b2ee48c63a1"
+      ],
+      "witness": "theorem_timeout"
+    },
+    {
+      "obligation_id": "thm_49e514f4a0668b9e",
+      "encoding_hash": "23c57e4c8ac3f0fe",
+      "status": "inconclusive",
+      "solver": "theorem_llvm_ssa_bv_v1",
+      "timeout_ms": 2727,
+      "assumptions": [
+        "theorem_deadline_reached_before_obligation_execution",
+        "obligation_encoding_hash=23c57e4c8ac3f0fe"
+      ],
+      "witness": "theorem_timeout"
+    },
+    {
+      "obligation_id": "thm_4d8907afde129b50",
+      "encoding_hash": "2d4650fd62aee037",
+      "status": "inconclusive",
+      "solver": "theorem_llvm_ssa_bv_v1",
+      "timeout_ms": 2727,
+      "assumptions": [
+        "theorem_deadline_reached_before_obligation_execution",
+        "obligation_encoding_hash=2d4650fd62aee037"
+      ],
+      "witness": "theorem_timeout"
+    },
+    {
+      "obligation_id": "thm_4dd64d5143451c17",
+      "encoding_hash": "e4db211758bbffea",
+      "status": "inconclusive",
+      "solver": "theorem_llvm_ssa_bv_v1",
+      "timeout_ms": 2727,
+      "assumptions": [
+        "theorem_deadline_reached_before_obligation_execution",
+        "obligation_encoding_hash=e4db211758bbffea"
+      ],
+      "witness": "theorem_timeout"
+    },
+    {
+      "obligation_id": "thm_511bc8c301487104",
+      "encoding_hash": "d607e59464933bc2",
+      "status": "inconclusive",
+      "solver": "theorem_llvm_ssa_bv_v1",
+      "timeout_ms": 2727,
+      "assumptions": [
+        "theorem_deadline_reached_before_obligation_execution",
+        "obligation_encoding_hash=d607e59464933bc2"
+      ],
+      "witness": "theorem_timeout"
+    },
+    {
+      "obligation_id": "thm_524b5fa002f6d5c7",
+      "encoding_hash": "6937eddf6d876509",
+      "status": "inconclusive",
+      "solver": "theorem_llvm_ssa_bv_v1",
+      "timeout_ms": 2727,
+      "assumptions": [
+        "theorem_deadline_reached_before_obligation_execution",
+        "obligation_encoding_hash=6937eddf6d876509"
+      ],
+      "witness": "theorem_timeout"
+    },
+    {
+      "obligation_id": "thm_52bad3dd8cfb1aba",
+      "encoding_hash": "4ff3f702263db869",
+      "status": "inconclusive",
+      "solver": "theorem_llvm_ssa_bv_v1",
+      "timeout_ms": 2727,
+      "assumptions": [
+        "theorem_deadline_reached_before_obligation_execution",
+        "obligation_encoding_hash=4ff3f702263db869"
+      ],
+      "witness": "theorem_timeout"
+    },
+    {
+      "obligation_id": "thm_5517800943401174",
+      "encoding_hash": "8c61e39b1dc05bca",
+      "status": "inconclusive",
+      "solver": "theorem_llvm_ssa_bv_v1",
+      "timeout_ms": 2727,
+      "assumptions": [
+        "theorem_deadline_reached_before_obligation_execution",
+        "obligation_encoding_hash=8c61e39b1dc05bca"
+      ],
+      "witness": "theorem_timeout"
+    },
+    {
+      "obligation_id": "thm_5692e2a56f01ebda",
+      "encoding_hash": "18da210ba4d7c4c7",
+      "status": "inconclusive",
+      "solver": "theorem_llvm_ssa_bv_v1",
+      "timeout_ms": 2727,
+      "assumptions": [
+        "theorem_deadline_reached_before_obligation_execution",
+        "obligation_encoding_hash=18da210ba4d7c4c7"
+      ],
+      "witness": "theorem_timeout"
+    },
+    {
+      "obligation_id": "thm_5dda7a965e7be39b",
+      "encoding_hash": "bd23effee4c4111e",
+      "status": "inconclusive",
+      "solver": "theorem_llvm_ssa_bv_v1",
+      "timeout_ms": 2727,
+      "assumptions": [
+        "theorem_deadline_reached_before_obligation_execution",
+        "obligation_encoding_hash=bd23effee4c4111e"
+      ],
+      "witness": "theorem_timeout"
+    },
+    {
+      "obligation_id": "thm_5fa9e4db3e078432",
+      "encoding_hash": "f54964f83eadbda8",
+      "status": "inconclusive",
+      "solver": "theorem_llvm_ssa_bv_v1",
+      "timeout_ms": 2727,
+      "assumptions": [
+        "theorem_deadline_reached_before_obligation_execution",
+        "obligation_encoding_hash=f54964f83eadbda8"
+      ],
+      "witness": "theorem_timeout"
+    },
+    {
+      "obligation_id": "thm_6403b7084f467b31",
+      "encoding_hash": "d69d3315d3c71c4a",
+      "status": "inconclusive",
+      "solver": "theorem_llvm_ssa_bv_v1",
+      "timeout_ms": 2727,
+      "assumptions": [
+        "theorem_deadline_reached_before_obligation_execution",
+        "obligation_encoding_hash=d69d3315d3c71c4a"
+      ],
+      "witness": "theorem_timeout"
+    },
+    {
+      "obligation_id": "thm_64792b0023ca7ce6",
+      "encoding_hash": "a80d277bedb4e68e",
+      "status": "inconclusive",
+      "solver": "theorem_llvm_ssa_bv_v1",
+      "timeout_ms": 2727,
+      "assumptions": [
+        "theorem_deadline_reached_before_obligation_execution",
+        "obligation_encoding_hash=a80d277bedb4e68e"
+      ],
+      "witness": "theorem_timeout"
+    },
+    {
+      "obligation_id": "thm_65c64ff5c81cb97a",
+      "encoding_hash": "cbd3ab82ec3048ae",
+      "status": "inconclusive",
+      "solver": "theorem_llvm_ssa_bv_v1",
+      "timeout_ms": 2727,
+      "assumptions": [
+        "theorem_deadline_reached_before_obligation_execution",
+        "obligation_encoding_hash=cbd3ab82ec3048ae"
+      ],
+      "witness": "theorem_timeout"
+    },
+    {
+      "obligation_id": "thm_68157cfc31f48841",
+      "encoding_hash": "36f752416cbec4d8",
+      "status": "inconclusive",
+      "solver": "theorem_llvm_ssa_bv_v1",
+      "timeout_ms": 2727,
+      "assumptions": [
+        "theorem_deadline_reached_before_obligation_execution",
+        "obligation_encoding_hash=36f752416cbec4d8"
+      ],
+      "witness": "theorem_timeout"
+    },
+    {
+      "obligation_id": "thm_6aec8392ad527f3c",
+      "encoding_hash": "478c70ee75054e4e",
+      "status": "inconclusive",
+      "solver": "theorem_llvm_ssa_bv_v1",
+      "timeout_ms": 2727,
+      "assumptions": [
+        "theorem_deadline_reached_before_obligation_execution",
+        "obligation_encoding_hash=478c70ee75054e4e"
+      ],
+      "witness": "theorem_timeout"
+    },
+    {
+      "obligation_id": "thm_6cd4b082f433b351",
+      "encoding_hash": "fb06fff5d2eff21d",
+      "status": "inconclusive",
+      "solver": "theorem_llvm_ssa_bv_v1",
+      "timeout_ms": 2727,
+      "assumptions": [
+        "theorem_deadline_reached_before_obligation_execution",
+        "obligation_encoding_hash=fb06fff5d2eff21d"
+      ],
+      "witness": "theorem_timeout"
+    },
+    {
+      "obligation_id": "thm_6f5c022dde7550bf",
+      "encoding_hash": "d75325048fa007c4",
+      "status": "inconclusive",
+      "solver": "theorem_llvm_ssa_bv_v1",
+      "timeout_ms": 2727,
+      "assumptions": [
+        "theorem_deadline_reached_before_obligation_execution",
+        "obligation_encoding_hash=d75325048fa007c4"
+      ],
+      "witness": "theorem_timeout"
+    },
+    {
+      "obligation_id": "thm_70e95befcdad071d",
+      "encoding_hash": "5a5e171fb52160d6",
+      "status": "inconclusive",
+      "solver": "theorem_llvm_ssa_bv_v1",
+      "timeout_ms": 2727,
+      "assumptions": [
+        "theorem_deadline_reached_before_obligation_execution",
+        "obligation_encoding_hash=5a5e171fb52160d6"
+      ],
+      "witness": "theorem_timeout"
+    },
+    {
+      "obligation_id": "thm_73b099380a1542a8",
+      "encoding_hash": "9de755dc92763223",
+      "status": "inconclusive",
+      "solver": "theorem_llvm_ssa_bv_v1",
+      "timeout_ms": 2727,
+      "assumptions": [
+        "theorem_deadline_reached_before_obligation_execution",
+        "obligation_encoding_hash=9de755dc92763223"
+      ],
+      "witness": "theorem_timeout"
+    },
+    {
+      "obligation_id": "thm_765415bb4d36635b",
+      "encoding_hash": "68eeb613456952ce",
+      "status": "inconclusive",
+      "solver": "theorem_llvm_ssa_bv_v1",
+      "timeout_ms": 2727,
+      "assumptions": [
+        "theorem_deadline_reached_before_obligation_execution",
+        "obligation_encoding_hash=68eeb613456952ce"
+      ],
+      "witness": "theorem_timeout"
+    },
+    {
+      "obligation_id": "thm_77b0df031f693663",
+      "encoding_hash": "89b2da366a8ed6f2",
+      "status": "inconclusive",
+      "solver": "theorem_llvm_ssa_bv_v1",
+      "timeout_ms": 2727,
+      "assumptions": [
+        "theorem_deadline_reached_before_obligation_execution",
+        "obligation_encoding_hash=89b2da366a8ed6f2"
+      ],
+      "witness": "theorem_timeout"
+    },
+    {
+      "obligation_id": "thm_78b5711bf70611fd",
+      "encoding_hash": "ae3ae1d14b88456a",
+      "status": "inconclusive",
+      "solver": "theorem_llvm_ssa_bv_v1",
+      "timeout_ms": 2727,
+      "assumptions": [
+        "theorem_deadline_reached_before_obligation_execution",
+        "obligation_encoding_hash=ae3ae1d14b88456a"
+      ],
+      "witness": "theorem_timeout"
+    },
+    {
+      "obligation_id": "thm_7ac55ff84d3f4367",
+      "encoding_hash": "d1ecb1bffdcb3dab",
+      "status": "inconclusive",
+      "solver": "theorem_llvm_ssa_bv_v1",
+      "timeout_ms": 2727,
+      "assumptions": [
+        "theorem_deadline_reached_before_obligation_execution",
+        "obligation_encoding_hash=d1ecb1bffdcb3dab"
+      ],
+      "witness": "theorem_timeout"
+    },
+    {
+      "obligation_id": "thm_7b518e279bfc8600",
+      "encoding_hash": "f95c883fb0674096",
+      "status": "inconclusive",
+      "solver": "theorem_llvm_ssa_bv_v1",
+      "timeout_ms": 2727,
+      "assumptions": [
+        "theorem_deadline_reached_before_obligation_execution",
+        "obligation_encoding_hash=f95c883fb0674096"
+      ],
+      "witness": "theorem_timeout"
+    },
+    {
+      "obligation_id": "thm_804775f1e5513b6b",
+      "encoding_hash": "be7a6855f3563126",
+      "status": "inconclusive",
+      "solver": "theorem_llvm_ssa_bv_v1",
+      "timeout_ms": 2727,
+      "assumptions": [
+        "theorem_deadline_reached_before_obligation_execution",
+        "obligation_encoding_hash=be7a6855f3563126"
+      ],
+      "witness": "theorem_timeout"
+    },
+    {
+      "obligation_id": "thm_8617b65b3df48d71",
+      "encoding_hash": "87340b2b68084da4",
+      "status": "inconclusive",
+      "solver": "theorem_llvm_ssa_bv_v1",
+      "timeout_ms": 2727,
+      "assumptions": [
+        "theorem_deadline_reached_before_obligation_execution",
+        "obligation_encoding_hash=87340b2b68084da4"
+      ],
+      "witness": "theorem_timeout"
+    },
+    {
+      "obligation_id": "thm_87ab94a23e63ee03",
+      "encoding_hash": "a47e4bb0230d1cc8",
+      "status": "inconclusive",
+      "solver": "theorem_llvm_ssa_bv_v1",
+      "timeout_ms": 2727,
+      "assumptions": [
+        "theorem_deadline_reached_before_obligation_execution",
+        "obligation_encoding_hash=a47e4bb0230d1cc8"
+      ],
+      "witness": "theorem_timeout"
+    },
+    {
+      "obligation_id": "thm_8b75c1d645ef0e58",
+      "encoding_hash": "95e8a068a7bf64fb",
+      "status": "inconclusive",
+      "solver": "theorem_llvm_ssa_bv_v1",
+      "timeout_ms": 2727,
+      "assumptions": [
+        "theorem_deadline_reached_before_obligation_execution",
+        "obligation_encoding_hash=95e8a068a7bf64fb"
+      ],
+      "witness": "theorem_timeout"
+    },
+    {
+      "obligation_id": "thm_8e742f536b43efaa",
+      "encoding_hash": "508853d51b1d678a",
+      "status": "inconclusive",
+      "solver": "theorem_llvm_ssa_bv_v1",
+      "timeout_ms": 2727,
+      "assumptions": [
+        "theorem_deadline_reached_before_obligation_execution",
+        "obligation_encoding_hash=508853d51b1d678a"
+      ],
+      "witness": "theorem_timeout"
+    },
+    {
+      "obligation_id": "thm_92480d683be4fe82",
+      "encoding_hash": "e1ee1dd4e3d3dfe5",
+      "status": "inconclusive",
+      "solver": "theorem_llvm_ssa_bv_v1",
+      "timeout_ms": 2727,
+      "assumptions": [
+        "theorem_deadline_reached_before_obligation_execution",
+        "obligation_encoding_hash=e1ee1dd4e3d3dfe5"
+      ],
+      "witness": "theorem_timeout"
+    },
+    {
+      "obligation_id": "thm_98e98e55d8673a32",
+      "encoding_hash": "aa4a1ddd94a1b5d2",
+      "status": "inconclusive",
+      "solver": "theorem_llvm_ssa_bv_v1",
+      "timeout_ms": 2727,
+      "assumptions": [
+        "theorem_deadline_reached_before_obligation_execution",
+        "obligation_encoding_hash=aa4a1ddd94a1b5d2"
+      ],
+      "witness": "theorem_timeout"
+    },
+    {
+      "obligation_id": "thm_99566750dec59e34",
+      "encoding_hash": "99526b0303046414",
+      "status": "inconclusive",
+      "solver": "theorem_llvm_ssa_bv_v1",
+      "timeout_ms": 2727,
+      "assumptions": [
+        "theorem_deadline_reached_before_obligation_execution",
+        "obligation_encoding_hash=99526b0303046414"
+      ],
+      "witness": "theorem_timeout"
+    },
+    {
+      "obligation_id": "thm_99dfae1e3aa4190f",
+      "encoding_hash": "ef7df9c3a71185eb",
+      "status": "inconclusive",
+      "solver": "theorem_llvm_ssa_bv_v1",
+      "timeout_ms": 2727,
+      "assumptions": [
+        "theorem_deadline_reached_before_obligation_execution",
+        "obligation_encoding_hash=ef7df9c3a71185eb"
+      ],
+      "witness": "theorem_timeout"
+    },
+    {
+      "obligation_id": "thm_9a1f976befb8bb31",
+      "encoding_hash": "4b4a1070ce35e9b8",
+      "status": "inconclusive",
+      "solver": "theorem_llvm_ssa_bv_v1",
+      "timeout_ms": 2727,
+      "assumptions": [
+        "theorem_deadline_reached_before_obligation_execution",
+        "obligation_encoding_hash=4b4a1070ce35e9b8"
+      ],
+      "witness": "theorem_timeout"
+    },
+    {
+      "obligation_id": "thm_9c57c96a3a2fcb95",
+      "encoding_hash": "b840a044494eab34",
+      "status": "inconclusive",
+      "solver": "theorem_llvm_ssa_bv_v1",
+      "timeout_ms": 2727,
+      "assumptions": [
+        "theorem_deadline_reached_before_obligation_execution",
+        "obligation_encoding_hash=b840a044494eab34"
+      ],
+      "witness": "theorem_timeout"
+    },
+    {
+      "obligation_id": "thm_9cb195b886e79ae8",
+      "encoding_hash": "a699373d7ab02c27",
+      "status": "inconclusive",
+      "solver": "theorem_llvm_ssa_bv_v1",
+      "timeout_ms": 2727,
+      "assumptions": [
+        "theorem_deadline_reached_before_obligation_execution",
+        "obligation_encoding_hash=a699373d7ab02c27"
+      ],
+      "witness": "theorem_timeout"
+    },
+    {
+      "obligation_id": "thm_9cf8bbfce20c437b",
+      "encoding_hash": "98e6ab95b5c9d3a1",
+      "status": "inconclusive",
+      "solver": "theorem_llvm_ssa_bv_v1",
+      "timeout_ms": 2727,
+      "assumptions": [
+        "theorem_deadline_reached_before_obligation_execution",
+        "obligation_encoding_hash=98e6ab95b5c9d3a1"
+      ],
+      "witness": "theorem_timeout"
+    },
+    {
+      "obligation_id": "thm_a40431ab8330bd97",
+      "encoding_hash": "5b3a1a50ff2ec157",
+      "status": "inconclusive",
+      "solver": "theorem_llvm_ssa_bv_v1",
+      "timeout_ms": 2727,
+      "assumptions": [
+        "theorem_deadline_reached_before_obligation_execution",
+        "obligation_encoding_hash=5b3a1a50ff2ec157"
+      ],
+      "witness": "theorem_timeout"
+    },
+    {
+      "obligation_id": "thm_a4dac86cb67c7df5",
+      "encoding_hash": "ac4fc941789a7bcc",
+      "status": "inconclusive",
+      "solver": "theorem_llvm_ssa_bv_v1",
+      "timeout_ms": 2727,
+      "assumptions": [
+        "theorem_deadline_reached_before_obligation_execution",
+        "obligation_encoding_hash=ac4fc941789a7bcc"
+      ],
+      "witness": "theorem_timeout"
+    },
+    {
+      "obligation_id": "thm_aa2fed9c6640469a",
+      "encoding_hash": "51c5cb28295ab78c",
+      "status": "inconclusive",
+      "solver": "theorem_llvm_ssa_bv_v1",
+      "timeout_ms": 2727,
+      "assumptions": [
+        "theorem_deadline_reached_before_obligation_execution",
+        "obligation_encoding_hash=51c5cb28295ab78c"
+      ],
+      "witness": "theorem_timeout"
+    },
+    {
+      "obligation_id": "thm_ae6f4496fe57cbd3",
+      "encoding_hash": "40ec4b09f0d53785",
+      "status": "inconclusive",
+      "solver": "theorem_llvm_ssa_bv_v1",
+      "timeout_ms": 2727,
+      "assumptions": [
+        "theorem_deadline_reached_before_obligation_execution",
+        "obligation_encoding_hash=40ec4b09f0d53785"
+      ],
+      "witness": "theorem_timeout"
+    },
+    {
+      "obligation_id": "thm_b14bb779aecee2d5",
+      "encoding_hash": "bbfe61447e88dd9b",
+      "status": "inconclusive",
+      "solver": "theorem_llvm_ssa_bv_v1",
+      "timeout_ms": 2727,
+      "assumptions": [
+        "theorem_deadline_reached_before_obligation_execution",
+        "obligation_encoding_hash=bbfe61447e88dd9b"
+      ],
+      "witness": "theorem_timeout"
+    },
+    {
+      "obligation_id": "thm_b2075ee367f50c43",
+      "encoding_hash": "a4ac90c0dfdc90fb",
+      "status": "inconclusive",
+      "solver": "theorem_llvm_ssa_bv_v1",
+      "timeout_ms": 2727,
+      "assumptions": [
+        "theorem_deadline_reached_before_obligation_execution",
+        "obligation_encoding_hash=a4ac90c0dfdc90fb"
+      ],
+      "witness": "theorem_timeout"
+    },
+    {
+      "obligation_id": "thm_b333d3a54aedaeac",
+      "encoding_hash": "517efa41322109c2",
+      "status": "inconclusive",
+      "solver": "theorem_llvm_ssa_bv_v1",
+      "timeout_ms": 2727,
+      "assumptions": [
+        "theorem_deadline_reached_before_obligation_execution",
+        "obligation_encoding_hash=517efa41322109c2"
+      ],
+      "witness": "theorem_timeout"
+    },
+    {
+      "obligation_id": "thm_b4d742385242d210",
+      "encoding_hash": "f131d19aed55563c",
+      "status": "inconclusive",
+      "solver": "theorem_llvm_ssa_bv_v1",
+      "timeout_ms": 2727,
+      "assumptions": [
+        "theorem_deadline_reached_before_obligation_execution",
+        "obligation_encoding_hash=f131d19aed55563c"
+      ],
+      "witness": "theorem_timeout"
+    },
+    {
+      "obligation_id": "thm_b73a340507a06024",
+      "encoding_hash": "7aca80e8643061cd",
+      "status": "inconclusive",
+      "solver": "theorem_llvm_ssa_bv_v1",
+      "timeout_ms": 2727,
+      "assumptions": [
+        "theorem_deadline_reached_before_obligation_execution",
+        "obligation_encoding_hash=7aca80e8643061cd"
+      ],
+      "witness": "theorem_timeout"
+    },
+    {
+      "obligation_id": "thm_b7fef5993675355c",
+      "encoding_hash": "a96bf6c60a263d83",
+      "status": "inconclusive",
+      "solver": "theorem_llvm_ssa_bv_v1",
+      "timeout_ms": 2727,
+      "assumptions": [
+        "theorem_deadline_reached_before_obligation_execution",
+        "obligation_encoding_hash=a96bf6c60a263d83"
+      ],
+      "witness": "theorem_timeout"
+    },
+    {
+      "obligation_id": "thm_b8ac6853b1fbdc4d",
+      "encoding_hash": "e2fa0ed8be70eb6c",
+      "status": "inconclusive",
+      "solver": "theorem_llvm_ssa_bv_v1",
+      "timeout_ms": 2727,
+      "assumptions": [
+        "theorem_deadline_reached_before_obligation_execution",
+        "obligation_encoding_hash=e2fa0ed8be70eb6c"
+      ],
+      "witness": "theorem_timeout"
+    },
+    {
+      "obligation_id": "thm_bdd20e632a7f2bf5",
+      "encoding_hash": "9f93649770759ac4",
+      "status": "inconclusive",
+      "solver": "theorem_llvm_ssa_bv_v1",
+      "timeout_ms": 2727,
+      "assumptions": [
+        "theorem_deadline_reached_before_obligation_execution",
+        "obligation_encoding_hash=9f93649770759ac4"
+      ],
+      "witness": "theorem_timeout"
+    },
+    {
+      "obligation_id": "thm_bf1c242fa0d4f43b",
+      "encoding_hash": "1011c6a48fe10dae",
+      "status": "inconclusive",
+      "solver": "theorem_llvm_ssa_bv_v1",
+      "timeout_ms": 2727,
+      "assumptions": [
+        "theorem_deadline_reached_before_obligation_execution",
+        "obligation_encoding_hash=1011c6a48fe10dae"
+      ],
+      "witness": "theorem_timeout"
+    },
+    {
+      "obligation_id": "thm_c21f940a394e254d",
+      "encoding_hash": "b24f7cd1677d2356",
+      "status": "inconclusive",
+      "solver": "theorem_llvm_ssa_bv_v1",
+      "timeout_ms": 2727,
+      "assumptions": [
+        "theorem_deadline_reached_before_obligation_execution",
+        "obligation_encoding_hash=b24f7cd1677d2356"
+      ],
+      "witness": "theorem_timeout"
+    },
+    {
+      "obligation_id": "thm_c5f334d10efe59fe",
+      "encoding_hash": "31758cfe1e4df7fa",
+      "status": "inconclusive",
+      "solver": "theorem_llvm_ssa_bv_v1",
+      "timeout_ms": 2727,
+      "assumptions": [
+        "theorem_deadline_reached_before_obligation_execution",
+        "obligation_encoding_hash=31758cfe1e4df7fa"
+      ],
+      "witness": "theorem_timeout"
+    },
+    {
+      "obligation_id": "thm_d01822c59e7f1f9a",
+      "encoding_hash": "039ea4456b8c5393",
+      "status": "inconclusive",
+      "solver": "theorem_llvm_ssa_bv_v1",
+      "timeout_ms": 2727,
+      "assumptions": [
+        "theorem_deadline_reached_before_obligation_execution",
+        "obligation_encoding_hash=039ea4456b8c5393"
+      ],
+      "witness": "theorem_timeout"
+    },
+    {
+      "obligation_id": "thm_d2e5f26e712b902c",
+      "encoding_hash": "784e034f13334d8a",
+      "status": "inconclusive",
+      "solver": "theorem_llvm_ssa_bv_v1",
+      "timeout_ms": 2727,
+      "assumptions": [
+        "theorem_deadline_reached_before_obligation_execution",
+        "obligation_encoding_hash=784e034f13334d8a"
+      ],
+      "witness": "theorem_timeout"
+    },
+    {
+      "obligation_id": "thm_d7e006a7e5c3b737",
+      "encoding_hash": "b3ab2ad0a3319212",
+      "status": "inconclusive",
+      "solver": "theorem_llvm_ssa_bv_v1",
+      "timeout_ms": 2727,
+      "assumptions": [
+        "theorem_deadline_reached_before_obligation_execution",
+        "obligation_encoding_hash=b3ab2ad0a3319212"
+      ],
+      "witness": "theorem_timeout"
+    },
+    {
+      "obligation_id": "thm_d7e8ebbba12dca71",
+      "encoding_hash": "ff2af43d232731da",
+      "status": "inconclusive",
+      "solver": "theorem_llvm_ssa_bv_v1",
+      "timeout_ms": 2727,
+      "assumptions": [
+        "theorem_deadline_reached_before_obligation_execution",
+        "obligation_encoding_hash=ff2af43d232731da"
+      ],
+      "witness": "theorem_timeout"
+    },
+    {
+      "obligation_id": "thm_da521025b6e52a23",
+      "encoding_hash": "08585bebb806e704",
+      "status": "inconclusive",
+      "solver": "theorem_llvm_ssa_bv_v1",
+      "timeout_ms": 2727,
+      "assumptions": [
+        "theorem_deadline_reached_before_obligation_execution",
+        "obligation_encoding_hash=08585bebb806e704"
+      ],
+      "witness": "theorem_timeout"
+    },
+    {
+      "obligation_id": "thm_dea2684d9a313269",
+      "encoding_hash": "4e45b13273f4d7ea",
+      "status": "inconclusive",
+      "solver": "theorem_llvm_ssa_bv_v1",
+      "timeout_ms": 2727,
+      "assumptions": [
+        "theorem_deadline_reached_before_obligation_execution",
+        "obligation_encoding_hash=4e45b13273f4d7ea"
+      ],
+      "witness": "theorem_timeout"
+    },
+    {
+      "obligation_id": "thm_e02992f5c3b07e3f",
+      "encoding_hash": "3a0b5c93cfdf0642",
+      "status": "inconclusive",
+      "solver": "theorem_llvm_ssa_bv_v1",
+      "timeout_ms": 2727,
+      "assumptions": [
+        "theorem_deadline_reached_before_obligation_execution",
+        "obligation_encoding_hash=3a0b5c93cfdf0642"
+      ],
+      "witness": "theorem_timeout"
+    },
+    {
+      "obligation_id": "thm_e1dd2324dd155916",
+      "encoding_hash": "44e7720d3fad9a89",
+      "status": "inconclusive",
+      "solver": "theorem_llvm_ssa_bv_v1",
+      "timeout_ms": 2727,
+      "assumptions": [
+        "theorem_deadline_reached_before_obligation_execution",
+        "obligation_encoding_hash=44e7720d3fad9a89"
+      ],
+      "witness": "theorem_timeout"
+    },
+    {
+      "obligation_id": "thm_ea9f1e186b467902",
+      "encoding_hash": "97d11c963b96a045",
+      "status": "inconclusive",
+      "solver": "theorem_llvm_ssa_bv_v1",
+      "timeout_ms": 2727,
+      "assumptions": [
+        "theorem_deadline_reached_before_obligation_execution",
+        "obligation_encoding_hash=97d11c963b96a045"
+      ],
+      "witness": "theorem_timeout"
+    },
+    {
+      "obligation_id": "thm_ec972992ca4ffebc",
+      "encoding_hash": "bbe4d768888d7fc6",
+      "status": "inconclusive",
+      "solver": "theorem_llvm_ssa_bv_v1",
+      "timeout_ms": 2727,
+      "assumptions": [
+        "theorem_deadline_reached_before_obligation_execution",
+        "obligation_encoding_hash=bbe4d768888d7fc6"
+      ],
+      "witness": "theorem_timeout"
+    },
+    {
+      "obligation_id": "thm_f0eef67effde5e97",
+      "encoding_hash": "de2fc14d642b01b3",
+      "status": "inconclusive",
+      "solver": "theorem_llvm_ssa_bv_v1",
+      "timeout_ms": 2727,
+      "assumptions": [
+        "theorem_deadline_reached_before_obligation_execution",
+        "obligation_encoding_hash=de2fc14d642b01b3"
+      ],
+      "witness": "theorem_timeout"
+    },
+    {
+      "obligation_id": "thm_f46c847519fab46b",
+      "encoding_hash": "a807c72cb6eb4bcb",
+      "status": "inconclusive",
+      "solver": "theorem_llvm_ssa_bv_v1",
+      "timeout_ms": 2727,
+      "assumptions": [
+        "theorem_deadline_reached_before_obligation_execution",
+        "obligation_encoding_hash=a807c72cb6eb4bcb"
+      ],
+      "witness": "theorem_timeout"
+    },
+    {
+      "obligation_id": "thm_f47bcdd71dc1ac04",
+      "encoding_hash": "fca2f34dd4595d91",
+      "status": "inconclusive",
+      "solver": "theorem_llvm_ssa_bv_v1",
+      "timeout_ms": 2727,
+      "assumptions": [
+        "theorem_deadline_reached_before_obligation_execution",
+        "obligation_encoding_hash=fca2f34dd4595d91"
+      ],
+      "witness": "theorem_timeout"
+    },
+    {
+      "obligation_id": "thm_f604a115be85ead4",
+      "encoding_hash": "0fb5eb4186d46fa2",
+      "status": "inconclusive",
+      "solver": "theorem_llvm_ssa_bv_v1",
+      "timeout_ms": 2727,
+      "assumptions": [
+        "theorem_deadline_reached_before_obligation_execution",
+        "obligation_encoding_hash=0fb5eb4186d46fa2"
+      ],
+      "witness": "theorem_timeout"
+    },
+    {
+      "obligation_id": "thm_f9cf976d00aa136f",
+      "encoding_hash": "2fe371e9d8d18941",
+      "status": "inconclusive",
+      "solver": "theorem_llvm_ssa_bv_v1",
+      "timeout_ms": 2727,
+      "assumptions": [
+        "theorem_deadline_reached_before_obligation_execution",
+        "obligation_encoding_hash=2fe371e9d8d18941"
+      ],
+      "witness": "theorem_timeout"
+    },
+    {
+      "obligation_id": "thm_fae4103f0c3af8a7",
+      "encoding_hash": "84ea8ff27178be63",
+      "status": "inconclusive",
+      "solver": "theorem_llvm_ssa_bv_v1",
+      "timeout_ms": 2727,
+      "assumptions": [
+        "theorem_deadline_reached_before_obligation_execution",
+        "obligation_encoding_hash=84ea8ff27178be63"
+      ],
+      "witness": "theorem_timeout"
+    },
+    {
+      "obligation_id": "thm_fc12d6f2d6d42d8b",
+      "encoding_hash": "7465ac0509d44eff",
+      "status": "inconclusive",
+      "solver": "theorem_llvm_ssa_bv_v1",
+      "timeout_ms": 2727,
+      "assumptions": [
+        "theorem_deadline_reached_before_obligation_execution",
+        "obligation_encoding_hash=7465ac0509d44eff"
+      ],
+      "witness": "theorem_timeout"
+    },
+    {
+      "obligation_id": "thm_fcf0eeab0b6bba7e",
+      "encoding_hash": "2c9eb3e2200b7cb3",
+      "status": "inconclusive",
+      "solver": "theorem_llvm_ssa_bv_v1",
+      "timeout_ms": 2727,
+      "assumptions": [
+        "theorem_deadline_reached_before_obligation_execution",
+        "obligation_encoding_hash=2c9eb3e2200b7cb3"
+      ],
+      "witness": "theorem_timeout"
+    }
+  ],
+  "theorem_replay_artifact": "d:\\RepoBrainOS\\.repobrain\\theorem-runs\\2026-04-02-theorem-cli-parallel12-artifact.json",
+  "theorem_replay_command": "repobrain replay-theorem --artifact \"d:\\\\RepoBrainOS\\\\.repobrain\\\\theorem-runs\\\\2026-04-02-theorem-cli-parallel12-artifact.json\"",
+  "planned_backlog": [
+    "Iteration 1: L0 hardening, widen deterministic structural sensitivity and default verification guidance; current stage focus: keep theorem receipts bounded while compiler-IR lanes grow deeper.",
+    "Iteration 2: L1 hardening, deepen obligation targeting, harness synthesis, and large-scope triage without regressing bounded execution.",
+    "Iteration 3: L2 hardening, improve behavioral alignment precision/recall and solver-backed relational witnesses for high-risk pairs.",
+    "Iteration 4: L3 hardening, expand LLVM SSA/IVL obligations with bounded memory, pointer, and call summaries plus stricter compiler-IR translation validation.",
+    "Iteration 5: Cross-stage hardening, converge replay, perf ceilings, no-overclaim audits, and residual-risk reporting across L0/L1/L2/L3."
+  ],
+  "changed_scope": [
+    "plans/2026-04-01-semantic-equivalence-ladder-spec.md",
+    "src/rust/crates/repobrain-cli/src/main.rs",
+    "src/rust/crates/repobrain-cli/src/semantic_pipeline.rs"
+  ],
+  "added_files": [],
+  "removed_files": [],
+  "modified_files": [
+    "plans/2026-04-01-semantic-equivalence-ladder-spec.md",
+    "src/rust/crates/repobrain-cli/src/main.rs",
+    "src/rust/crates/repobrain-cli/src/semantic_pipeline.rs"
+  ],
+  "added_symbol_facts": 263,
+  "removed_symbol_facts": 267,
+  "added_import_facts": 15,
+  "removed_import_facts": 15,
+  "added_verification_targets": [],
+  "removed_verification_targets": [],
+  "recommended_next_steps": [
+    "repobrain blast-radius plans/2026-04-01-semantic-equivalence-ladder-spec.md",
+    "repobrain list-invariants --scope plans/2026-04-01-semantic-equivalence-ladder-spec.md --token-budget 4096",
+    "repobrain get-brief --goal \"safe edit\" --scope <path-or-symbol> --token-budget 4096",
+    "repobrain replay-theorem --artifact \"d:\\\\RepoBrainOS\\\\.repobrain\\\\theorem-runs\\\\2026-04-02-theorem-cli-parallel12-artifact.json\""
+  ]
+}

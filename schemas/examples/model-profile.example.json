@@ -1,0 +1,7 @@
+{
+  "id": "local-small-coder",
+  "class": "weak_local_coder",
+  "max_context_tokens": 16000,
+  "preferred_scaffolding_level": "high",
+  "notes": ["Prefer narrower file scopes.", "Needs explicit verification targets."]
+}

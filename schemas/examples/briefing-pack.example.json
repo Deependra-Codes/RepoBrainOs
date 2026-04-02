@@ -1,0 +1,65 @@
+{
+  "task_type": "safe_edit",
+  "consumer_type": "mcp_agent",
+  "model_profile": {
+    "id": "local-small-coder",
+    "class": "weak_local_coder",
+    "max_context_tokens": 16000,
+    "preferred_scaffolding_level": "high"
+  },
+  "readiness_state": "ready",
+  "snapshot_binding": {
+    "snapshot_id": "d:/RepoBrainOS::abc123",
+    "repo_root": "d:/RepoBrainOS",
+    "revision": "abc123"
+  },
+  "overlay_scope": {
+    "kind": "worktree",
+    "claim_scope": "overlay_adjusted",
+    "overlay_hash": "overlay42",
+    "touched_paths": ["src/auth/api.ts", "src/auth/session-store.ts"]
+  },
+  "scaffolding_level": "high",
+  "must_know": [
+    {
+      "statement": "Session invalidation is likely coupled to logout and token compatibility logic.",
+      "confidence": 0.87,
+      "freshness": "fresh",
+      "evidence_ids": ["ev_17", "ev_31"]
+    }
+  ],
+  "relevant_flows": ["authentication logout flow"],
+  "relevant_decisions": ["legacy mobile tokens remain supported"],
+  "fragile_zones": ["session invalidation logic"],
+  "do_not_break": ["legacy mobile session tokens must remain valid"],
+  "suggested_files": ["src/auth/api.ts", "src/auth/session-store.ts"],
+  "reasoning_scaffold": [
+    "inspect auth/api.ts entrypoint",
+    "confirm invalidation path in session-store.ts",
+    "run logout regression checks"
+  ],
+  "impact_summary": {
+    "reference": "HEAD~1..HEAD",
+    "summary": "Authentication session invalidation is likely affected.",
+    "changed_scope": ["src/auth/api.ts", "src/auth/session-store.ts"],
+    "stale_concepts": ["authentication subsystem"],
+    "freshness_impact": "localized"
+  },
+  "verification_plan": {
+    "required_checks": ["logout integration test"],
+    "recommended_checks": ["legacy cookie parsing test"],
+    "invariants": ["legacy mobile session tokens must remain valid"],
+    "coverage_gaps": ["no dedicated session-store property test"],
+    "stop_conditions": ["narrow scope if the invalidation path cannot be traced"]
+  },
+  "verification_targets": ["logout integration test", "legacy cookie parsing test"],
+  "evidence_index": [
+    {
+      "id": "ev_17",
+      "source_type": "file_range",
+      "source_ref": "src/auth/api.ts",
+      "locator": "L40-L88",
+      "captured_at": "2026-03-30T00:00:00Z"
+    }
+  ]
+}

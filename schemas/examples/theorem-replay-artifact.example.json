@@ -1,0 +1,34 @@
+{
+  "artifact_version": "v1",
+  "snapshot_id": "D:\\RepoBrainOS::worktree",
+  "reference_snapshot_id": "D:\\RepoBrainOS::HEAD",
+  "contract_id": "repo-equivalence-v1",
+  "policy": {
+    "max_obligations": 128,
+    "max_candidate_functions": 256,
+    "timeout_ms": 30000,
+    "flaky_retries": 1,
+    "stability_runs": 1,
+    "max_parallelism": 1
+  },
+  "obligations": [
+    {
+      "id": "thm_00",
+      "source_pair": "pair:compute_total@src/lib.rs:1=>calculate_total@src/new_logic.rs:1",
+      "contract_id": "repo-equivalence-v1",
+      "assumptions": ["alignment_strategy=behavioral_profile_exact"],
+      "encoding_hash": "f00dbeef"
+    }
+  ],
+  "certificates": [
+    {
+      "obligation_id": "thm_00",
+      "encoding_hash": "f00dbeef",
+      "status": "proved",
+      "solver": "theorem_relational_solver_v1",
+      "timeout_ms": 30000,
+      "assumptions": ["pair-level relational signatures match under theorem contract bounds"],
+      "witness": null
+    }
+  ]
+}

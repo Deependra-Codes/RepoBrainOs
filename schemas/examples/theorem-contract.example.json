@@ -1,0 +1,14 @@
+{
+  "contract_id": "repo-equivalence-v1",
+  "observable_outputs": ["public API return values", "error codes and error messages"],
+  "error_behavior": ["same input classes produce equivalent error categories"],
+  "side_effects": ["same files are created, updated, or deleted for equivalent inputs"],
+  "preconditions": [
+    "identical environment configuration and dependencies",
+    "identical input payloads"
+  ],
+  "environment_assumptions": [
+    "filesystem semantics are stable",
+    "clock time is not an observable output"
+  ]
+}

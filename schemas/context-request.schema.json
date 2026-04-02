@@ -1,0 +1,66 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://repobrain.dev/schemas/context-request.schema.json",
+  "title": "ContextRequest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "goal",
+    "task_type",
+    "consumer_type",
+    "model_profile",
+    "question",
+    "token_budget",
+    "depth",
+    "include_evidence"
+  ],
+  "properties": {
+    "goal": {
+      "type": "string",
+      "minLength": 1
+    },
+    "task_type": {
+      "type": "string",
+      "enum": [
+        "repo_onboarding",
+        "safe_edit",
+        "explain_flow",
+        "blast_radius",
+        "semantic_diff",
+        "query"
+      ]
+    },
+    "consumer_type": {
+      "type": "string"
+    },
+    "model_profile": {
+      "$ref": "./model-profile.schema.json"
+    },
+    "question": {
+      "type": "string",
+      "minLength": 1
+    },
+    "scope_hint": {
+      "type": "string"
+    },
+    "token_budget": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "latency_budget": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "depth": {
+      "type": "string",
+      "enum": ["compact", "standard", "deep"]
+    },
+    "freshness_requirement": {
+      "type": "string",
+      "enum": ["any", "fresh_preferred", "fresh_only"]
+    },
+    "include_evidence": {
+      "type": "boolean"
+    }
+  }
+}

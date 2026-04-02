@@ -1,0 +1,111 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://repobrain.dev/schemas/theorem-replay-artifact.schema.json",
+  "title": "TheoremReplayArtifact",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "artifact_version",
+    "snapshot_id",
+    "reference_snapshot_id",
+    "contract_id",
+    "policy",
+    "obligations",
+    "certificates"
+  ],
+  "properties": {
+    "artifact_version": {
+      "type": "string",
+      "minLength": 1
+    },
+    "snapshot_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "reference_snapshot_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "contract_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "max_obligations",
+        "max_candidate_functions",
+        "timeout_ms",
+        "flaky_retries",
+        "stability_runs",
+        "max_parallelism"
+      ],
+      "properties": {
+        "max_obligations": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "max_candidate_functions": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "timeout_ms": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "flaky_retries": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "stability_runs": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "max_parallelism": {
+          "type": "integer",
+          "minimum": 1
+        }
+      }
+    },
+    "obligations": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "source_pair", "contract_id", "assumptions", "encoding_hash"],
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "source_pair": {
+            "type": "string",
+            "minLength": 1
+          },
+          "contract_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "assumptions": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "encoding_hash": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    },
+    "certificates": {
+      "type": "array",
+      "items": {
+        "$ref": "https://repobrain.dev/schemas/theorem-proof-certificate.schema.json"
+      }
+    }
+  }
+}

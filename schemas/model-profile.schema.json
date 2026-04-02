@@ -1,0 +1,32 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://repobrain.dev/schemas/model-profile.schema.json",
+  "title": "ModelProfile",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id", "class", "max_context_tokens", "preferred_scaffolding_level"],
+  "properties": {
+    "id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "class": {
+      "type": "string",
+      "enum": ["weak_local_coder", "medium_cloud_coder", "frontier_agent", "custom"]
+    },
+    "max_context_tokens": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "preferred_scaffolding_level": {
+      "type": "string",
+      "enum": ["minimal", "medium", "high"]
+    },
+    "notes": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  }
+}

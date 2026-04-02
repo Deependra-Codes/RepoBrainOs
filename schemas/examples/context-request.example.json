@@ -1,0 +1,18 @@
+{
+  "goal": "safe repo edit",
+  "task_type": "safe_edit",
+  "consumer_type": "mcp_agent",
+  "model_profile": {
+    "id": "local-small-coder",
+    "class": "weak_local_coder",
+    "max_context_tokens": 16000,
+    "preferred_scaffolding_level": "high"
+  },
+  "question": "What can break if I edit auth session invalidation?",
+  "scope_hint": "src/auth",
+  "token_budget": 4096,
+  "latency_budget": 800,
+  "depth": "standard",
+  "freshness_requirement": "fresh_preferred",
+  "include_evidence": true
+}

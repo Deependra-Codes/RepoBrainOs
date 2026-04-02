@@ -1,0 +1,21 @@
+[package]
+name = "repobrain-cli"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+
+[lints]
+workspace = true
+
+[dependencies]
+anyhow.workspace = true
+clap.workspace = true
+repobrain-broker = { path = "../repobrain-broker" }
+repobrain-domain = { path = "../repobrain-domain" }
+repobrain-graph = { path = "../repobrain-graph" }
+repobrain-ingest = { path = "../repobrain-ingest" }
+repobrain-serving = { path = "../repobrain-serving" }
+rayon.workspace = true
+serde.workspace = true
+serde_json.workspace = true

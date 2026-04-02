@@ -1,0 +1,19 @@
+[package]
+name = "repobrain-xtask"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+
+[lints]
+workspace = true
+
+[dependencies]
+anyhow.workspace = true
+clap.workspace = true
+repobrain-broker = { path = "../crates/repobrain-broker" }
+repobrain-domain = { path = "../crates/repobrain-domain" }
+repobrain-graph = { path = "../crates/repobrain-graph" }
+repobrain-ingest = { path = "../crates/repobrain-ingest" }
+repobrain-serving = { path = "../crates/repobrain-serving" }
+serde_json.workspace = true

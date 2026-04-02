@@ -1,0 +1,46 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://repobrain.dev/schemas/verification-plan.schema.json",
+  "title": "VerificationPlan",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "required_checks",
+    "recommended_checks",
+    "invariants",
+    "coverage_gaps",
+    "stop_conditions"
+  ],
+  "properties": {
+    "required_checks": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "recommended_checks": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "invariants": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "coverage_gaps": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "stop_conditions": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  }
+}

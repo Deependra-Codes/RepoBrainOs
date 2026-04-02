@@ -1,0 +1,226 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://repobrain.dev/schemas/briefing-pack.schema.json",
+  "title": "BriefingPack",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "task_type",
+    "query_classification",
+    "consumer_type",
+    "model_profile",
+    "readiness_state",
+    "snapshot_binding",
+    "overlay_scope",
+    "scaffolding_level",
+    "must_know",
+    "relevant_flows",
+    "relevant_decisions",
+    "fragile_zones",
+    "do_not_break",
+    "suggested_files",
+    "reasoning_scaffold",
+    "verification_plan",
+    "coverage_audit",
+    "verification_targets",
+    "evidence_index"
+  ],
+  "properties": {
+    "task_type": {
+      "type": "string",
+      "enum": [
+        "repo_onboarding",
+        "safe_edit",
+        "explain_flow",
+        "blast_radius",
+        "semantic_diff",
+        "query"
+      ]
+    },
+    "query_classification": {
+      "type": "string",
+      "enum": [
+        "entity_lookup",
+        "architecture_explanation",
+        "safe_edit",
+        "bug_fix",
+        "feature_implementation",
+        "decision_why"
+      ]
+    },
+    "consumer_type": {
+      "type": "string"
+    },
+    "model_profile": {
+      "$ref": "./model-profile.schema.json"
+    },
+    "readiness_state": {
+      "type": "string",
+      "enum": ["cold", "warming", "ready", "stale", "degraded", "bulk_refresh", "overlay_only"]
+    },
+    "snapshot_binding": {
+      "$ref": "./snapshot-binding.schema.json"
+    },
+    "overlay_scope": {
+      "$ref": "./overlay-scope.schema.json"
+    },
+    "scaffolding_level": {
+      "type": "string",
+      "enum": ["minimal", "medium", "high"]
+    },
+    "must_know": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["statement", "confidence", "freshness", "evidence_ids"],
+        "properties": {
+          "statement": {
+            "type": "string"
+          },
+          "confidence": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1
+          },
+          "freshness": {
+            "type": "string",
+            "enum": ["fresh", "stale", "contradicted", "inferred", "unverified"]
+          },
+          "evidence_ids": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "relevant_flows": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "relevant_decisions": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "fragile_zones": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "do_not_break": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "suggested_files": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "reasoning_scaffold": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "impact_summary": {
+      "$ref": "./impact-summary.schema.json"
+    },
+    "verification_plan": {
+      "$ref": "./verification-plan.schema.json"
+    },
+    "coverage_audit": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "query_classification",
+        "required_slots",
+        "slot_results",
+        "sufficient",
+        "summary"
+      ],
+      "properties": {
+        "query_classification": {
+          "type": "string",
+          "enum": [
+            "entity_lookup",
+            "architecture_explanation",
+            "safe_edit",
+            "bug_fix",
+            "feature_implementation",
+            "decision_why"
+          ]
+        },
+        "required_slots": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "exact_anchor",
+              "structural_context",
+              "flow_summary",
+              "verification_targets",
+              "impact_envelope",
+              "decision_evidence"
+            ]
+          }
+        },
+        "slot_results": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["slot", "status", "detail"],
+            "properties": {
+              "slot": {
+                "type": "string",
+                "enum": [
+                  "exact_anchor",
+                  "structural_context",
+                  "flow_summary",
+                  "verification_targets",
+                  "impact_envelope",
+                  "decision_evidence"
+                ]
+              },
+              "status": {
+                "type": "string",
+                "enum": ["satisfied", "partial", "missing"]
+              },
+              "detail": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "sufficient": {
+          "type": "boolean"
+        },
+        "summary": {
+          "type": "string"
+        }
+      }
+    },
+    "verification_targets": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "evidence_index": {
+      "type": "array",
+      "items": {
+        "$ref": "./evidence-receipt.schema.json"
+      }
+    }
+  }
+}

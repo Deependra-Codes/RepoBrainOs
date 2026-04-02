@@ -1,0 +1,38 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://repobrain.dev/schemas/theorem-proof-certificate.schema.json",
+  "title": "TheoremProofCertificate",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["obligation_id", "status", "assumptions"],
+  "properties": {
+    "obligation_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "encoding_hash": {
+      "type": ["string", "null"]
+    },
+    "status": {
+      "type": "string",
+      "enum": ["proved", "refuted", "inconclusive"]
+    },
+    "solver": {
+      "type": ["string", "null"]
+    },
+    "timeout_ms": {
+      "type": ["integer", "null"],
+      "minimum": 0
+    },
+    "assumptions": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "witness": {
+      "type": ["string", "null"]
+    }
+  }
+}

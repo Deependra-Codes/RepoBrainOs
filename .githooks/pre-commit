@@ -1,0 +1,5 @@
+#!/bin/sh
+set -eu
+
+printf '%s\n' "RepoBrain pre-commit quality gate"
+cargo xtask quality

@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://repobrain.dev/schemas/snapshot-binding.schema.json",
+  "title": "SnapshotBinding",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["snapshot_id", "repo_root"],
+  "properties": {
+    "snapshot_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "repo_root": {
+      "type": "string",
+      "minLength": 1
+    },
+    "revision": {
+      "type": "string"
+    }
+  }
+}

@@ -1,0 +1,17 @@
+[package]
+name = "repobrain-broker"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+
+[lints]
+workspace = true
+
+[dependencies]
+repobrain-compiler = { path = "../repobrain-compiler" }
+repobrain-domain = { path = "../repobrain-domain" }
+repobrain-graph = { path = "../repobrain-graph" }
+repobrain-ingest = { path = "../repobrain-ingest" }
+repobrain-serving = { path = "../repobrain-serving" }
+thiserror.workspace = true

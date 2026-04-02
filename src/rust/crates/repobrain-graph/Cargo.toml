@@ -1,0 +1,14 @@
+[package]
+name = "repobrain-graph"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+
+[lints]
+workspace = true
+
+[dependencies]
+repobrain-domain = { path = "../repobrain-domain" }
+repobrain-ingest = { path = "../repobrain-ingest" }
+serde.workspace = true

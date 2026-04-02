@@ -1,0 +1,35 @@
+[workspace]
+resolver = "2"
+members = ["src/rust/crates/*", "src/rust/xtask"]
+default-members = ["src/rust/crates/repobrain-cli"]
+
+[workspace.package]
+edition = "2024"
+license = "MIT"
+rust-version = "1.94"
+version = "0.1.0"
+
+[workspace.dependencies]
+anyhow = "1.0.100"
+clap = { version = "4.5.51", features = ["derive"] }
+serde = { version = "1.0.228", features = ["derive"] }
+serde_json = "1.0.145"
+rayon = "1.11.0"
+thiserror = "2.0.17"
+time = { version = "0.3.44", features = ["formatting"] }
+tree-sitter = "0.26.7"
+tree-sitter-javascript = "0.25.0"
+tree-sitter-python = "0.25.0"
+tree-sitter-rust = "0.24.2"
+tree-sitter-typescript = "0.23.2"
+
+[workspace.lints.rust]
+unsafe_code = "forbid"
+
+[workspace.lints.clippy]
+all = { level = "warn", priority = -1 }
+pedantic = { level = "warn", priority = -1 }
+dbg_macro = "deny"
+expect_used = "deny"
+todo = "deny"
+unwrap_used = "deny"
