@@ -40,6 +40,8 @@ Current plans:
 - [Snapshot-owned reverse import indexes and hot-path perf baselines spec](d:/RepoBrainOS/plans/2026-03-30-snapshot-owned-reverse-import-indexes-and-hot-path-perf-baselines-spec.md)
 - [Query classification and coverage-audited briefing intent](d:/RepoBrainOS/plans/2026-03-30-query-classification-and-coverage-audited-briefing-intent.md)
 - [Query classification and coverage-audited briefing spec](d:/RepoBrainOS/plans/2026-03-30-query-classification-and-coverage-audited-briefing-spec.md)
+- [Retrieval pipeline intent](d:/RepoBrainOS/plans/2026-04-03-retrieval-pipeline-intent.md)
+- [Retrieval pipeline spec](d:/RepoBrainOS/plans/2026-04-03-retrieval-pipeline-spec.md)
 - [Invariants engine intent](d:/RepoBrainOS/plans/2026-04-01-invariants-engine-intent.md)
 - [Invariants engine spec](d:/RepoBrainOS/plans/2026-04-01-invariants-engine-spec.md)
 - [Pipeline readiness gap map intent](d:/RepoBrainOS/plans/2026-04-01-pipeline-readiness-gap-map-intent.md)

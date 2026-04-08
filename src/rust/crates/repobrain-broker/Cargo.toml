@@ -13,5 +13,7 @@ repobrain-compiler = { path = "../repobrain-compiler" }
 repobrain-domain = { path = "../repobrain-domain" }
 repobrain-graph = { path = "../repobrain-graph" }
 repobrain-ingest = { path = "../repobrain-ingest" }
+repobrain-retrieval = { path = "../repobrain-retrieval" }
 repobrain-serving = { path = "../repobrain-serving" }
+rusqlite = { workspace = true }
 thiserror.workspace = true

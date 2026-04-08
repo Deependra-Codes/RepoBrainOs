@@ -1,0 +1,12 @@
+[package]
+name = "repobrain-retrieval"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+
+[dependencies]
+repobrain-domain = { path = "../repobrain-domain" }
+repobrain-ingest = { path = "../repobrain-ingest" }
+rusqlite = { workspace = true }
+thiserror = { workspace = true }

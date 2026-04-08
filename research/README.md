@@ -27,6 +27,7 @@ This directory holds market scans, paper synthesis, and concept iteration work.
 - [L1 Rust bounded backend (Kani)](d:/RepoBrainOS/research/2026-04-01-l1-rust-bounded-kani-backend.md)
 - [L2 relational semantic backend](d:/RepoBrainOS/research/2026-04-01-l2-relational-semantic-backend.md)
 - [Full theorem-proving equivalence feasibility](d:/RepoBrainOS/research/2026-04-01-full-theorem-proving-equivalence-feasibility.md)
+- [Retrieval pipeline lexical + graph + coverage research](d:/RepoBrainOS/research/2026-04-03-retrieval-pipeline-lexical-graph-coverage-research.md)
 
 ## Purpose
 

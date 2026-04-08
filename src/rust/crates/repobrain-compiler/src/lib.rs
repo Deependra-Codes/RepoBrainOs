@@ -137,7 +137,7 @@ impl ContextCompiler for DefaultCompiler {
 #[cfg(test)]
 mod tests {
     use repobrain_domain::{
-        BriefingItem, ContextRequest, CoverageAudit, CoverageSlot, CoverageSlotAudit,
+        BriefingItem, ConsumerType, ContextRequest, CoverageAudit, CoverageSlot, CoverageSlotAudit,
         CoverageStatus, Freshness, FreshnessRequirement, ModelClass, ModelProfile,
         OverlayClaimScope, OverlayKind, OverlayScope, QueryClassification, ReadinessState,
         RequestDepth, ScaffoldingLevel, SnapshotBinding, TaskType, VerificationPlan,
@@ -151,7 +151,7 @@ mod tests {
         let request = ContextRequest {
             goal: "safe edit".to_string(),
             task_type: TaskType::SafeEdit,
-            consumer_type: "cli".to_string(),
+            consumer_type: ConsumerType::Cli,
             model_profile: ModelProfile {
                 id: "local-small".to_string(),
                 class: ModelClass::WeakLocalCoder,
@@ -213,7 +213,7 @@ mod tests {
                 ],
                 slot_results: vec![CoverageSlotAudit {
                     slot: CoverageSlot::ExactAnchor,
-                    status: CoverageStatus::Satisfied,
+                    status: CoverageStatus::Present,
                     detail: "exact anchor present".to_string(),
                 }],
                 sufficient: true,

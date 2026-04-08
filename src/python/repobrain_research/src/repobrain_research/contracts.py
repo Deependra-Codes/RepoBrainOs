@@ -26,6 +26,14 @@ TaskType = Literal[
     "semantic_diff",
     "query",
 ]
+ConsumerType = Literal[
+    "cli",
+    "mcp_agent",
+    "background_worker",
+    "background_job",
+    "xtask_perf",
+    "xtask-perf",
+]
 QueryClassification = Literal[
     "entity_lookup",
     "architecture_explanation",
@@ -42,7 +50,13 @@ CoverageSlot = Literal[
     "impact_envelope",
     "decision_evidence",
 ]
-CoverageStatus = Literal["satisfied", "partial", "missing"]
+CoverageStatus = Literal[
+    "present",
+    "missing_retrievable",
+    "not_observable",
+    "not_applicable",
+    "stale",
+]
 FreshnessImpact = Literal["none", "localized", "moderate", "high"]
 OverlayKind = Literal["none", "worktree", "buffer", "mixed"]
 OverlayClaimScope = Literal[
@@ -75,7 +89,7 @@ class EvidenceReceipt:
 class ContextRequest:
     goal: str
     task_type: TaskType
-    consumer_type: str
+    consumer_type: ConsumerType
     model_profile: ModelProfile
     question: str
     token_budget: int
@@ -147,7 +161,7 @@ class CoverageAudit:
 class BriefingPack:
     task_type: TaskType
     query_classification: QueryClassification
-    consumer_type: str
+    consumer_type: ConsumerType
     model_profile: ModelProfile
     readiness_state: ReadinessState
     snapshot_binding: SnapshotBinding

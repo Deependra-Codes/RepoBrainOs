@@ -1,8 +1,9 @@
 use std::path::Path;
 
 use repobrain_domain::{
-    ContextRequest, FreshnessRequirement, LatencyClass, ModelClass, OverlayClaimScope, OverlayKind,
-    OverlayScope, ReadinessState, RequestDepth, SnapshotBinding, TaskType, VerificationPlan,
+    ConsumerType, ContextRequest, FreshnessRequirement, LatencyClass, ModelClass,
+    OverlayClaimScope, OverlayKind, OverlayScope, ReadinessState, RequestDepth, SnapshotBinding,
+    TaskType, VerificationPlan,
 };
 use serde::{Deserialize, Serialize};
 
@@ -267,11 +268,7 @@ impl Default for HotPathPolicy {
 impl HotPathPolicy {
     #[must_use]
     pub fn classify_latency(&self, request: &ContextRequest) -> LatencyClass {
-        if request
-            .consumer_type
-            .eq_ignore_ascii_case("background_worker")
-            || request.consumer_type.eq_ignore_ascii_case("background_job")
-        {
+        if request.consumer_type == ConsumerType::BackgroundWorker {
             return LatencyClass::Background;
         }
 
@@ -553,8 +550,8 @@ fn model_class_label(model_class: ModelClass) -> &'static str {
 #[cfg(test)]
 mod tests {
     use repobrain_domain::{
-        FreshnessRequirement, LatencyClass, ModelClass, ModelProfile, OverlayClaimScope,
-        OverlayKind, ReadinessState, RequestDepth, ScaffoldingLevel, TaskType,
+        ConsumerType, FreshnessRequirement, LatencyClass, ModelClass, ModelProfile,
+        OverlayClaimScope, OverlayKind, ReadinessState, RequestDepth, ScaffoldingLevel, TaskType,
     };
 
     use super::{
@@ -571,7 +568,7 @@ mod tests {
         repobrain_domain::ContextRequest {
             goal: "answer a repo question".to_string(),
             task_type,
-            consumer_type: "cli".to_string(),
+            consumer_type: ConsumerType::Cli,
             model_profile: ModelProfile {
                 id: "frontier".to_string(),
                 class: ModelClass::FrontierAgent,
@@ -631,7 +628,7 @@ mod tests {
     fn background_workers_route_to_background() {
         let policy = HotPathPolicy::default();
         let mut background_request = request(TaskType::SemanticDiff, RequestDepth::Deep, None);
-        background_request.consumer_type = "background_worker".to_string();
+        background_request.consumer_type = ConsumerType::BackgroundWorker;
         let decision = policy.route(&background_request);
 
         assert_eq!(decision.latency_class, LatencyClass::Background);

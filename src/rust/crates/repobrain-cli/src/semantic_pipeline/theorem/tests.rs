@@ -162,6 +162,13 @@ fn translation_ordering_context() -> TheoremExecutionContext {
     }
 }
 
+fn unique_temp_path(label: &str) -> PathBuf {
+    let nonce = std::time::SystemTime::now()
+        .duration_since(std::time::UNIX_EPOCH)
+        .map_or(0_u128, |duration| duration.as_nanos());
+    std::env::temp_dir().join(format!("repobrain-{label}-{nonce}"))
+}
+
 #[test]
 fn theorem_smt_script_encodes_symbolic_field_constraints() {
     let reference = signal(
@@ -281,6 +288,84 @@ entry:
     );
     assert_eq!(functions[0].line_number, Some(7));
     assert!(functions[0].ir.contains("define i32 @foo()"));
+}
+
+#[test]
+fn theorem_collect_llvm_artifact_paths_keeps_matching_json_listed_ll_paths() {
+    let workspace_root = unique_temp_path("theorem-llvm-workspace");
+    let shared_target_dir = unique_temp_path("theorem-llvm-target");
+    let manifest_dir = workspace_root.join("crates/demo");
+    let manifest_relative = PathBuf::from("crates/demo/Cargo.toml");
+    let manifest_path = manifest_dir.join("Cargo.toml");
+    let listed_dir = shared_target_dir.join("debug/deps");
+    let listed_ll = listed_dir.join("demo_bin.ll");
+    let _ = fs::create_dir_all(&manifest_dir);
+    let _ = fs::create_dir_all(&listed_dir);
+
+    let cargo_stdout = serde_json::json!({
+        "reason": "compiler-artifact",
+        "manifest_path": manifest_path,
+        "target": {
+            "kind": ["bin"],
+            "name": "demo-bin",
+        },
+        "filenames": [listed_ll],
+    })
+    .to_string();
+
+    let paths = theorem_collect_llvm_artifact_paths(
+        cargo_stdout.as_bytes(),
+        &shared_target_dir,
+        &workspace_root,
+        manifest_relative.to_string_lossy().as_ref(),
+    );
+
+    assert_eq!(paths, vec![listed_ll.clone()]);
+
+    let _ = fs::remove_dir_all(&workspace_root);
+    let _ = fs::remove_dir_all(&shared_target_dir);
+}
+
+#[test]
+fn theorem_collect_llvm_artifact_paths_falls_back_to_target_dir_scan() {
+    let workspace_root = unique_temp_path("theorem-llvm-fallback-workspace");
+    let shared_target_dir = unique_temp_path("theorem-llvm-fallback-target");
+    let manifest_dir = workspace_root.join("crates/demo");
+    let manifest_relative = PathBuf::from("crates/demo/Cargo.toml");
+    let manifest_path = manifest_dir.join("Cargo.toml");
+    let main_dir = shared_target_dir.join("debug/deps");
+    let main_ll = main_dir.join("demo_bin.ll");
+    let incremental_dir = shared_target_dir.join("debug/incremental/demo_bin-abc123/session");
+    let incremental_ll = incremental_dir.join("stale.ll");
+    let exe_path = shared_target_dir.join("debug/demo-bin.exe");
+    let _ = fs::create_dir_all(&manifest_dir);
+    let _ = fs::create_dir_all(&main_dir);
+    let _ = fs::create_dir_all(&incremental_dir);
+    let _ = fs::write(&main_ll, "; primary module");
+    let _ = fs::write(&incremental_ll, "; incremental module");
+
+    let cargo_stdout = serde_json::json!({
+        "reason": "compiler-artifact",
+        "manifest_path": manifest_path,
+        "target": {
+            "kind": ["bin"],
+            "name": "demo-bin",
+        },
+        "filenames": [exe_path],
+    })
+    .to_string();
+
+    let paths = theorem_collect_llvm_artifact_paths(
+        cargo_stdout.as_bytes(),
+        &shared_target_dir,
+        &workspace_root,
+        manifest_relative.to_string_lossy().as_ref(),
+    );
+
+    assert_eq!(paths, vec![main_ll.clone()]);
+
+    let _ = fs::remove_dir_all(&workspace_root);
+    let _ = fs::remove_dir_all(&shared_target_dir);
 }
 
 #[test]

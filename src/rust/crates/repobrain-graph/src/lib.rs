@@ -591,6 +591,81 @@ impl<'a> SnapshotGraphStore<'a> {
         }
     }
 
+    #[must_use]
+    pub fn blast_radius_with_decision_mode(
+        &self,
+        target: &str,
+        include_decision_documents: bool,
+    ) -> BlastRadiusReport {
+        let seed_symbols = self.seed_symbols(target);
+        let seed_paths = self.seed_paths(target);
+        let impacted_paths = self.impacted_paths(&seed_paths);
+        let defined_symbols = if seed_symbols.is_empty() {
+            self.defined_symbols_for_paths(&seed_paths)
+        } else {
+            seed_symbols.clone()
+        };
+        let reference_imports =
+            self.reference_imports_touching_seed_paths(&seed_paths, &impacted_paths);
+        let mut verification_plan = self.plan_verification(&impacted_paths);
+        let decision_documents = if include_decision_documents {
+            self.collect_decision_documents(target, &impacted_paths, 4)
+        } else {
+            Vec::new()
+        };
+        let relationships = self.collect_relationships(
+            target,
+            &impacted_paths,
+            &defined_symbols,
+            &reference_imports,
+            &verification_plan,
+            &decision_documents,
+        );
+        let symbol_nodes = Self::symbol_anchor_nodes(&seed_symbols);
+        let mut impacted_nodes = symbol_nodes;
+        impacted_nodes.extend(impacted_paths.iter().map(|path| file_node_ref(path)));
+        let invariants = Self::derive_invariants(
+            target,
+            &seed_paths,
+            &seed_symbols,
+            &reference_imports,
+            &verification_plan,
+        );
+        verification_plan.invariants.clone_from(&invariants);
+        let evidence = self.collect_evidence(
+            target,
+            &defined_symbols,
+            &reference_imports,
+            &verification_plan,
+            &decision_documents,
+        );
+        let flow_capsules = Self::build_flow_capsules(
+            target,
+            &seed_symbols,
+            &impacted_paths,
+            &relationships,
+            &verification_plan,
+            &evidence,
+        );
+        let verification_targets = verification_plan
+            .required_checks
+            .iter()
+            .chain(&verification_plan.recommended_checks)
+            .cloned()
+            .collect::<Vec<_>>();
+
+        BlastRadiusReport {
+            target: target.to_string(),
+            impacted_nodes,
+            relationships,
+            invariants,
+            flow_capsules,
+            verification_plan,
+            verification_targets,
+            evidence,
+        }
+    }
+
     fn derive_invariants(
         target: &str,
         seed_paths: &BTreeSet<String>,
@@ -738,69 +813,7 @@ impl GraphStore for SnapshotGraphStore<'_> {
     }
 
     fn blast_radius(&self, target: &str) -> BlastRadiusReport {
-        let seed_symbols = self.seed_symbols(target);
-        let seed_paths = self.seed_paths(target);
-        let impacted_paths = self.impacted_paths(&seed_paths);
-        let defined_symbols = if seed_symbols.is_empty() {
-            self.defined_symbols_for_paths(&seed_paths)
-        } else {
-            seed_symbols.clone()
-        };
-        let reference_imports =
-            self.reference_imports_touching_seed_paths(&seed_paths, &impacted_paths);
-        let mut verification_plan = self.plan_verification(&impacted_paths);
-        let decision_documents = self.collect_decision_documents(target, &impacted_paths, 4);
-        let relationships = self.collect_relationships(
-            target,
-            &impacted_paths,
-            &defined_symbols,
-            &reference_imports,
-            &verification_plan,
-            &decision_documents,
-        );
-        let symbol_nodes = Self::symbol_anchor_nodes(&seed_symbols);
-        let mut impacted_nodes = symbol_nodes;
-        impacted_nodes.extend(impacted_paths.iter().map(|path| file_node_ref(path)));
-        let invariants = Self::derive_invariants(
-            target,
-            &seed_paths,
-            &seed_symbols,
-            &reference_imports,
-            &verification_plan,
-        );
-        verification_plan.invariants.clone_from(&invariants);
-        let evidence = self.collect_evidence(
-            target,
-            &defined_symbols,
-            &reference_imports,
-            &verification_plan,
-            &decision_documents,
-        );
-        let flow_capsules = Self::build_flow_capsules(
-            target,
-            &seed_symbols,
-            &impacted_paths,
-            &relationships,
-            &verification_plan,
-            &evidence,
-        );
-        let verification_targets = verification_plan
-            .required_checks
-            .iter()
-            .chain(&verification_plan.recommended_checks)
-            .cloned()
-            .collect::<Vec<_>>();
-
-        BlastRadiusReport {
-            target: target.to_string(),
-            impacted_nodes,
-            relationships,
-            invariants,
-            flow_capsules,
-            verification_plan,
-            verification_targets,
-            evidence,
-        }
+        self.blast_radius_with_decision_mode(target, true)
     }
 }
 
@@ -1266,6 +1279,53 @@ mod tests {
         assert_has_evidence_type(&report, "symbol_definition");
         assert_has_evidence_type(&report, "reference_edge");
         assert_has_evidence_type(&report, "decision_document");
+    }
+
+    #[test]
+    fn blast_radius_can_skip_decision_document_edges_when_disabled() {
+        let repo = TempRepo::new("blast-no-decision-docs");
+        repo.write_file(
+            "Cargo.toml",
+            b"[package]\nname = \"demo\"\nversion = \"0.1.0\"\nedition = \"2024\"\n",
+        );
+        repo.write_file(
+            "src/lib.rs",
+            b"mod inner;\npub struct RepositoryScanner {}\n",
+        );
+        repo.write_file("src/inner.rs", b"pub fn helper() {}\n");
+        repo.write_file(
+            "docs/adr-0001-repository-scanner.md",
+            b"# ADR-0001: RepositoryScanner\ndecision: keep RepositoryScanner deterministic for safe edit.\n",
+        );
+
+        let scanner = RepositoryScanner::default();
+        let snapshot = scanner
+            .scan(&RepositoryTarget {
+                root: repo.root().to_string_lossy().into_owned(),
+                revision: None,
+            })
+            .unwrap_or_else(|error| panic!("scan failed: {error}"));
+        let graph = SnapshotGraphStore::new(&snapshot);
+        let report = graph.blast_radius_with_decision_mode("RepositoryScanner", false);
+
+        assert!(
+            report
+                .relationships
+                .iter()
+                .all(|relationship| relationship.edge_kind != GraphEdgeKind::Documents)
+        );
+        assert!(
+            report
+                .relationships
+                .iter()
+                .all(|relationship| relationship.edge_kind != GraphEdgeKind::SupportsDecision)
+        );
+        assert!(
+            report
+                .evidence
+                .iter()
+                .all(|receipt| receipt.source_type != "decision_document")
+        );
     }
 
     #[test]

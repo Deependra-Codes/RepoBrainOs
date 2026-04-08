@@ -1,4 +1,4 @@
-use std::collections::BTreeSet;
+use std::collections::{BTreeMap, BTreeSet};
 use std::env;
 use std::fmt::Write as _;
 use std::fs;
@@ -10,11 +10,15 @@ use anyhow::{Context, Result, bail};
 use clap::{Parser, Subcommand};
 use repobrain_broker::{SnapshotBrokerInput, SnapshotContextBroker};
 use repobrain_domain::{
-    ContextRequest, FreshnessRequirement, ModelClass, ModelProfile, OverlayClaimScope, OverlayKind,
-    RequestDepth, ScaffoldingLevel, TaskType,
+    ConsumerType, ContextRequest, CoverageSlot, CoverageStatus, FreshnessRequirement, ModelClass,
+    ModelProfile, OverlayClaimScope, OverlayKind, QueryClassification, RequestDepth,
+    ScaffoldingLevel, TaskType,
 };
 use repobrain_graph::{GraphStore, SnapshotGraphStore};
-use repobrain_ingest::{RepositoryInventorySnapshot, RepositoryScanner, RepositoryTarget};
+use repobrain_ingest::{
+    RepositoryInventorySnapshot, RepositoryScanner, RepositoryTarget, exact_path_lookup,
+    exact_symbol_lookup,
+};
 use repobrain_serving::{FreshnessStatus, ReadinessAssessment, ServingHealth, SnapshotStatus};
 use serde_json::Value;
 
@@ -32,6 +36,7 @@ enum CommandKind {
     Check,
     Quality,
     Perf,
+    Eval,
     Policy,
     Sync,
     Fmt,
@@ -48,6 +53,7 @@ fn main() -> Result<()> {
         CommandKind::Check => check(&root),
         CommandKind::Quality => quality(&root),
         CommandKind::Perf => perf(&root),
+        CommandKind::Eval => eval(&root),
         CommandKind::Policy => policy(&root),
         CommandKind::Sync => sync(&root),
         CommandKind::Fmt => fmt(&root),
@@ -207,6 +213,768 @@ fn perf(_root: &Path) -> Result<()> {
     println!("RepoBrain OS perf: hot-path thresholds are within budget");
 
     Ok(())
+}
+
+fn eval(_root: &Path) -> Result<()> {
+    let fixture = PerfRepo::new("retrieval-eval")?;
+    write_eval_fixture(&fixture)?;
+    let snapshot = scan_perf_fixture(&fixture)?;
+    let broker = SnapshotContextBroker::default();
+    let readiness_assessment = ready_assessment();
+    let scenarios = eval_scenarios();
+    let observations =
+        run_eval_observations(&snapshot, &broker, &readiness_assessment, &scenarios)?;
+    let summary = EvalSummary::from_observations(&observations)?;
+    print_eval_summary(&summary, scenarios.len());
+    ensure_eval_guardrails(&summary)?;
+
+    println!("RepoBrain OS eval: retrieval quality and robustness guardrails are within budget");
+
+    Ok(())
+}
+
+fn run_eval_observations(
+    snapshot: &RepositoryInventorySnapshot,
+    broker: &SnapshotContextBroker,
+    readiness_assessment: &ReadinessAssessment,
+    scenarios: &[EvalScenario],
+) -> Result<Vec<EvalObservation>> {
+    let mut observations = Vec::new();
+
+    for scenario in scenarios {
+        for mutation in EvalMutation::ALL {
+            let request = scenario.request(mutation);
+            let started = Instant::now();
+            let pack = broker.get_brief(SnapshotBrokerInput {
+                request: request.clone(),
+                snapshot,
+                readiness_assessment: readiness_assessment.clone(),
+                overlay_kind: OverlayKind::None,
+                claim_scope: OverlayClaimScope::SnapshotConfirmed,
+                overlay_hash: None,
+                touched_paths: Vec::new(),
+            })?;
+            let elapsed = started.elapsed();
+            let baseline_required_slot_hit_count = anchor_only_baseline_hit_count(
+                snapshot,
+                request.scope_hint.as_deref(),
+                &pack.coverage_audit.required_slots,
+            );
+            observations.push(EvalObservation::from_pack(
+                scenario.name,
+                mutation,
+                scenario.expected_classification,
+                elapsed,
+                &pack,
+                baseline_required_slot_hit_count,
+            ));
+        }
+    }
+
+    Ok(observations)
+}
+
+fn print_eval_summary(summary: &EvalSummary, scenario_count: usize) {
+    println!("RepoBrain OS eval");
+    println!(
+        "scenario-count={scenario_count} mutation-count-per-scenario={}",
+        EvalMutation::ALL.len()
+    );
+    println!("run-count={}", summary.run_count);
+    println!(
+        "get-brief-latency: p50={} p95={} mean={} max={}",
+        render_duration(summary.latency.p50()),
+        render_duration(summary.latency.p95()),
+        render_duration(summary.latency.mean()),
+        render_duration(summary.latency.max()),
+    );
+    println!(
+        "classification-match-rate={} coverage-sufficient-rate={}",
+        render_rate(summary.classification_match_rate),
+        render_rate(summary.coverage_sufficient_rate),
+    );
+    println!(
+        "required-slot-hit-rate={} anchor-only-baseline-hit-rate={} uplift-delta={}",
+        render_rate(summary.required_slot_hit_rate),
+        render_rate(summary.baseline_required_slot_hit_rate),
+        render_rate(summary.required_slot_uplift_delta),
+    );
+    println!(
+        "mutation-slot-retention={} mutation-evidence-overlap={}",
+        render_rate(summary.mutation_slot_retention_mean),
+        render_rate(summary.mutation_evidence_overlap_mean),
+    );
+    if let Some(efficiency) = summary.healed_slots_per_ms {
+        println!(
+            "second-pass-efficiency={efficiency:.4} healed-slot/ms (aggregate slot_gains / retrieval_cost_ms)"
+        );
+    } else {
+        println!("second-pass-efficiency=n/a (no slot-cost samples)");
+    }
+    if summary.decision_cost_ms.is_empty() {
+        println!("decision-evidence-slot-cost=n/a (no decision slot cost samples)");
+    } else {
+        println!(
+            "decision-evidence-slot-cost-ms: p50={} p95={} mean={} max={}",
+            render_float_ms(summary.decision_cost_ms.p50()),
+            render_float_ms(summary.decision_cost_ms.p95()),
+            render_float_ms(summary.decision_cost_ms.mean()),
+            render_float_ms(summary.decision_cost_ms.max()),
+        );
+    }
+}
+
+fn ensure_eval_guardrails(summary: &EvalSummary) -> Result<()> {
+    ensure_perf_threshold(
+        "eval get-brief p95",
+        summary.latency.p95(),
+        EVAL_GET_BRIEF_P95_THRESHOLD,
+    )?;
+    ensure_rate_floor(
+        "eval classification match rate",
+        summary.classification_match_rate,
+        EVAL_CLASSIFICATION_MATCH_FLOOR,
+    )?;
+    ensure_rate_floor(
+        "eval coverage sufficient rate",
+        summary.coverage_sufficient_rate,
+        EVAL_COVERAGE_SUFFICIENCY_FLOOR,
+    )?;
+    ensure_rate_floor(
+        "eval required slot hit rate",
+        summary.required_slot_hit_rate,
+        EVAL_REQUIRED_SLOT_HIT_FLOOR,
+    )?;
+    ensure_rate_floor(
+        "eval required slot uplift delta",
+        summary.required_slot_uplift_delta,
+        EVAL_REQUIRED_SLOT_UPLIFT_FLOOR,
+    )?;
+    ensure_rate_floor(
+        "eval mutation slot retention",
+        summary.mutation_slot_retention_mean,
+        EVAL_MUTATION_SLOT_RETENTION_FLOOR,
+    )?;
+    if !summary.decision_cost_ms.is_empty() {
+        ensure_float_threshold(
+            "eval decision-evidence slot retrieval_cost_ms p95",
+            summary.decision_cost_ms.p95(),
+            EVAL_DECISION_SLOT_COST_P95_MS_THRESHOLD,
+        )?;
+    }
+
+    Ok(())
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+enum EvalMutation {
+    Canonical,
+    Terse,
+    Typo,
+    SymbolicNoise,
+}
+
+impl EvalMutation {
+    const ALL: [Self; 4] = [
+        Self::Canonical,
+        Self::Terse,
+        Self::Typo,
+        Self::SymbolicNoise,
+    ];
+}
+
+#[derive(Debug)]
+struct EvalScenario {
+    name: &'static str,
+    task_type: TaskType,
+    expected_classification: QueryClassification,
+    goal: &'static str,
+    question: &'static str,
+    scope_hint: Option<&'static str>,
+}
+
+impl EvalScenario {
+    fn request(&self, mutation: EvalMutation) -> ContextRequest {
+        ContextRequest {
+            goal: self.goal.to_string(),
+            task_type: self.task_type,
+            consumer_type: ConsumerType::XtaskPerf,
+            model_profile: ModelProfile {
+                id: "frontier-eval".to_string(),
+                class: ModelClass::FrontierAgent,
+                max_context_tokens: 128_000,
+                preferred_scaffolding_level: ScaffoldingLevel::Minimal,
+                notes: vec!["xtask eval harness".to_string()],
+            },
+            question: mutated_question(self.question, mutation),
+            scope_hint: self.scope_hint.map(ToString::to_string),
+            token_budget: 4_096,
+            latency_budget: Some(900),
+            depth: RequestDepth::Standard,
+            freshness_requirement: Some(FreshnessRequirement::FreshPreferred),
+            include_evidence: true,
+        }
+    }
+}
+
+#[derive(Debug)]
+struct EvalObservation {
+    scenario: String,
+    mutation: EvalMutation,
+    expected_classification: QueryClassification,
+    observed_classification: QueryClassification,
+    elapsed: Duration,
+    coverage_sufficient: bool,
+    required_slot_count: usize,
+    satisfied_required_slot_count: usize,
+    baseline_required_slot_hit_count: usize,
+    required_slot_sufficient: BTreeMap<String, bool>,
+    evidence_ids: BTreeSet<String>,
+    slot_cost_ms: BTreeMap<String, f64>,
+    slot_gains: BTreeMap<String, u32>,
+}
+
+impl EvalObservation {
+    fn from_pack(
+        scenario: &str,
+        mutation: EvalMutation,
+        expected_classification: QueryClassification,
+        elapsed: Duration,
+        pack: &repobrain_domain::BriefingPack,
+        baseline_required_slot_hit_count: usize,
+    ) -> Self {
+        let required_slots = pack
+            .coverage_audit
+            .required_slots
+            .iter()
+            .map(|slot| coverage_slot_label(*slot).to_string())
+            .collect::<BTreeSet<_>>();
+        let mut required_slot_sufficient = BTreeMap::new();
+        let mut slot_cost_ms = BTreeMap::new();
+        let mut slot_gains = BTreeMap::new();
+
+        for slot_audit in &pack.coverage_audit.slot_results {
+            let slot_label = coverage_slot_label(slot_audit.slot).to_string();
+            required_slot_sufficient.insert(
+                slot_label.clone(),
+                status_is_sufficient_for_eval(slot_audit.status),
+            );
+            if let Some(cost_ms) =
+                parse_detail_float_metric(&slot_audit.detail, "retrieval_cost_ms=")
+            {
+                slot_cost_ms.insert(slot_label.clone(), cost_ms);
+            }
+            if let Some(gains) = parse_detail_u32_metric(&slot_audit.detail, "slot_gains=") {
+                slot_gains.insert(slot_label, gains);
+            }
+        }
+        let satisfied_required_slot_count = required_slots
+            .iter()
+            .filter(|slot_label| {
+                required_slot_sufficient
+                    .get((*slot_label).as_str())
+                    .copied()
+                    .unwrap_or(false)
+            })
+            .count();
+        let evidence_ids = pack
+            .evidence_index
+            .iter()
+            .map(|receipt| receipt.id.clone())
+            .collect::<BTreeSet<_>>();
+
+        Self {
+            scenario: scenario.to_string(),
+            mutation,
+            expected_classification,
+            observed_classification: pack.query_classification,
+            elapsed,
+            coverage_sufficient: pack.coverage_audit.sufficient,
+            required_slot_count: required_slots.len(),
+            satisfied_required_slot_count,
+            baseline_required_slot_hit_count,
+            required_slot_sufficient,
+            evidence_ids,
+            slot_cost_ms,
+            slot_gains,
+        }
+    }
+
+    fn classification_matches(&self) -> bool {
+        self.expected_classification == self.observed_classification
+    }
+
+    fn total_slot_cost_ms(&self) -> f64 {
+        self.slot_cost_ms.values().sum()
+    }
+
+    fn total_slot_gains(&self) -> u32 {
+        self.slot_gains.values().sum()
+    }
+}
+
+#[derive(Debug)]
+struct EvalSummary {
+    run_count: usize,
+    latency: PerfMeasurement,
+    classification_match_rate: f64,
+    coverage_sufficient_rate: f64,
+    required_slot_hit_rate: f64,
+    baseline_required_slot_hit_rate: f64,
+    required_slot_uplift_delta: f64,
+    mutation_slot_retention_mean: f64,
+    mutation_evidence_overlap_mean: f64,
+    healed_slots_per_ms: Option<f64>,
+    decision_cost_ms: FloatMeasurement,
+}
+
+impl EvalSummary {
+    fn from_observations(observations: &[EvalObservation]) -> Result<Self> {
+        if observations.is_empty() {
+            bail!("eval harness produced no observations");
+        }
+
+        let latency = latency_from_observations(observations);
+        let rates = eval_rate_totals(observations);
+        let (mutation_slot_retention_mean, mutation_evidence_overlap_mean) =
+            mutation_robustness_means(observations);
+        let healed_slots_per_ms = healed_slots_per_ms(observations);
+        let decision_cost_ms = decision_cost_distribution(observations);
+
+        Ok(Self {
+            run_count: observations.len(),
+            latency,
+            classification_match_rate: rates.classification_match_rate,
+            coverage_sufficient_rate: rates.coverage_sufficient_rate,
+            required_slot_hit_rate: rates.required_slot_hit_rate,
+            baseline_required_slot_hit_rate: rates.baseline_required_slot_hit_rate,
+            required_slot_uplift_delta: rates.required_slot_uplift_delta,
+            mutation_slot_retention_mean,
+            mutation_evidence_overlap_mean,
+            healed_slots_per_ms,
+            decision_cost_ms,
+        })
+    }
+}
+
+#[derive(Debug)]
+struct EvalRateTotals {
+    classification_match_rate: f64,
+    coverage_sufficient_rate: f64,
+    required_slot_hit_rate: f64,
+    baseline_required_slot_hit_rate: f64,
+    required_slot_uplift_delta: f64,
+}
+
+fn latency_from_observations(observations: &[EvalObservation]) -> PerfMeasurement {
+    let mut latency_samples = observations
+        .iter()
+        .map(|observation| observation.elapsed.as_micros())
+        .collect::<Vec<_>>();
+    latency_samples.sort_unstable();
+
+    PerfMeasurement {
+        samples_micros: latency_samples,
+    }
+}
+
+fn eval_rate_totals(observations: &[EvalObservation]) -> EvalRateTotals {
+    let run_count = observations.len();
+    let classification_match_count = observations
+        .iter()
+        .filter(|observation| observation.classification_matches())
+        .count();
+    let coverage_sufficient_count = observations
+        .iter()
+        .filter(|observation| observation.coverage_sufficient)
+        .count();
+    let required_slot_count = observations
+        .iter()
+        .map(|observation| observation.required_slot_count)
+        .sum::<usize>();
+    let required_slot_hit_count = observations
+        .iter()
+        .map(|observation| observation.satisfied_required_slot_count)
+        .sum::<usize>();
+    let baseline_required_slot_hit_count = observations
+        .iter()
+        .map(|observation| observation.baseline_required_slot_hit_count)
+        .sum::<usize>();
+    let classification_match_rate =
+        usize_ratio(classification_match_count, run_count).unwrap_or(0.0);
+    let coverage_sufficient_rate = usize_ratio(coverage_sufficient_count, run_count).unwrap_or(0.0);
+    let required_slot_hit_rate =
+        usize_ratio(required_slot_hit_count, required_slot_count).unwrap_or(0.0);
+    let baseline_required_slot_hit_rate =
+        usize_ratio(baseline_required_slot_hit_count, required_slot_count).unwrap_or(0.0);
+
+    EvalRateTotals {
+        classification_match_rate,
+        coverage_sufficient_rate,
+        required_slot_hit_rate,
+        baseline_required_slot_hit_rate,
+        required_slot_uplift_delta: (required_slot_hit_rate - baseline_required_slot_hit_rate)
+            .max(0.0),
+    }
+}
+
+fn mutation_robustness_means(observations: &[EvalObservation]) -> (f64, f64) {
+    let mut observations_by_scenario = BTreeMap::<String, Vec<&EvalObservation>>::new();
+    for observation in observations {
+        observations_by_scenario
+            .entry(observation.scenario.clone())
+            .or_default()
+            .push(observation);
+    }
+
+    let mut mutation_slot_retention_samples = Vec::new();
+    let mut mutation_evidence_overlap_samples = Vec::new();
+    for grouped_observations in observations_by_scenario.values() {
+        let Some(canonical) = grouped_observations
+            .iter()
+            .copied()
+            .find(|observation| observation.mutation == EvalMutation::Canonical)
+        else {
+            continue;
+        };
+
+        for observation in grouped_observations {
+            if observation.mutation == EvalMutation::Canonical {
+                continue;
+            }
+            mutation_slot_retention_samples.push(slot_retention(canonical, observation));
+            mutation_evidence_overlap_samples.push(jaccard_index(
+                &canonical.evidence_ids,
+                &observation.evidence_ids,
+            ));
+        }
+    }
+
+    (
+        mean(&mutation_slot_retention_samples).unwrap_or(1.0),
+        mean(&mutation_evidence_overlap_samples).unwrap_or(1.0),
+    )
+}
+
+fn healed_slots_per_ms(observations: &[EvalObservation]) -> Option<f64> {
+    let total_slot_cost_ms = observations
+        .iter()
+        .map(EvalObservation::total_slot_cost_ms)
+        .sum::<f64>();
+    if total_slot_cost_ms <= 0.0 {
+        return None;
+    }
+
+    let total_slot_gains = observations
+        .iter()
+        .map(EvalObservation::total_slot_gains)
+        .sum::<u32>();
+    Some(f64::from(total_slot_gains) / total_slot_cost_ms)
+}
+
+fn decision_cost_distribution(observations: &[EvalObservation]) -> FloatMeasurement {
+    let mut decision_cost_ms = FloatMeasurement::default();
+    for observation in observations {
+        if let Some(cost_ms) = observation.slot_cost_ms.get("decision_evidence")
+            && *cost_ms > 0.0
+        {
+            decision_cost_ms.push(*cost_ms);
+        }
+    }
+    decision_cost_ms.sort();
+
+    decision_cost_ms
+}
+
+#[derive(Debug, Default)]
+struct FloatMeasurement {
+    samples: Vec<f64>,
+}
+
+impl FloatMeasurement {
+    fn push(&mut self, sample: f64) {
+        if sample.is_finite() {
+            self.samples.push(sample.max(0.0));
+        }
+    }
+
+    fn sort(&mut self) {
+        self.samples.sort_by(f64::total_cmp);
+    }
+
+    fn p50(&self) -> f64 {
+        percentile_f64(&self.samples, 50, 100)
+    }
+
+    fn p95(&self) -> f64 {
+        percentile_f64(&self.samples, 95, 100)
+    }
+
+    fn mean(&self) -> f64 {
+        mean(&self.samples).unwrap_or(0.0)
+    }
+
+    fn max(&self) -> f64 {
+        self.samples.last().copied().unwrap_or(0.0)
+    }
+
+    fn is_empty(&self) -> bool {
+        self.samples.is_empty()
+    }
+}
+
+fn eval_scenarios() -> Vec<EvalScenario> {
+    vec![
+        EvalScenario {
+            name: "entity_lookup",
+            task_type: TaskType::Query,
+            expected_classification: QueryClassification::EntityLookup,
+            goal: "locate SnapshotLexicalIndexCache in the retrieval crate",
+            question: "where is SnapshotLexicalIndexCache defined?",
+            scope_hint: Some("SnapshotLexicalIndexCache"),
+        },
+        EvalScenario {
+            name: "architecture_explanation",
+            task_type: TaskType::ExplainFlow,
+            expected_classification: QueryClassification::ArchitectureExplanation,
+            goal: "explain retrieval flow for planner decisions",
+            question: "how does retrieval frontier planning work end to end?",
+            scope_hint: Some("src/planner.rs"),
+        },
+        EvalScenario {
+            name: "safe_edit",
+            task_type: TaskType::SafeEdit,
+            expected_classification: QueryClassification::SafeEdit,
+            goal: "prepare a safe edit for planner budget wiring",
+            question: "what should I know before editing AdaptiveBudgetPlanner?",
+            scope_hint: Some("AdaptiveBudgetPlanner"),
+        },
+        EvalScenario {
+            name: "bug_fix",
+            task_type: TaskType::SafeEdit,
+            expected_classification: QueryClassification::BugFix,
+            goal: "fix bug in retrieval frontier stop threshold handling",
+            question: "failing threshold bug around RetrievalFrontierController",
+            scope_hint: Some("RetrievalFrontierController"),
+        },
+        EvalScenario {
+            name: "feature_implementation",
+            task_type: TaskType::SafeEdit,
+            expected_classification: QueryClassification::FeatureImplementation,
+            goal: "add feature support for incremental lexical cache refresh",
+            question: "implement feature support around snapshot pinning",
+            scope_hint: Some("src/retrieval.rs"),
+        },
+        EvalScenario {
+            name: "decision_why",
+            task_type: TaskType::Query,
+            expected_classification: QueryClassification::DecisionWhy,
+            goal: "why did we split retrieval into lexical and bounded graph stages",
+            question: "what rationale and tradeoff drove this decision?",
+            scope_hint: Some("retrieval strategy"),
+        },
+    ]
+}
+
+fn write_eval_fixture(repo: &PerfRepo) -> Result<()> {
+    repo.write_file(
+        "Cargo.toml",
+        "[package]\nname = \"repobrain-eval-fixture\"\nversion = \"0.1.0\"\nedition = \"2024\"\n",
+    )?;
+    repo.write_file(
+        "README.md",
+        "# RepoBrain Eval Fixture\n\nThis fixture models retrieval, frontier control, and planner wiring for broker evaluation.\n",
+    )?;
+    repo.write_file(
+        "src/lib.rs",
+        "pub mod frontier;\npub mod planner;\npub mod retrieval;\npub mod verification;\n\npub use frontier::RetrievalFrontierController;\npub use planner::AdaptiveBudgetPlanner;\npub use retrieval::SnapshotLexicalIndexCache;\n",
+    )?;
+    repo.write_file(
+        "src/retrieval.rs",
+        "pub struct SnapshotLexicalIndexCache {\n    pub snapshot_pin_count: usize,\n}\n\nimpl SnapshotLexicalIndexCache {\n    pub fn new() -> Self {\n        Self { snapshot_pin_count: 0 }\n    }\n\n    pub fn incremental_refresh(&mut self, changed_files: usize) {\n        self.snapshot_pin_count = self.snapshot_pin_count.saturating_add(changed_files);\n    }\n}\n",
+    )?;
+    repo.write_file(
+        "src/frontier.rs",
+        "use crate::retrieval::SnapshotLexicalIndexCache;\n\npub struct RetrievalFrontierController {\n    floor: f64,\n}\n\nimpl RetrievalFrontierController {\n    pub fn new(floor: f64) -> Self {\n        Self { floor }\n    }\n\n    pub fn should_continue(&self, expected_healed_slots_per_ms: f64) -> bool {\n        expected_healed_slots_per_ms >= self.floor\n    }\n\n    pub fn forecast(&self, cache: &SnapshotLexicalIndexCache) -> f64 {\n        if cache.snapshot_pin_count == 0 {\n            self.floor\n        } else {\n            self.floor + 0.01\n        }\n    }\n}\n",
+    )?;
+    repo.write_file(
+        "src/planner.rs",
+        "use crate::frontier::RetrievalFrontierController;\nuse crate::retrieval::SnapshotLexicalIndexCache;\nuse crate::verification::verification_targets_for_planner;\n\npub struct AdaptiveBudgetPlanner {\n    frontier: RetrievalFrontierController,\n}\n\nimpl AdaptiveBudgetPlanner {\n    pub fn new() -> Self {\n        Self {\n            frontier: RetrievalFrontierController::new(0.01),\n        }\n    }\n\n    pub fn plan(&self, cache: &SnapshotLexicalIndexCache) -> usize {\n        let expected = self.frontier.forecast(cache);\n        let checks = verification_targets_for_planner();\n        if self.frontier.should_continue(expected) {\n            checks.len()\n        } else {\n            0\n        }\n    }\n}\n",
+    )?;
+    repo.write_file(
+        "src/verification.rs",
+        "pub fn verification_targets_for_planner() -> Vec<&'static str> {\n    vec![\"cargo test -p repobrain-broker\", \"cargo check -p repobrain-broker\"]\n}\n",
+    )?;
+    repo.write_file(
+        "docs/adr/ADR-0001-retrieval-strategy.md",
+        "# ADR-0001 Retrieval Strategy\n\nStatus: accepted\n\n## Decision\n\nUse lexical anchors first, then bounded graph expansion, then coverage audit.\n\n## Rationale\n\nThis decision keeps interactive latency low while preserving evidence-grounded retrieval.\n\n## Tradeoff\n\nA bounded frontier can miss long-range context, but this is preferable to unbounded noise in hot paths.\n",
+    )?;
+    repo.write_file(
+        "docs/adr/ADR-0002-frontier-control.md",
+        "# ADR-0002 Frontier Control\n\nStatus: accepted\n\n## Decision\n\nStop second-pass expansion when expected healed-slots per millisecond falls under class floor.\n\n## Rationale\n\nThis keeps retrieval budget proportional to practical slot healing gains.\n\n## Tradeoff\n\nConservative stopping can leave some retrievable slots unresolved on difficult scopes.\n",
+    )?;
+
+    Ok(())
+}
+
+fn mutated_question(question: &str, mutation: EvalMutation) -> String {
+    match mutation {
+        EvalMutation::Canonical => question.to_string(),
+        EvalMutation::Terse => question
+            .split_whitespace()
+            .take(7)
+            .collect::<Vec<_>>()
+            .join(" "),
+        EvalMutation::Typo => question
+            .replace("retrieval", "retrival")
+            .replace("decision", "decison")
+            .replace("verification", "verfication"),
+        EvalMutation::SymbolicNoise => format!("{question} (@_@)"),
+    }
+}
+
+fn anchor_only_baseline_hit_count(
+    snapshot: &RepositoryInventorySnapshot,
+    scope_hint: Option<&str>,
+    required_slots: &[CoverageSlot],
+) -> usize {
+    let anchor_hit = scope_hint.is_some_and(|scope| {
+        exact_path_lookup(snapshot, scope).is_some()
+            || !exact_symbol_lookup(snapshot, scope).is_empty()
+    });
+
+    required_slots
+        .iter()
+        .filter(|slot| matches!(slot, CoverageSlot::ExactAnchor) && anchor_hit)
+        .count()
+}
+
+fn coverage_slot_label(slot: CoverageSlot) -> &'static str {
+    match slot {
+        CoverageSlot::ExactAnchor => "exact_anchor",
+        CoverageSlot::StructuralContext => "structural_context",
+        CoverageSlot::FlowSummary => "flow_summary",
+        CoverageSlot::VerificationTargets => "verification_targets",
+        CoverageSlot::ImpactEnvelope => "impact_envelope",
+        CoverageSlot::DecisionEvidence => "decision_evidence",
+    }
+}
+
+fn status_is_sufficient_for_eval(status: CoverageStatus) -> bool {
+    matches!(
+        status,
+        CoverageStatus::Present | CoverageStatus::NotApplicable
+    )
+}
+
+fn parse_detail_float_metric(detail: &str, metric_prefix: &str) -> Option<f64> {
+    detail.split(';').find_map(|segment| {
+        segment
+            .trim()
+            .strip_prefix(metric_prefix)
+            .and_then(|value| value.parse::<f64>().ok())
+    })
+}
+
+fn parse_detail_u32_metric(detail: &str, metric_prefix: &str) -> Option<u32> {
+    detail.split(';').find_map(|segment| {
+        segment
+            .trim()
+            .strip_prefix(metric_prefix)
+            .and_then(|value| value.parse::<u32>().ok())
+    })
+}
+
+fn slot_retention(canonical: &EvalObservation, mutated: &EvalObservation) -> f64 {
+    let required_and_satisfied = canonical
+        .required_slot_sufficient
+        .iter()
+        .filter(|(_, is_sufficient)| **is_sufficient)
+        .map(|(slot, _)| slot.as_str())
+        .collect::<BTreeSet<_>>();
+    if required_and_satisfied.is_empty() {
+        return 1.0;
+    }
+    let retained = required_and_satisfied
+        .iter()
+        .filter(|slot| {
+            mutated
+                .required_slot_sufficient
+                .get(**slot)
+                .copied()
+                .unwrap_or(false)
+        })
+        .count();
+
+    usize_ratio(retained, required_and_satisfied.len()).unwrap_or(0.0)
+}
+
+fn jaccard_index(left: &BTreeSet<String>, right: &BTreeSet<String>) -> f64 {
+    if left.is_empty() && right.is_empty() {
+        return 1.0;
+    }
+    let intersection = left.intersection(right).count();
+    let union = left.union(right).count();
+    usize_ratio(intersection, union).unwrap_or(0.0)
+}
+
+fn percentile_f64(samples: &[f64], numerator: usize, denominator: usize) -> f64 {
+    if samples.is_empty() {
+        return 0.0;
+    }
+
+    let last_index = samples.len() - 1;
+    let index = last_index.saturating_mul(numerator) / denominator;
+    samples[index]
+}
+
+fn mean(samples: &[f64]) -> Option<f64> {
+    if samples.is_empty() {
+        return None;
+    }
+    let sum = samples.iter().sum::<f64>();
+
+    Some(sum / usize_to_f64(samples.len()))
+}
+
+fn usize_ratio(numerator: usize, denominator: usize) -> Option<f64> {
+    if denominator == 0 {
+        return None;
+    }
+
+    Some(usize_to_f64(numerator) / usize_to_f64(denominator))
+}
+
+fn usize_to_f64(value: usize) -> f64 {
+    f64::from(u32::try_from(value).unwrap_or(u32::MAX))
+}
+
+fn ensure_rate_floor(label: &str, observed: f64, floor: f64) -> Result<()> {
+    if observed + f64::EPSILON < floor {
+        bail!("{label} dropped below floor: observed {observed:.4}, floor {floor:.4}");
+    }
+
+    Ok(())
+}
+
+fn ensure_float_threshold(label: &str, observed: f64, threshold: f64) -> Result<()> {
+    if observed > threshold {
+        bail!(
+            "{label} exceeded threshold: observed {}, threshold {}",
+            render_float_ms(observed),
+            render_float_ms(threshold)
+        );
+    }
+
+    Ok(())
+}
+
+fn render_rate(rate: f64) -> String {
+    format!("{:.2}%", rate * 100.0)
+}
+
+fn render_float_ms(value_ms: f64) -> String {
+    format!("{value_ms:.2} ms")
 }
 
 fn sync(root: &Path) -> Result<()> {
@@ -397,7 +1165,7 @@ fn perf_request() -> ContextRequest {
     ContextRequest {
         goal: "measure graph and broker hot paths".to_string(),
         task_type: TaskType::SafeEdit,
-        consumer_type: "xtask-perf".to_string(),
+        consumer_type: ConsumerType::XtaskPerf,
         model_profile: ModelProfile {
             id: "frontier-cli".to_string(),
             class: ModelClass::FrontierAgent,
@@ -765,6 +1533,7 @@ fn quickstart() {
     println!("cargo xtask quality");
     println!("cargo xtask check");
     println!("cargo xtask perf");
+    println!("cargo xtask eval");
 }
 
 fn unique_suffix() -> u128 {
@@ -1009,9 +1778,9 @@ fn ensure_context_request_sync(root: &Path, sources: &ContractSources) -> Result
             ),
             FieldMapping::new(
                 "consumer_type",
-                "pub consumer_type: String,",
-                "consumerType: string;",
-                "consumer_type: str",
+                "pub consumer_type: ConsumerType,",
+                "consumerType: ConsumerType;",
+                "consumer_type: ConsumerType",
             ),
             FieldMapping::new(
                 "model_profile",
@@ -1276,9 +2045,9 @@ const BRIEFING_PACK_FIELD_MAPPINGS: &[FieldMapping] = &[
     ),
     FieldMapping::new(
         "consumer_type",
-        "pub consumer_type: String,",
-        "consumerType: string;",
-        "consumer_type: str",
+        "pub consumer_type: ConsumerType,",
+        "consumerType: ConsumerType;",
+        "consumer_type: ConsumerType",
     ),
     FieldMapping::new(
         "model_profile",
@@ -1389,6 +2158,13 @@ const PERF_WARMUP_ITERS: usize = 5;
 const PERF_MEASURE_ITERS: usize = 40;
 const BLAST_RADIUS_P95_THRESHOLD: Duration = Duration::from_millis(20);
 const GET_BRIEF_P95_THRESHOLD: Duration = Duration::from_millis(40);
+const EVAL_GET_BRIEF_P95_THRESHOLD: Duration = Duration::from_millis(55);
+const EVAL_CLASSIFICATION_MATCH_FLOOR: f64 = 0.95;
+const EVAL_COVERAGE_SUFFICIENCY_FLOOR: f64 = 0.60;
+const EVAL_REQUIRED_SLOT_HIT_FLOOR: f64 = 0.78;
+const EVAL_REQUIRED_SLOT_UPLIFT_FLOOR: f64 = 0.20;
+const EVAL_MUTATION_SLOT_RETENTION_FLOOR: f64 = 0.70;
+const EVAL_DECISION_SLOT_COST_P95_MS_THRESHOLD: f64 = 25.0;
 
 fn ensure_briefing_pack_sync(root: &Path, sources: &ContractSources) -> Result<()> {
     ensure_schema_contract(

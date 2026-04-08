@@ -10,8 +10,11 @@ use super::{
     TheoremPolicy, TheoremProofCertificate, TheoremProofObligation, TheoremReplayArtifact,
     TheoremReplayPolicy, TheoremRunStatus, TheoremStageArtifacts, fs, semantic_diff_summary,
 };
+use llvm_artifacts::theorem_collect_llvm_artifact_paths;
 use rayon::{ThreadPoolBuilder, prelude::*};
 use std::sync::Mutex;
+
+mod llvm_artifacts;
 
 #[derive(Debug, Clone)]
 struct TheoremSignalCatalog {
@@ -2281,8 +2284,12 @@ fn theorem_compile_manifest_llvm_functions(
         ));
     }
 
-    let artifact_paths =
-        theorem_collect_llvm_artifact_paths(&output.stdout, workspace_root, manifest_path);
+    let artifact_paths = theorem_collect_llvm_artifact_paths(
+        &output.stdout,
+        shared_target_dir,
+        workspace_root,
+        manifest_path,
+    );
     if artifact_paths.is_empty() {
         return Err(format!("no_llvm_artifacts:{manifest_path}"));
     }
@@ -2299,54 +2306,6 @@ fn theorem_compile_manifest_llvm_functions(
     }
 
     Ok(functions)
-}
-
-fn theorem_collect_llvm_artifact_paths(
-    cargo_stdout: &[u8],
-    workspace_root: &Path,
-    manifest_path: &str,
-) -> Vec<PathBuf> {
-    let mut paths = BTreeSet::<PathBuf>::new();
-    let manifest_stem = Path::new(manifest_path)
-        .parent()
-        .map(|parent| parent.to_string_lossy().replace('\\', "/"));
-    for line in String::from_utf8_lossy(cargo_stdout).lines() {
-        let Ok(value) = serde_json::from_str::<serde_json::Value>(line) else {
-            continue;
-        };
-        if value.get("reason").and_then(|field| field.as_str()) != Some("compiler-artifact") {
-            continue;
-        }
-        let Some(filenames) = value.get("filenames").and_then(|field| field.as_array()) else {
-            continue;
-        };
-        for filename in filenames {
-            let Some(path) = filename.as_str() else {
-                continue;
-            };
-            if !Path::new(path)
-                .extension()
-                .is_some_and(|extension| extension.eq_ignore_ascii_case("ll"))
-            {
-                continue;
-            }
-            let candidate = PathBuf::from(path);
-            let absolute = if candidate.is_absolute() {
-                candidate
-            } else {
-                workspace_root.join(candidate)
-            };
-            if let Some(stem) = &manifest_stem {
-                let normalized = absolute.to_string_lossy().replace('\\', "/");
-                if !normalized.contains(stem) {
-                    continue;
-                }
-            }
-            paths.insert(absolute);
-        }
-    }
-
-    paths.into_iter().collect()
 }
 
 fn theorem_parse_llvm_module_functions(module: &str) -> Vec<ExtractedLlvmFunction> {

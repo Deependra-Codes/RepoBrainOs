@@ -13,6 +13,7 @@ Rules:
 Current scripts:
 
 - [bootstrap.ps1](d:/RepoBrainOS/scripts/bootstrap.ps1)
+- [install-alive2-windows.cmd](d:/RepoBrainOS/scripts/install-alive2-windows.cmd)
 
 Primary automation lives in:
 

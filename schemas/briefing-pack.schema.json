@@ -49,7 +49,15 @@
       ]
     },
     "consumer_type": {
-      "type": "string"
+      "type": "string",
+      "enum": [
+        "cli",
+        "mcp_agent",
+        "background_worker",
+        "background_job",
+        "xtask_perf",
+        "xtask-perf"
+      ]
     },
     "model_profile": {
       "$ref": "./model-profile.schema.json"
@@ -194,7 +202,13 @@
               },
               "status": {
                 "type": "string",
-                "enum": ["satisfied", "partial", "missing"]
+                "enum": [
+                  "present",
+                  "missing_retrievable",
+                  "not_observable",
+                  "not_applicable",
+                  "stale"
+                ]
               },
               "detail": {
                 "type": "string"

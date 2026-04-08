@@ -8,6 +8,7 @@ Current crates:
 - `repobrain-ingest`
 - `repobrain-graph`
 - `repobrain-compiler`
+- `repobrain-retrieval`
 - `repobrain-serving`
 - `repobrain-cli`
 - `repobrain-xtask`

@@ -2,7 +2,7 @@ use std::collections::{BTreeMap, BTreeSet};
 use std::env;
 use std::fs;
 use std::io::ErrorKind;
-use std::path::{Path, PathBuf};
+use std::path::{Component, Path, PathBuf};
 use std::process::{Command as ProcessCommand, Output, Stdio};
 use std::time::{Duration, Instant};
 
@@ -10,9 +10,9 @@ use anyhow::{Context, Result, bail};
 use clap::{ArgAction, Args, Parser, Subcommand, ValueEnum};
 use repobrain_broker::{SnapshotBrokerInput, SnapshotContextBroker};
 use repobrain_domain::{
-    ContextRequest, EquivalenceContract, EquivalenceEvidenceReceipt, EquivalenceEvidenceStatus,
-    EquivalenceStage, FreshnessRequirement, ModelClass, ModelProfile, OverlayClaimScope,
-    OverlayKind, RequestDepth, ScaffoldingLevel, TaskType, TheoremContract,
+    ConsumerType, ContextRequest, EquivalenceContract, EquivalenceEvidenceReceipt,
+    EquivalenceEvidenceStatus, EquivalenceStage, FreshnessRequirement, ModelClass, ModelProfile,
+    OverlayClaimScope, OverlayKind, RequestDepth, ScaffoldingLevel, TaskType, TheoremContract,
     TheoremObligationStatus, TheoremProofCertificate, TheoremProofObligation, TheoremRunStatus,
     canonicalize_repo_root,
 };
@@ -352,6 +352,11 @@ struct ReplayTheoremArgs {
     obligation_id: Option<String>,
 }
 
+const MAX_DELTA_SCOPE_ITEMS: usize = 96;
+const MAX_DELTA_SCOPE_PREVIEW_ITEMS: usize = 8;
+const MAX_UNRESOLVED_CHANGED_PATH_PREVIEW: usize = 8;
+const MAX_DIRECTORY_EXPANSION_PREVIEW: usize = 6;
+
 fn main() -> Result<()> {
     let cli = Cli::parse();
 
@@ -422,6 +427,7 @@ fn scan(args: ScanArgs) -> Result<()> {
         })
         .context("failed to build repository inventory snapshot")?;
     let store = SnapshotArtifactStore::new(&repo_root);
+    let previous_snapshot = load_previous_snapshot_for_scan(&store, args.revision.as_deref());
     let artifact_path = store
         .write_inventory(&snapshot)
         .context("failed to persist repository inventory snapshot")?;
@@ -438,6 +444,16 @@ fn scan(args: ScanArgs) -> Result<()> {
         snapshot.verification_targets.len()
     );
     println!("languages: {}", snapshot.languages.join(", "));
+    match previous_snapshot {
+        Some(previous_snapshot) => {
+            println!("previous_snapshot: {}", previous_snapshot.snapshot_id);
+            let delta = semantic_delta(&previous_snapshot, &snapshot, MAX_DELTA_SCOPE_ITEMS);
+            print_semantic_delta_summary("snapshot_diff", &delta);
+        }
+        None => {
+            println!("previous_snapshot: none (first scan for this revision label)");
+        }
+    }
 
     Ok(())
 }
@@ -445,8 +461,8 @@ fn scan(args: ScanArgs) -> Result<()> {
 fn scan_delta(args: ScanDeltaArgs) -> Result<()> {
     let serving = serving_runtime_input(&args.serving);
     let repo_root = resolve_repo_root(args.repo_root)?;
-    let changed_paths = normalize_changed_paths(&repo_root, &args.changed_paths);
-    if changed_paths.is_empty() {
+    let normalized_changed_inputs = normalize_changed_paths(&repo_root, &args.changed_paths)?;
+    if normalized_changed_inputs.is_empty() {
         bail!("scan-delta requires at least one --changed-path entry");
     }
 
@@ -469,18 +485,41 @@ fn scan_delta(args: ScanDeltaArgs) -> Result<()> {
                 repo_root.display()
             )
         })?;
-    let merged_snapshot = merge_delta_snapshot(&base_snapshot, &target_snapshot, &changed_paths);
+    let changed_resolution = resolve_changed_paths_for_delta(
+        &normalized_changed_inputs,
+        &base_snapshot,
+        &target_snapshot,
+    );
+    if changed_resolution.resolved_paths.is_empty() {
+        bail!(
+            "scan-delta could not resolve any --changed-path entries against base `{}` and target `{}` snapshots. unresolved inputs: {}",
+            base_snapshot.snapshot_id,
+            target_snapshot.snapshot_id,
+            preview_paths(
+                &changed_resolution.unresolved_inputs,
+                MAX_UNRESOLVED_CHANGED_PATH_PREVIEW
+            )
+        );
+    }
+
+    let merged_snapshot = merge_delta_snapshot(
+        &base_snapshot,
+        &target_snapshot,
+        &changed_resolution.resolved_paths,
+    );
     let artifact_path = store
         .write_inventory(&merged_snapshot)
         .context("failed to persist delta-merged repository inventory snapshot")?;
     let metadata = serving_metadata(&repo_root, args.revision, &serving);
+    let applied_delta = semantic_delta(&base_snapshot, &merged_snapshot, MAX_DELTA_SCOPE_ITEMS);
+    let full_target_delta = semantic_delta(&base_snapshot, &target_snapshot, MAX_DELTA_SCOPE_ITEMS);
 
     println!("snapshot: {}", metadata.snapshot_binding.snapshot_id);
     println!("base_snapshot: {}", base_snapshot.snapshot_id);
     println!("target_snapshot: {}", target_snapshot.snapshot_id);
     println!("readiness: {}", readiness_label(metadata.readiness_state));
     println!("artifact: {}", artifact_path.display());
-    println!("changed_paths: {}", changed_paths.len());
+    print_changed_path_resolution_summary(normalized_changed_inputs.len(), &changed_resolution);
     println!("files: {}", merged_snapshot.files.len());
     println!("symbols: {}", merged_snapshot.symbols.len());
     println!("imports: {}", merged_snapshot.imports.len());
@@ -489,6 +528,9 @@ fn scan_delta(args: ScanDeltaArgs) -> Result<()> {
         merged_snapshot.verification_targets.len()
     );
     println!("languages: {}", merged_snapshot.languages.join(", "));
+    print_semantic_delta_summary("applied_delta", &applied_delta);
+    print_semantic_delta_summary("full_target_delta", &full_target_delta);
+    print_delta_scope_coverage(&applied_delta, &full_target_delta);
 
     Ok(())
 }
@@ -501,29 +543,247 @@ fn revision_label_to_option(value: &str) -> Option<&str> {
     }
 }
 
-fn normalize_changed_paths(repo_root: &Path, changed_paths: &[String]) -> BTreeSet<String> {
-    changed_paths
-        .iter()
-        .filter_map(|path| normalize_changed_path(repo_root, path))
-        .collect()
+#[derive(Debug, Clone, PartialEq, Eq, Default)]
+struct ChangedPathResolution {
+    resolved_paths: BTreeSet<String>,
+    unresolved_inputs: Vec<String>,
+    directory_expansions: Vec<(String, usize)>,
 }
 
-fn normalize_changed_path(repo_root: &Path, path: &str) -> Option<String> {
-    let candidate = PathBuf::from(path);
+fn load_previous_snapshot_for_scan(
+    store: &SnapshotArtifactStore,
+    revision: Option<&str>,
+) -> Option<RepositoryInventorySnapshot> {
+    match store.load_inventory(revision) {
+        Ok(snapshot) => Some(snapshot),
+        Err(IngestError::Io { source, .. }) if source.kind() == ErrorKind::NotFound => None,
+        Err(error) => {
+            println!("warning: previous snapshot could not be loaded for diff summary: {error}");
+            None
+        }
+    }
+}
+
+fn normalize_changed_paths(repo_root: &Path, changed_paths: &[String]) -> Result<BTreeSet<String>> {
+    let mut normalized_paths = BTreeSet::new();
+
+    for path in changed_paths {
+        if let Some(normalized) = normalize_changed_path(repo_root, path)? {
+            let _ = normalized_paths.insert(normalized);
+        }
+    }
+
+    Ok(normalized_paths)
+}
+
+fn normalize_changed_path(repo_root: &Path, path: &str) -> Result<Option<String>> {
+    let trimmed = path.trim();
+    if trimmed.is_empty() {
+        return Ok(None);
+    }
+    let candidate = PathBuf::from(trimmed);
     let normalized = if candidate.is_absolute() {
         match candidate.strip_prefix(repo_root) {
             Ok(relative) => relative.to_string_lossy().replace('\\', "/"),
-            Err(_) => candidate.to_string_lossy().replace('\\', "/"),
+            Err(_) => {
+                bail!(
+                    "--changed-path `{trimmed}` is outside repo root `{}`",
+                    repo_root.display()
+                );
+            }
         }
     } else {
-        path.replace('\\', "/")
+        trimmed.replace('\\', "/")
     };
-    let trimmed = normalized.trim();
-    if trimmed.is_empty() {
-        return None;
+    if contains_parent_dir_segment(&normalized) {
+        bail!("--changed-path `{trimmed}` contains parent traversal `..`");
     }
 
-    Some(trimmed.to_string())
+    let normalized = normalized
+        .trim()
+        .trim_start_matches("./")
+        .trim_matches('/')
+        .to_string();
+    if normalized.is_empty() {
+        return Ok(None);
+    }
+
+    Ok(Some(normalized))
+}
+
+fn contains_parent_dir_segment(path: &str) -> bool {
+    Path::new(path)
+        .components()
+        .any(|component| matches!(component, Component::ParentDir))
+}
+
+fn resolve_changed_paths_for_delta(
+    normalized_inputs: &BTreeSet<String>,
+    base_snapshot: &RepositoryInventorySnapshot,
+    target_snapshot: &RepositoryInventorySnapshot,
+) -> ChangedPathResolution {
+    let known_paths = base_snapshot
+        .files
+        .iter()
+        .map(|file| file.relative_path.clone())
+        .chain(
+            target_snapshot
+                .files
+                .iter()
+                .map(|file| file.relative_path.clone()),
+        )
+        .collect::<BTreeSet<_>>();
+    let mut resolution = ChangedPathResolution::default();
+
+    for input in normalized_inputs {
+        if known_paths.contains(input) {
+            let _ = resolution.resolved_paths.insert(input.clone());
+            continue;
+        }
+
+        let matches = collect_prefixed_paths(&known_paths, input);
+        if matches.is_empty() {
+            resolution.unresolved_inputs.push(input.clone());
+            continue;
+        }
+
+        resolution
+            .directory_expansions
+            .push((input.clone(), matches.len()));
+        resolution.resolved_paths.extend(matches);
+    }
+
+    resolution
+}
+
+fn collect_prefixed_paths(known_paths: &BTreeSet<String>, prefix: &str) -> Vec<String> {
+    let normalized_prefix = prefix.trim_end_matches('/');
+    if normalized_prefix.is_empty() {
+        return Vec::new();
+    }
+    let prefix_with_separator = format!("{normalized_prefix}/");
+
+    known_paths
+        .range(prefix_with_separator.clone()..)
+        .take_while(|path| path.starts_with(&prefix_with_separator))
+        .cloned()
+        .collect()
+}
+
+fn print_changed_path_resolution_summary(input_count: usize, resolution: &ChangedPathResolution) {
+    let resolved_input_count = input_count.saturating_sub(resolution.unresolved_inputs.len());
+    let resolved_input_percent = ratio_percent(resolved_input_count, input_count);
+
+    println!("changed_path_inputs: {input_count}");
+    println!(
+        "changed_path_resolution: {resolved_input_count}/{input_count} ({resolved_input_percent}%)"
+    );
+    println!("changed_paths: {}", resolution.resolved_paths.len());
+    if !resolution.directory_expansions.is_empty() {
+        println!(
+            "changed_path_directory_expansions: {}",
+            resolution.directory_expansions.len()
+        );
+        for (input, expanded_file_count) in resolution
+            .directory_expansions
+            .iter()
+            .take(MAX_DIRECTORY_EXPANSION_PREVIEW)
+        {
+            println!("  {input} -> {expanded_file_count} file(s)");
+        }
+    }
+    if !resolution.unresolved_inputs.is_empty() {
+        println!(
+            "warning_unresolved_changed_paths: {}",
+            resolution.unresolved_inputs.len()
+        );
+        println!(
+            "warning_unresolved_preview: {}",
+            preview_paths(
+                &resolution.unresolved_inputs,
+                MAX_UNRESOLVED_CHANGED_PATH_PREVIEW
+            )
+        );
+        println!(
+            "warning_hint: unresolved paths are ignored; use repo-relative file paths or directory prefixes"
+        );
+    }
+}
+
+fn print_semantic_delta_summary(label: &str, delta: &SemanticDelta) {
+    println!(
+        "{label}: files +{} -{} ~{}, symbols +{} -{}, imports +{} -{}, verification_targets +{} -{}",
+        delta.added_files.len(),
+        delta.removed_files.len(),
+        delta.modified_files.len(),
+        delta.added_symbol_facts,
+        delta.removed_symbol_facts,
+        delta.added_import_facts,
+        delta.removed_import_facts,
+        delta.added_verification_targets.len(),
+        delta.removed_verification_targets.len(),
+    );
+    println!("{label}_changed_scope: {}", delta.changed_scope.len());
+    if !delta.changed_scope.is_empty() {
+        println!(
+            "{label}_scope_preview: {}",
+            preview_paths(&delta.changed_scope, MAX_DELTA_SCOPE_PREVIEW_ITEMS)
+        );
+    }
+}
+
+fn print_delta_scope_coverage(applied_delta: &SemanticDelta, full_target_delta: &SemanticDelta) {
+    let applied_scope = applied_delta
+        .changed_scope
+        .iter()
+        .cloned()
+        .collect::<BTreeSet<_>>();
+    let full_scope = full_target_delta
+        .changed_scope
+        .iter()
+        .cloned()
+        .collect::<BTreeSet<_>>();
+    let matched_scope_count = applied_scope.intersection(&full_scope).count();
+    let full_scope_count = full_scope.len();
+    let coverage_percent = ratio_percent(matched_scope_count, full_scope_count);
+    let missing_scope = full_scope
+        .difference(&applied_scope)
+        .cloned()
+        .collect::<Vec<_>>();
+
+    println!(
+        "delta_scope_coverage: {matched_scope_count}/{full_scope_count} ({coverage_percent}%)"
+    );
+    if !missing_scope.is_empty() {
+        println!("delta_scope_gap_count: {}", missing_scope.len());
+        println!(
+            "delta_scope_gap_preview: {}",
+            preview_paths(&missing_scope, MAX_DELTA_SCOPE_PREVIEW_ITEMS)
+        );
+        println!(
+            "delta_scope_hint: widen --changed-path or run `repobrain scan` when bounded delta excludes expected scope"
+        );
+    }
+}
+
+fn ratio_percent(numerator: usize, denominator: usize) -> usize {
+    if denominator == 0 {
+        return 100;
+    }
+
+    numerator.saturating_mul(100) / denominator
+}
+
+fn preview_paths(paths: &[String], limit: usize) -> String {
+    if paths.is_empty() {
+        return "none".to_string();
+    }
+    let mut preview = paths.iter().take(limit).cloned().collect::<Vec<_>>();
+    if paths.len() > limit {
+        preview.push(format!("... +{}", paths.len() - limit));
+    }
+
+    preview.join(", ")
 }
 
 fn merge_delta_snapshot(
@@ -681,7 +941,7 @@ fn get_brief(args: GetBriefArgs) -> Result<()> {
             request: ContextRequest {
                 goal: args.goal.clone(),
                 task_type: args.task_type.into(),
-                consumer_type: "cli".to_string(),
+                consumer_type: ConsumerType::Cli,
                 model_profile: default_model_profile(),
                 question: args.goal,
                 scope_hint: Some(args.scope),
@@ -811,15 +1071,18 @@ struct ListInvariantsOutput {
 }
 
 mod semantic_pipeline;
-use semantic_pipeline::{explain_flow, list_invariants, replay_theorem, what_changed_semantically};
+use semantic_pipeline::{
+    SemanticDelta, explain_flow, list_invariants, replay_theorem, semantic_delta,
+    what_changed_semantically,
+};
 
 #[cfg(test)]
 use semantic_pipeline::{
     L1RustBoundedScope, L2RelationalPolicy, TheoremPolicy, TheoremReplayArtifact,
     is_rust_source_path, l1_collect_proof_obligations, l1_rust_bounded_scope, l1_status_label,
     l2_relational_semantic_receipt, l2_status_label, load_theorem_contract_for_stage,
-    semantic_delta, theorem_obligation_for_source_pair, theorem_schedule_obligations,
-    theorem_stage_artifacts, theorem_translation_validation_receipt,
+    theorem_obligation_for_source_pair, theorem_schedule_obligations, theorem_stage_artifacts,
+    theorem_translation_validation_receipt,
 };
 
 fn lookup_path(args: LookupPathArgs) -> Result<()> {
@@ -1157,9 +1420,9 @@ mod tests {
         TheoremReplayArtifact, WhatChangedSemanticallyArgs, changed_paths_affect_verification,
         is_rust_source_path, l1_collect_proof_obligations, l1_rust_bounded_scope, l1_status_label,
         l2_relational_semantic_receipt, l2_status_label, load_theorem_contract_for_stage,
-        merge_delta_snapshot, semantic_delta, theorem_obligation_for_source_pair,
-        theorem_schedule_obligations, theorem_stage_artifacts,
-        theorem_translation_validation_receipt,
+        merge_delta_snapshot, normalize_changed_paths, resolve_changed_paths_for_delta,
+        semantic_delta, theorem_obligation_for_source_pair, theorem_schedule_obligations,
+        theorem_stage_artifacts, theorem_translation_validation_receipt,
     };
 
     struct TempRepo {
@@ -2005,6 +2268,124 @@ mod tests {
 
         let changed = BTreeSet::from([String::from("src/lib.rs")]);
         assert!(!changed_paths_affect_verification(&changed));
+    }
+
+    #[test]
+    fn normalize_changed_paths_rejects_outside_repo_root() {
+        let repo = TempRepo::new("changed-path-outside-root");
+        let outside_path = repo
+            .root()
+            .parent()
+            .unwrap_or_else(|| panic!("temp repo should have a parent"))
+            .join("outside.rs");
+        let changed_paths = vec![outside_path.to_string_lossy().into_owned()];
+
+        let result = normalize_changed_paths(repo.root(), &changed_paths);
+
+        assert!(result.is_err());
+        let error = match result {
+            Ok(_) => panic!("normalize_changed_paths should fail for out-of-root paths"),
+            Err(error) => error.to_string(),
+        };
+        assert!(error.contains("outside repo root"));
+    }
+
+    #[test]
+    fn normalize_changed_paths_rejects_parent_traversal() {
+        let repo = TempRepo::new("changed-path-parent-traversal");
+        let changed_paths = vec!["../src/lib.rs".to_string()];
+
+        let result = normalize_changed_paths(repo.root(), &changed_paths);
+
+        assert!(result.is_err());
+        let error = match result {
+            Ok(_) => panic!("normalize_changed_paths should fail for parent traversal"),
+            Err(error) => error.to_string(),
+        };
+        assert!(error.contains("parent traversal"));
+    }
+
+    #[test]
+    fn resolve_changed_paths_expands_directory_prefix_inputs() {
+        let repo = TempRepo::new("changed-path-directory-expansion");
+        repo.write_file(
+            "Cargo.toml",
+            b"[package]\nname = \"demo\"\nversion = \"0.1.0\"\nedition = \"2024\"\n",
+        );
+        repo.write_file("src/lib.rs", b"mod inner;\n");
+        repo.write_file("src/inner.rs", b"pub fn helper() {}\n");
+        repo.write_file("README.md", b"# demo\n");
+
+        let scanner = RepositoryScanner::default();
+        let base_snapshot = scanner
+            .scan(&RepositoryTarget {
+                root: repo.root().to_string_lossy().into_owned(),
+                revision: Some("base".to_string()),
+            })
+            .unwrap_or_else(|error| panic!("base scan failed: {error}"));
+        let target_snapshot = scanner
+            .scan(&RepositoryTarget {
+                root: repo.root().to_string_lossy().into_owned(),
+                revision: Some("target".to_string()),
+            })
+            .unwrap_or_else(|error| panic!("target scan failed: {error}"));
+        let inputs = BTreeSet::from([String::from("src")]);
+
+        let resolution = resolve_changed_paths_for_delta(&inputs, &base_snapshot, &target_snapshot);
+
+        assert!(resolution.unresolved_inputs.is_empty());
+        assert_eq!(resolution.directory_expansions.len(), 1);
+        assert!(
+            resolution
+                .resolved_paths
+                .iter()
+                .any(|path| path == "src/lib.rs")
+        );
+        assert!(
+            resolution
+                .resolved_paths
+                .iter()
+                .any(|path| path == "src/inner.rs")
+        );
+        assert!(
+            !resolution
+                .resolved_paths
+                .iter()
+                .any(|path| path == "README.md")
+        );
+    }
+
+    #[test]
+    fn resolve_changed_paths_tracks_unresolved_entries() {
+        let repo = TempRepo::new("changed-path-unresolved");
+        repo.write_file(
+            "Cargo.toml",
+            b"[package]\nname = \"demo\"\nversion = \"0.1.0\"\nedition = \"2024\"\n",
+        );
+        repo.write_file("src/lib.rs", b"pub fn stable() {}\n");
+
+        let scanner = RepositoryScanner::default();
+        let base_snapshot = scanner
+            .scan(&RepositoryTarget {
+                root: repo.root().to_string_lossy().into_owned(),
+                revision: Some("base".to_string()),
+            })
+            .unwrap_or_else(|error| panic!("base scan failed: {error}"));
+        let target_snapshot = scanner
+            .scan(&RepositoryTarget {
+                root: repo.root().to_string_lossy().into_owned(),
+                revision: Some("target".to_string()),
+            })
+            .unwrap_or_else(|error| panic!("target scan failed: {error}"));
+        let inputs = BTreeSet::from([String::from("src/missing.rs")]);
+
+        let resolution = resolve_changed_paths_for_delta(&inputs, &base_snapshot, &target_snapshot);
+
+        assert!(resolution.resolved_paths.is_empty());
+        assert_eq!(
+            resolution.unresolved_inputs,
+            vec!["src/missing.rs".to_string()]
+        );
     }
 
     fn l2_test_policy() -> L2RelationalPolicy {

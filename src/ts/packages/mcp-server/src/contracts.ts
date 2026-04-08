@@ -20,6 +20,13 @@ export type TaskType =
   | "blast_radius"
   | "semantic_diff"
   | "query";
+export type ConsumerType =
+  | "cli"
+  | "mcp_agent"
+  | "background_worker"
+  | "background_job"
+  | "xtask_perf"
+  | "xtask-perf";
 export type QueryClassification =
   | "entity_lookup"
   | "architecture_explanation"
@@ -34,7 +41,12 @@ export type CoverageSlot =
   | "verification_targets"
   | "impact_envelope"
   | "decision_evidence";
-export type CoverageStatus = "satisfied" | "partial" | "missing";
+export type CoverageStatus =
+  | "present"
+  | "missing_retrievable"
+  | "not_observable"
+  | "not_applicable"
+  | "stale";
 export type FreshnessImpact = "none" | "localized" | "moderate" | "high";
 export type OverlayKind = "none" | "worktree" | "buffer" | "mixed";
 export type OverlayClaimScope = "snapshot_confirmed" | "overlay_adjusted" | "overlay_local_only";
@@ -109,7 +121,7 @@ export interface CoverageAudit {
 export interface ContextRequest {
   goal: string;
   taskType: TaskType;
-  consumerType: string;
+  consumerType: ConsumerType;
   modelProfile: ModelProfile;
   question: string;
   scopeHint?: string;
@@ -123,7 +135,7 @@ export interface ContextRequest {
 export interface BriefingPack {
   taskType: TaskType;
   queryClassification: QueryClassification;
-  consumerType: string;
+  consumerType: ConsumerType;
   modelProfile: ModelProfile;
   readinessState: ReadinessState;
   snapshotBinding: SnapshotBinding;

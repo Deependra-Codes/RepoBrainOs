@@ -68,6 +68,18 @@ pub enum TaskType {
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+pub enum ConsumerType {
+    #[serde(rename = "cli")]
+    Cli,
+    #[serde(rename = "mcp_agent")]
+    McpAgent,
+    #[serde(rename = "background_worker", alias = "background_job")]
+    BackgroundWorker,
+    #[serde(rename = "xtask_perf", alias = "xtask-perf")]
+    XtaskPerf,
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(rename_all = "snake_case")]
 pub enum QueryClassification {
     EntityLookup,
@@ -92,9 +104,11 @@ pub enum CoverageSlot {
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(rename_all = "snake_case")]
 pub enum CoverageStatus {
-    Satisfied,
-    Partial,
-    Missing,
+    Present,
+    MissingRetrievable,
+    NotObservable,
+    NotApplicable,
+    Stale,
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
@@ -246,7 +260,7 @@ pub struct EvidenceReceipt {
 pub struct ContextRequest {
     pub goal: String,
     pub task_type: TaskType,
-    pub consumer_type: String,
+    pub consumer_type: ConsumerType,
     pub model_profile: ModelProfile,
     pub question: String,
     pub scope_hint: Option<String>,
@@ -318,7 +332,7 @@ pub struct CoverageAudit {
 pub struct BriefingPack {
     pub task_type: TaskType,
     pub query_classification: QueryClassification,
-    pub consumer_type: String,
+    pub consumer_type: ConsumerType,
     pub model_profile: ModelProfile,
     pub readiness_state: ReadinessState,
     pub snapshot_binding: SnapshotBinding,
